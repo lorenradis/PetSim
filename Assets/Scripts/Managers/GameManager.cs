@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour {
     public GameClock gameClock;
     public PetManager petManager;
     public AffinityManager affinityManager;
+    public RegionManager regionManager;
 
     public enum GameState{STARTUP, NORMAL, MENU, PAUSE}
     public GameState gameState;
@@ -38,9 +39,13 @@ public class GameManager : MonoBehaviour {
 
     private void Start()
     {
-        SetupClock();
-        affinityManager.SetupAffinities();
-        petManager.SetupPets();
+            SetupClock();
+            affinityManager = new AffinityManager();
+            affinityManager.SetupAffinities();
+            petManager = new PetManager();
+            petManager.SetupPets();
+            regionManager = new RegionManager();
+            regionManager.SetupRegions();
     }
 
     private void SetupClock()
@@ -64,10 +69,35 @@ public class GameManager : MonoBehaviour {
                 break;
             default:
                 break;
-            
         }
+        ManageInput();
     }
 
+    private void ManageInput()
+    {
+        switch(gameState)
+        {
+            case GameState.STARTUP:
+                break;
+            case GameState.NORMAL:
+                if(Input.GetKeyDown("joystick button 7") || Input.GetKeyDown(Keycode.Enter))
+                {
+                    PauseGame();
+                }
+                break;
+            case GameState.MENU:
+                break;
+            case GameState.PAUSE:
+                if(Input.GetKeyDown("joystick button 7") || Input.GetKeyDown(Keycode.Enter))
+                {
+                    UnpauseGame();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
     public void EnterMenuState()
     {
         ChangeState(GameState.MENU);
