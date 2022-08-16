@@ -20,6 +20,15 @@ public class Region  {
 
     public Region(){}
 
-
+    public Region(string newName, Affinity newAffinity)
+    {
+        regionName = newName;
+        affinity = newAffinity;
+    }
+    
+    public void AddPetToList(PetInfo petInfo)
+    {
+        availableSpawns.Add(petInfo);   
+    }
 
 }
