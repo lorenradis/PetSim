@@ -64,21 +64,21 @@ public class MovingObject : MonoBehaviour {
         {
             if (isMoving)
             {
-                Vector2 newPosition = transform.position;
+                Vector2 movementVector = Vector2.zero;
                 if (target != null)
                 {
-                    newPosition = CalculateMovementVector(target.position);
+                    movementVector = CalculateMovementVector(target.position);
                 }
                 else if (destination != Vector2.zero)
                 {
-                    newPosition = CalculateMovementVector(destination);
+                    movementVector = CalculateMovementVector(destination);
                 }
                 else if (direction != Vector2.zero)
                 {
-                    newPosition = CalculateMovementVector(rb2d.position + direction);
+                    movementVector = CalculateMovementVector(rb2d.position + direction);
                 }
                 facingVector = (newPosition - rb2d.position).normalized;
-                rb2d.MovePosition(newPosition);
+                rb2d.MovePosition(rb2d.position + movementVector.normalized * moveSpeed * moveMod * Time.deltaTime);
             }
         }
     }
