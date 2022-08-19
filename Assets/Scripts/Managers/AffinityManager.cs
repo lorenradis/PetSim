@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class AffinityManager {
 
+    public List<Affinity> affinities = new List<Affinity>();
+
     public static Affinity grassAffinity;
     public static Affinity waterAffinity;
     public static Affinity fireAffinity;
@@ -35,6 +37,10 @@ public class AffinityManager {
         strengths.Add(grassAffinity);
         weaknesses.Add(waterAffinity);
         fireAffinity = new Affinity("Fire", strengths, weaknesses);
+
+        affinities.Add(grassAffinity);
+        affinities.Add(waterAffinity);
+        affinities.Add(fireAffinity);
     }
 
 }

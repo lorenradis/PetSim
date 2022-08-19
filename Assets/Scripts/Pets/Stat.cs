@@ -6,7 +6,9 @@ using System.Collections.Generic;
 public class Stat{
 
     private string statName;
-    public string StatName{get{return statName}set{}}
+    public string StatName{get{
+            return statName;
+        }set{}}
     [SerializeField] private int baseValue; //creature specific starting value
     public int BaseValue{get{return baseValue;}set{}}
     private int randomValue; //randomly generated on instantiate

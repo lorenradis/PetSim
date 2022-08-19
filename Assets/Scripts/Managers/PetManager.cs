@@ -19,9 +19,9 @@ the player will be presented with a graphical representation of the 3 pets.
 
     public List<PetInfo> currentPets = new List<PetInfo>();
 
-    public PetInfo Bulbos;
-    public PetInfo Charby;
-    public PetInfo Squirt;
+    public static PetInfo Bulbos;
+    public static PetInfo Charby;
+    public static PetInfo Squirt;
 
     public void SetupPets()
     {

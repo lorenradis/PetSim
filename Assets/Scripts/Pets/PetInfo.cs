@@ -33,6 +33,10 @@ public class PetInfo{
 
     public Affinity affinity;
 
+    public RuntimeAnimatorController overworldAnimator;
+
+    public float moveMod = 1f;
+
     public Task currentTask;
     
     public PetInfo()
@@ -49,11 +53,11 @@ public class PetInfo{
         Speed = new Stat("Speed", newSpd);
         Luck = new Stat("Luck", 0);
 
-        maxHealth = Strength.Value * Random.Range(1.95f, 2.05f);
+        maxHealth = Mathf.FloorToInt(Strength.Value * Random.Range(1.95f, 2.05f));
         health = maxHealth;
-        maxEnergy = Smarts.Value * Random.Range(1.95f, 2.05f);
+        maxEnergy = Mathf.FloorToInt(Smarts.Value * Random.Range(1.95f, 2.05f));
         energy = maxEnergy;
-        maxStamina = Speed.Value * Random.Range(1.95f, 2.05f);
+        maxStamina = Mathf.FloorToInt(Speed.Value * Random.Range(1.95f, 2.05f));
         stamina = maxStamina;
         
         experience = 0;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class OverworldPet : MovingObject {
 
-    public PetInfo petInfo;
+    public PetInfo petInfo = null;
 
     private SpriteRenderer spriteRenderer;
     private Animator animator;
@@ -30,11 +30,14 @@ public class OverworldPet : MovingObject {
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        SetPetInfo(GameManager.instance.petManager.petTemplates[0]);
+        petInfo.petName = "Bob Hoskins";
+        GetComponent<InteractablePet>().SetPetInfo(petInfo);
     }
 
     private void Update()
     {
-        if(GameManager.instance.gameState == GameManager.GameState.NORMAL)
+        if(GameManager.instance.gameState == GameManager.GameState.NORMAL || GameManager.instance == null)
         {
             ManageState();
             UpdateAnimator();
@@ -151,12 +154,12 @@ public class OverworldPet : MovingObject {
         ChangeState(MoveState.FLEE);
     }
 
-    public void SetEnemyUnit(UnitInfo unitInfo)
+    public void SetPetInfo(PetInfo newPet)
     {
-        enemyUnit = unitInfo;
+        petInfo = new PetInfo(newPet.petName, newPet.Strength.BaseValue, newPet.Smarts.BaseValue, newPet.Speed.BaseValue, newPet.affinity, newPet.description);
         if (animator == null)
             animator = GetComponent<Animator>();
-        animator.runtimeAnimatorController = enemyUnit.overworldAnimator;
-        SetMoveMod(enemyUnit.moveMod);
+        animator.runtimeAnimatorController = petInfo.overworldAnimator;
+        SetMoveMod(petInfo.moveMod);
     }
 }

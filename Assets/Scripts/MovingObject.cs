@@ -17,6 +17,8 @@ public class MovingObject : MonoBehaviour {
 
     protected Vector2 facingVector;
 
+    public LayerMask blockingLayer;
+
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
@@ -65,19 +67,61 @@ public class MovingObject : MonoBehaviour {
                 Vector2 newPosition = transform.position;
                 if (target != null)
                 {
-                    newPosition = Vector2.MoveTowards(transform.position, target.position, Time.deltaTime * moveSpeed * moveMod);
+                    newPosition = CalculateMovementVector(target.position);
                 }
                 else if (destination != Vector2.zero)
                 {
-                    newPosition = Vector2.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed * moveMod);
+                    newPosition = CalculateMovementVector(destination);
                 }
                 else if (direction != Vector2.zero)
                 {
-                    newPosition = Vector2.MoveTowards(transform.position, (Vector2)transform.position + direction, Time.deltaTime * moveSpeed * moveMod);
+                    newPosition = CalculateMovementVector(rb2d.position + direction);
                 }
                 facingVector = (newPosition - rb2d.position).normalized;
                 rb2d.MovePosition(newPosition);
             }
         }
+    }
+
+    private Vector2 CalculateMovementVector(Vector2 newDestination)
+    {
+        Vector2 targetVector = (newDestination - rb2d.position).normalized;
+        Vector2 move = Vector2.zero;
+
+        Vector2[] directions = new Vector2[8];
+        float[] interestLevels = new float[8];
+        float[] dangerLevels = new float[8];
+
+        directions[0] = Vector2.up;
+        directions[1] = new Vector2(1, 1).normalized;
+        directions[2] = Vector2.right;
+        directions[3] = new Vector2(1, -1).normalized;
+        directions[4] = Vector2.down;
+        directions[5] = new Vector2(-1, -1).normalized;
+        directions[6] = Vector2.left;
+        directions[7] = new Vector2(-1, 1).normalized;
+
+        for (int i = 0; i < directions.Length; i++)
+        {
+            interestLevels[i] = Mathf.Clamp(Vector2.Dot(directions[i], targetVector), 0f, 1f);
+
+            float checkDist = 5f;
+
+            RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, .25f, directions[i], checkDist, blockingLayer);
+            float shortestDist = 5f;
+
+            foreach (RaycastHit2D hit in hits)
+            {
+                if (hit.distance < shortestDist)
+                {
+                    shortestDist = hit.distance;
+                }
+            }
+
+            dangerLevels[i] = ((checkDist) - shortestDist) / 5f;
+
+            move += (directions[i] * (interestLevels[i] - dangerLevels[i]));
+        }
+        return move.normalized;
     }
 }

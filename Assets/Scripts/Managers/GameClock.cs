@@ -40,13 +40,13 @@ game manager will call clock.tick when..... when we're in a state that allows ti
     public float interval = .7f;
     public float elapsedTime = 0f;
 
-    public delegate void OnMinuteChanged;
+    public delegate void OnMinuteChanged();
     public static OnMinuteChanged onMinuteChangedCallback;
-    public delegate void OnHourChanged;
+    public delegate void OnHourChanged();
     public static OnHourChanged onHourChangedCallback;
-    public delegate void OnDayChanged;
+    public delegate void OnDayChanged();
     public static OnDayChanged onDayChangedCallback;
-    public delegate void OnSeasonChanged;
+    public delegate void OnSeasonChanged();
     public static OnSeasonChanged onSeasonChangedCallback;
 
     public GameClock()
