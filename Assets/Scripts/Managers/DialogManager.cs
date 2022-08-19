@@ -120,6 +120,11 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    public void ShowPrompt(Action action1, Action action2, Action action3, Action action4)
+    {
+
+    }
+
     public void ShowDialog(Dialog newDialog, Action action1)
     {
         dialogs.Add(newDialog);
@@ -348,7 +353,7 @@ public class DialogManager : MonoBehaviour
     }
 }
 
-[Serializable]
+[System.Serializable]
 public class Dialog
 {
     public string message;
@@ -361,5 +366,21 @@ public class Dialog
     public Dialog()
     {
 
+    }
+
+    public Dialog(string newMessage, string newName, Sprite newPortrait, bool _isSpeech, string response1, string response2, string response3, string response4)
+    {
+        message = newMessage;
+        speakerName = newName;
+        speakerPortrait = newPortrait;
+        isSpeech = _isSpeech;
+        if(response1 != "")
+            responses[0] = response1;
+        if(response2 != "")
+            responses[1] = response2;
+        if(response3 != "")
+            responses[2] = response3;
+        if(response4 != "")
+            responses[3] = response4;    
     }
 }
