@@ -30,9 +30,6 @@ public class OverworldPet : MovingObject {
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        SetPetInfo(GameManager.instance.petManager.petTemplates[0]);
-        petInfo.petName = "Bob Hoskins";
-        GetComponent<InteractablePet>().SetPetInfo(petInfo);
     }
 
     private void Update()
@@ -156,7 +153,11 @@ public class OverworldPet : MovingObject {
 
     public void SetPetInfo(PetInfo newPet)
     {
-        petInfo = new PetInfo(newPet.petName, newPet.Strength.BaseValue, newPet.Smarts.BaseValue, newPet.Speed.BaseValue, newPet.affinity, newPet.description);
+        petInfo = newPet;
+        if(GetComponent<InteractablePet>())
+        {
+            GetComponent<InteractablePet>().SetPetInfo(petInfo);
+        }
         if (animator == null)
             animator = GetComponent<Animator>();
         animator.runtimeAnimatorController = petInfo.overworldAnimator;

@@ -23,6 +23,9 @@ the player will be presented with a graphical representation of the 3 pets.
     public static PetInfo Charby;
     public static PetInfo Squirt;
 
+    private PetInfo selectedPet;
+    public PetInfo SelectedPet { get { return selectedPet; } set { } }
+
     public void SetupPets()
     {
         Bulbos = new PetInfo("Bulbos", 18, 12, 6, AffinityManager.grassAffinity, 
@@ -35,11 +38,29 @@ the player will be presented with a graphical representation of the 3 pets.
         petTemplates.Add(Bulbos);
         petTemplates.Add(Charby);
         petTemplates.Add(Squirt);
+
+        //for testing purposes only
+        Task task = new Task("", 1, 1, null, null, null);
+        PetInfo starter = new PetInfo(Bulbos.petName, Bulbos.Strength.BaseValue, Bulbos.Smarts.BaseValue, Bulbos.Speed.BaseValue, Bulbos.affinity, Bulbos.description);
+        starter.AssignTask(task);
+        AddPetToList(starter);
+        PetInfo starter2 = new PetInfo(Charby.petName, Charby.Strength.BaseValue, Charby.Smarts.BaseValue, Charby.Speed.BaseValue, Charby.affinity, Charby.description);
+        starter2.AssignTask(task);
+        AddPetToList(starter2);
+        PetInfo starter3 = new PetInfo(Squirt.petName, Squirt.Strength.BaseValue, Squirt.Smarts.BaseValue, Squirt.Speed.BaseValue, Squirt.affinity, Squirt.description);
+        starter3.AssignTask(task);
+        AddPetToList(starter3);
+
     }
 
     public void AddPetToList(PetInfo newPet)
     {
         currentPets.Add(newPet);
+    }
+
+    public void SelectPet(PetInfo petInfo)
+    {
+        selectedPet = petInfo;
     }
 
 }

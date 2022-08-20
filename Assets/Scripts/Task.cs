@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class Task {
 
     /*
@@ -35,24 +35,27 @@ public class Task {
     */
 
     private string taskName;
-    public string TaskName { get{return taskName;} set{}}
+    public string TaskName { get{return taskName;} set{ taskName = value; }}
 
     public enum StatRequired{STRENGTH, SMARTS, SPEED}
     public StatRequired statRequired;
 
     private int baseDuration; //in minutes
-    public int BaseDuration{get{return baseDuration;} set{}}
+    public int BaseDuration{get{return baseDuration;} set{ baseDuration = value; }}
 
-    private int elapsedTime;
+    private int elapsedTime = 0;
 
     private int difficulty;
-    public int Difficulty {get{return difficulty;}set{}}
+    public int Difficulty {get{return difficulty;}set{ difficulty = value; }}
 
     private Item resource;
+    public Item Resource { get { return resource; } set { resource = value; } }
 
     private Region region;
+    public Region myRegion { get { return region; } set { region = value; } }
 
     private PetInfo petInfo;
+    public PetInfo myPetInfo { get { return petInfo; } set { petInfo = value; } }
 
     public Task()
     {

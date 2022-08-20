@@ -340,6 +340,7 @@ public class DialogManager : MonoBehaviour
 
     private void CloseDialogWindow()
     {
+        EventSystem.current.SetSelectedGameObject(null);
         ClearListeners();
         isActive = false;
         dialogPanel.SetActive(false);
@@ -374,6 +375,9 @@ public class Dialog
         speakerName = newName;
         speakerPortrait = newPortrait;
         isSpeech = _isSpeech;
+
+        responses = new string[4];
+
         if(response1 != "")
             responses[0] = response1;
         if(response2 != "")

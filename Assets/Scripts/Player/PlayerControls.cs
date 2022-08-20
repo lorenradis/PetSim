@@ -21,7 +21,7 @@ public class PlayerControls : MonoBehaviour
 
     public int playerNumber = 1;
 
-    void Start()
+    private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -29,8 +29,9 @@ public class PlayerControls : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    private void Update()
     {
+//        Debug.Log("Player update");
         if (GameManager.instance == null || GameManager.instance.gameState == GameManager.GameState.NORMAL)
         {
             ManageInput();
@@ -59,7 +60,7 @@ public class PlayerControls : MonoBehaviour
             isMoving = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 0"))
         {
             AttemptInteract();
         }
@@ -67,6 +68,7 @@ public class PlayerControls : MonoBehaviour
 
     private void AttemptInteract()
     {
+        Debug.Log("Attempting an interaction");
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, facingVector, 2f);
         foreach(RaycastHit2D hit in hits)
         {
@@ -80,6 +82,8 @@ public class PlayerControls : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (GameManager.instance.gameState != GameManager.GameState.NORMAL)
+            return;
         if (isMoving)
         {
             moveSpeed += acceleration * Time.deltaTime;

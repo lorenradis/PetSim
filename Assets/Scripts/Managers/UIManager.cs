@@ -12,6 +12,8 @@ public class UIManager
 {
     [SerializeField] private TextMeshProUGUI timeText;
 
+    //pet info region
+
     [SerializeField] private GameObject petInfoPanel;
     [SerializeField] private Image petPortraitImage;
     [SerializeField] private TextMeshProUGUI petNameText;
@@ -29,15 +31,21 @@ public class UIManager
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private Button closePetInfoPanelButton;
 
-
-    public UIManager()
-    {
-
-    }
+    //map region
+    [SerializeField] private GameObject mapPanel;
+    [SerializeField] private Button region1Button;
+    [SerializeField] private Button region2Button;
+    [SerializeField] private Button region3Button;
+    [SerializeField] private Button[] mapButtons = new Button[3];
+    [SerializeField] private Button mapCloseButton;
 
     public void Setup()
     {
         GameClock.onMinuteChangedCallback += DisplayTime;
+        mapButtons[0] = region1Button;
+        mapButtons[1] = region2Button;
+        mapButtons[2] = region3Button;
+
     }
 
     private void DisplayTime()
@@ -72,5 +80,63 @@ public class UIManager
     public void HidePetInfo()
     {
         petInfoPanel.SetActive(false);
+    }
+
+    public void ShowMapPanel()
+    {
+        mapPanel.SetActive(true);
+        for (int i = 0; i < GameManager.instance.regionManager.regions.Count; i++)
+        {
+            if (GameManager.instance.regionManager.regions[i].isUnlocked)
+            {
+                int index = i;
+                mapButtons[i].enabled = true;
+                mapButtons[i].onClick.RemoveAllListeners();
+                mapButtons[i].onClick.AddListener(() => { Debug.Log("Selecting region " + index); GameManager.instance.regionManager.SelectRegion(GameManager.instance.regionManager.regions[index]); });
+                mapButtons[i].onClick.AddListener(() => { HideMapPanel();  ShowAvailableTasks(GameManager.instance.regionManager.SelectedRegion); });
+            }
+            else
+            {
+                mapButtons[i].enabled = false;
+            }
+
+        }
+        mapCloseButton.onClick.AddListener(() => GameManager.instance.HideMap());
+        EventSystem.current.SetSelectedGameObject(mapButtons[0].gameObject);
+    }
+
+    public void SetupMapForAssignment()
+    {
+        for (int i = 0; i < mapButtons.Length; i++)
+        {
+            mapButtons[i].onClick.AddListener(() => { });
+        }
+    }
+
+    private void AddTask(Task task, Region region, PetInfo petInfo)
+    {
+
+    }
+
+    public void HideMapPanel()
+    {
+        mapPanel.SetActive(false);
+
+    }
+
+    public void ShowAvailableTasks(Region region)
+    {
+        Dialog dialog = new Dialog("What would you like so and so to do there?", "", null, false, "Gather Resources", "Cancel", "", "");
+        DialogManager.instance.ShowDialog(dialog, () => {
+            GameManager.instance.petManager.SelectedPet.AssignTask(GameManager.instance.taskManager.GatherResources);
+
+        }, () => { }
+            
+        );
+    }
+
+    public void HideAvailableTasks()
+    {
+
     }
 }

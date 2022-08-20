@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
 public class Region  {
 
     /*
@@ -20,6 +21,8 @@ public class Region  {
 
     public Region(){}
 
+    public bool isUnlocked = false;
+
     public Region(string newName, Affinity newAffinity)
     {
         regionName = newName;
@@ -29,6 +32,11 @@ public class Region  {
     public void AddPetToList(PetInfo petInfo)
     {
         availableSpawns.Add(petInfo);   
+    }
+
+    public void UnlockRegion()
+    {
+        isUnlocked = true;
     }
 
     public PetInfo GetRandomPet()

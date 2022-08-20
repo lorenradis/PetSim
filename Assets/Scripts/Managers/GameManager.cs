@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     {
         if (newState != gameState)
         {
+            Debug.Log("Changing from " + gameState + " to " + newState);
             previousState = gameState;
             gameState = newState;
         }
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
     public AffinityManager affinityManager;
     public RegionManager regionManager;
     public UIManager uiManager;
+    public TaskManager taskManager;
 
     public static GameManager instance = null;
 
@@ -68,6 +70,8 @@ public class GameManager : MonoBehaviour
         petManager.SetupPets();
         regionManager = new RegionManager();
         regionManager.SetupRegions();
+        taskManager = new TaskManager();
+        taskManager.SetupTasks();
         //uiManager = new UIManager();
         uiManager.Setup();
     }
@@ -85,6 +89,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+
         switch (gameState)
         {
             case GameState.STARTUP:
@@ -156,6 +161,25 @@ public class GameManager : MonoBehaviour
     public void HidePetInfo()
     {
         uiManager.HidePetInfo();
+        ExitMenuState();
+    }
+
+    public void ShowMapForPlayerMovement()
+    {
+        uiManager.ShowMapPanel();
+        EnterMenuState();
+    }
+
+    public void ShowMapForAssignment()
+    {
+        uiManager.ShowMapPanel();
+        uiManager.SetupMapForAssignment();
+        EnterMenuState();
+    }
+
+    public void HideMap()
+    {
+        uiManager.HideMapPanel();
         ExitMenuState();
     }
 }

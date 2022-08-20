@@ -16,10 +16,12 @@ public class InteractablePet : Interactable
     {
         base.OnInteract();
 
+        GameManager.instance.petManager.SelectPet(petInfo);
+
         DialogManager.instance.ShowDialog(interactDialog, () =>{
             GameManager.instance.ShowPetInfo(petInfo);
         }, () => {
-            //bring up the assign task menu
+            GameManager.instance.ShowMapForAssignment();
         }, () => {
             //show whatever the hell we end up putting here
         }, () => {

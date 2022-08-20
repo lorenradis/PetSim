@@ -73,4 +73,9 @@ public class PetInfo{
 
         affinity = newAffinity;
     }
+
+    public void AssignTask(Task task)
+    {
+        currentTask = task;
+    }
 }
