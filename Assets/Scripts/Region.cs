@@ -16,7 +16,7 @@ public class Region  {
 
     public string regionName;
 
-    public List<PetInfo> availableSpawns = new List<PetInfo>();
+    private List<PetInfo> availableSpawns = new List<PetInfo>();
 
     public Region(){}
 
@@ -31,4 +31,8 @@ public class Region  {
         availableSpawns.Add(petInfo);   
     }
 
+    public PetInfo GetRandomPet()
+    {
+         return null;   
+    }
 }
