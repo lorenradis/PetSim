@@ -10,8 +10,6 @@ public class InteractablePet : Interactable
 
     private void Start()
     {
-        interactDialog = new Dialog(
-            "Your pet " + petInfo.petName + " looks happy!  What would you like to do?","", null, false, "Check", "Assign", "More", "Cancel");
     }
 
     public override void OnInteract()

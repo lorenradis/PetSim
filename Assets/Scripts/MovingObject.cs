@@ -6,7 +6,7 @@ public class MovingObject : MonoBehaviour {
     protected bool isMoving = false;
 
     private Rigidbody2D rb2d;
-
+    private Collider2D col2d;
     [SerializeField]
     private float moveSpeed = 3f;
     private float moveMod = 1f;
@@ -22,6 +22,7 @@ public class MovingObject : MonoBehaviour {
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        col2d = GetComponent<Collider2D>();
     }
 
     public void MoveInDirection(Vector2 newDirection)
@@ -77,7 +78,7 @@ public class MovingObject : MonoBehaviour {
                 {
                     movementVector = CalculateMovementVector(rb2d.position + direction);
                 }
-                facingVector = (newPosition - rb2d.position).normalized;
+                facingVector = (movementVector - rb2d.position).normalized;
                 rb2d.MovePosition(rb2d.position + movementVector.normalized * moveSpeed * moveMod * Time.deltaTime);
             }
         }
@@ -106,8 +107,10 @@ public class MovingObject : MonoBehaviour {
             interestLevels[i] = Mathf.Clamp(Vector2.Dot(directions[i], targetVector), 0f, 1f);
 
             float checkDist = 5f;
-
+            col2d.enabled = false;
             RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, .25f, directions[i], checkDist, blockingLayer);
+            col2d.enabled = true;
+
             float shortestDist = 5f;
 
             foreach (RaycastHit2D hit in hits)

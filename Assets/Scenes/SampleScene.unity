@@ -228,7 +228,7 @@ Transform:
   m_GameObject: {fileID: 63198709}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -339,7 +339,7 @@ Transform:
   m_GameObject: {fileID: 1062942140}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -450,7 +450,7 @@ Transform:
   m_GameObject: {fileID: 1244816910}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4, y: -4, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -561,7 +561,7 @@ Transform:
   m_GameObject: {fileID: 1578436479}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4, y: 4, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -638,7 +638,6 @@ MonoBehaviour:
       weakAgainst: []
     overworldAnimator: {fileID: 0}
     moveMod: 1
-    currentTask: {fileID: 0}
 --- !u!61 &1606375375
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -764,6 +763,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b1c3fe6eee046bc8b0d53d9f40387b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactDialog:
+    message: What would you like to do?
+    speakerName: 
+    speakerPortrait: {fileID: 0}
+    responses:
+    - Check
+    - Assign
+    - Something
+    - Cancel
+    isSpeech: 0
 --- !u!50 &1606375380
 Rigidbody2D:
   serializedVersion: 4
@@ -1008,6 +1017,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3660609331143733852, guid: 405dada6e76f14eda9fbf98381c0ba53, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5748651750207672198, guid: 405dada6e76f14eda9fbf98381c0ba53, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5909135153644448665, guid: 405dada6e76f14eda9fbf98381c0ba53, type: 3}

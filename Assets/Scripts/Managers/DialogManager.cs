@@ -92,7 +92,7 @@ public class DialogManager : MonoBehaviour
         dialogs.Add(newDialog);
         if (!isActive)
         {
-            GameManager.instance.PauseForDialog();
+            GameManager.instance.EnterMenuState();
             dialogPanel.SetActive(true);
             isActive = true;
             StartCoroutine(DisplayDialog());
@@ -109,7 +109,7 @@ public class DialogManager : MonoBehaviour
         if (!isActive)
         {
             Debug.Log("I received a dialog while inactive");
-            GameManager.instance.PauseForDialog();
+            GameManager.instance.EnterMenuState();
             dialogPanel.SetActive(true);
             isActive = true;
             StartCoroutine(DisplayDialog());
@@ -128,7 +128,7 @@ public class DialogManager : MonoBehaviour
     public void ShowDialog(Dialog newDialog, Action action1)
     {
         dialogs.Add(newDialog);
-        GameManager.instance.PauseForDialog();
+        GameManager.instance.EnterMenuState();
         EventSystem.current.SetSelectedGameObject(button1.gameObject);
         AddCallbacks(action1);
 
@@ -144,7 +144,7 @@ public class DialogManager : MonoBehaviour
     public void ShowDialog(Dialog newDialog, Action action1, Action action2)
     {
         dialogs.Add(newDialog);
-        GameManager.instance.PauseForDialog();
+        GameManager.instance.EnterMenuState();
         EventSystem.current.SetSelectedGameObject(button1.gameObject);
         AddCallbacks(action1, action2);
 
@@ -159,7 +159,7 @@ public class DialogManager : MonoBehaviour
     public void ShowDialog(Dialog newDialog, Action action1, Action action2, Action action3)
     {
         dialogs.Add(newDialog);
-        GameManager.instance.PauseForDialog();
+        GameManager.instance.EnterMenuState();
         EventSystem.current.SetSelectedGameObject(button1.gameObject);
         AddCallbacks(action1, action2, action3);
 
@@ -174,7 +174,7 @@ public class DialogManager : MonoBehaviour
     public void ShowDialog(Dialog newDialog, Action action1, Action action2, Action action3, Action action4)
     {
         dialogs.Add(newDialog);
-        GameManager.instance.PauseForDialog();
+        GameManager.instance.EnterMenuState();
         EventSystem.current.SetSelectedGameObject(button1.gameObject);
         AddCallbacks(action1, action2, action3, action4);
 
@@ -349,7 +349,7 @@ public class DialogManager : MonoBehaviour
         button2.gameObject.SetActive(false);
         button3.gameObject.SetActive(false);
         button4.gameObject.SetActive(false);
-        GameManager.instance.ResumeFromDialog();
+        GameManager.instance.ExitMenuState();
     }
 }
 
