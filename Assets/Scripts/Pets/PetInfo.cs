@@ -38,7 +38,12 @@ public class PetInfo{
     public float moveMod = 1f;
 
     public Task currentTask;
-    
+
+    public delegate void OnAssignTask();
+    public static OnAssignTask onAssignTaskCallback;
+
+    public enum PetState { IDLE, ONTASK, OTHER }//maybe we'll use this to clean up what a pet is doing and where they are?
+
     public PetInfo()
     {
 
@@ -76,6 +81,17 @@ public class PetInfo{
 
     public void AssignTask(Task task)
     {
-        currentTask = task;
+        currentTask = new Task(task.TaskName, task.BaseDuration, task.Difficulty, null, null, this);
+        if(onAssignTaskCallback != null)
+        {
+            onAssignTaskCallback.Invoke();
+        }
+    }
+
+    public void CompleteCurrentTask()
+    {
+        AssignTask(new Task());
+        if (onAssignTaskCallback != null)
+            onAssignTaskCallback.Invoke();
     }
 }

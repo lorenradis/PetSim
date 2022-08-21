@@ -128,6 +128,7 @@ public class UIManager
     {
         Dialog dialog = new Dialog("What would you like so and so to do there?", "", null, false, "Gather Resources", "Cancel", "", "");
         DialogManager.instance.ShowDialog(dialog, () => {
+            DialogManager.instance.ShowSimpleDialog("So and so went off on assignment, so long so and so!");
             GameManager.instance.petManager.SelectedPet.AssignTask(GameManager.instance.taskManager.GatherResources);
 
         }, () => { }

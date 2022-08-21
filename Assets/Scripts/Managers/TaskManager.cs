@@ -15,7 +15,7 @@ public class TaskManager
     {
         GatherResources = new Task();
         GatherResources.TaskName = "Gather Resources";
-        GatherResources.BaseDuration = 60;
+        GatherResources.BaseDuration = 5;
         ForageFood = new Task();
         ForageFood.TaskName = "Forage for Food";
         FindFriends = new Task();

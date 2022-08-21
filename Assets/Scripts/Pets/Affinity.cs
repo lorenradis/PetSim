@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class Affinity  {
 
     public string affinityName;
-    public List<Affinity> strongAgainst = new List<Affinity>();
-    public List<Affinity> weakAgainst = new List<Affinity>();
+    private List<Affinity> strongAgainst = new List<Affinity>();
+    private List<Affinity> weakAgainst = new List<Affinity>();
 
     public Affinity()
     {

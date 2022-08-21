@@ -70,12 +70,25 @@ public class Task {
         resource = newResource;
         region = newRegion;
         petInfo = newPet;
+        Debug.Log("I'm subscribing to the minute changed callback");
+        GameClock.onMinuteChangedCallback += AdvanceTimer;
+        
     }
 
     public void AdvanceTimer()
     {
         //should subscribe to gameClock's onminutechanged callback
         elapsedTime++;
+        if(elapsedTime >= baseDuration)
+        {
+            CompleteThisTask();
+        }
+    }
+
+    private void CompleteThisTask()
+    {
+        DialogManager.instance.ShowSimpleDialog(petInfo.petName + " completed their task to " + TaskName + "!  Welcome back " + petInfo.petName + "!");
+        petInfo.CompleteCurrentTask();
         
     }
 

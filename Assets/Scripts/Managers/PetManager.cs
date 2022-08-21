@@ -40,18 +40,19 @@ the player will be presented with a graphical representation of the 3 pets.
         petTemplates.Add(Squirt);
 
         //for testing purposes only
-        Task task = new Task("", 1, 1, null, null, null);
+        Task task = new Task();
         PetInfo starter = new PetInfo(Bulbos.petName, Bulbos.Strength.BaseValue, Bulbos.Smarts.BaseValue, Bulbos.Speed.BaseValue, Bulbos.affinity, Bulbos.description);
-        starter.AssignTask(task);
+        starter.currentTask = task;
         AddPetToList(starter);
         PetInfo starter2 = new PetInfo(Charby.petName, Charby.Strength.BaseValue, Charby.Smarts.BaseValue, Charby.Speed.BaseValue, Charby.affinity, Charby.description);
-        starter2.AssignTask(task);
+        starter2.currentTask = task;
         AddPetToList(starter2);
         PetInfo starter3 = new PetInfo(Squirt.petName, Squirt.Strength.BaseValue, Squirt.Smarts.BaseValue, Squirt.Speed.BaseValue, Squirt.affinity, Squirt.description);
-        starter3.AssignTask(task);
+        starter3.currentTask = task;
         AddPetToList(starter3);
-
     }
+
+
 
     public void AddPetToList(PetInfo newPet)
     {
