@@ -23,6 +23,7 @@ public class MovingObject : MonoBehaviour {
     {
         rb2d = GetComponent<Rigidbody2D>();
         col2d = GetComponent<Collider2D>();
+        facingVector = Vector2.down;
     }
 
     public void MoveInDirection(Vector2 newDirection)
@@ -78,7 +79,8 @@ public class MovingObject : MonoBehaviour {
                 {
                     movementVector = CalculateMovementVector(rb2d.position + direction);
                 }
-                facingVector = (movementVector - rb2d.position).normalized;
+                if (movementVector != Vector2.zero)
+                    facingVector = movementVector;
                 rb2d.MovePosition(rb2d.position + movementVector.normalized * moveSpeed * moveMod * Time.deltaTime);
             }
         }

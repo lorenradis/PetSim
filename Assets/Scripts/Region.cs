@@ -23,12 +23,39 @@ public class Region  {
 
     public bool isUnlocked = false;
 
-    public Region(string newName, Affinity newAffinity)
+    public Item resource;
+    public Item food;
+
+    private int experience;
+    private int level;
+    public int ToNextLevel { get { return level * level * level; } set { } }
+
+    public Region(string newName, Affinity newAffinity, Item newResource, Item newFood)
     {
         regionName = newName;
         affinity = newAffinity;
+        resource = newResource;
+        food = newFood;
     }
-    
+
+    public void GainExperience(int amount)
+    {
+        experience += amount;
+        if(experience >= ToNextLevel)
+        {
+            LevelUp();
+        }
+    }
+
+    private void LevelUp()
+    {
+        level++;
+        if(experience >= ToNextLevel)
+        {
+            LevelUp();
+        }
+    }
+
     public void AddPetToList(PetInfo petInfo)
     {
         availableSpawns.Add(petInfo);   

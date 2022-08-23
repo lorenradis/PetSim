@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
-public class Task {
+public class Task
+{
 
     /*
     tasks will have a baseDuration (amount of time it should take to complete)
@@ -35,21 +36,27 @@ public class Task {
     */
 
     private string taskName;
-    public string TaskName { get{return taskName;} set{ taskName = value; }}
+    public string TaskName { get { return taskName; } set { taskName = value; } }
 
-    public enum StatRequired{STRENGTH, SMARTS, SPEED}
+    public enum StatRequired { STRENGTH, SMARTS, SPEED }
     public StatRequired statRequired;
 
+    public enum TaskType { IDLE, GATHER, FOOD, EXPLORE }
+    public TaskType taskType;
+
     private int baseDuration; //in minutes
-    public int BaseDuration{get{return baseDuration;} set{ baseDuration = value; }}
+    public int BaseDuration { get { return baseDuration; } set { baseDuration = value; } }
 
     private int elapsedTime = 0;
 
     private int difficulty;
-    public int Difficulty {get{return difficulty;}set{ difficulty = value; }}
+    public int Difficulty { get { return difficulty; } set { difficulty = value; } }
 
     private Item resource;
     public Item Resource { get { return resource; } set { resource = value; } }
+
+    private Item food;
+    public Item Food { get { return food; } set { } }
 
     private Region region;
     public Region myRegion { get { return region; } set { region = value; } }
@@ -62,24 +69,26 @@ public class Task {
 
     }
 
-    public Task(string newName, int newDur, int newDiff, Item newResource, Region newRegion, PetInfo newPet)
+    public Task(string newName, int newDur, int newDiff, Region newRegion, PetInfo newPet, TaskType type)
     {
         taskName = newName;
         baseDuration = newDur;
         difficulty = newDiff;
-        resource = newResource;
         region = newRegion;
+        if (region != null)
+        {
+            resource = region.resource;
+            food = region.food;
+        }
         petInfo = newPet;
-        Debug.Log("I'm subscribing to the minute changed callback");
-        GameClock.onMinuteChangedCallback += AdvanceTimer;
-        
+        taskType = type;
     }
 
     public void AdvanceTimer()
     {
         //should subscribe to gameClock's onminutechanged callback
         elapsedTime++;
-        if(elapsedTime >= baseDuration)
+        if (elapsedTime >= baseDuration)
         {
             CompleteThisTask();
         }
@@ -87,9 +96,7 @@ public class Task {
 
     private void CompleteThisTask()
     {
-        DialogManager.instance.ShowSimpleDialog(petInfo.petName + " completed their task to " + TaskName + "!  Welcome back " + petInfo.petName + "!");
         petInfo.CompleteCurrentTask();
-        
     }
 
 }

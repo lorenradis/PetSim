@@ -21,15 +21,18 @@ public class RegionManager  {
 
     public void SetupRegions()
     {
-        desertRegion = new Region("Desert", AffinityManager.fireAffinity);
-        forestRegion = new Region("Forest", AffinityManager.grassAffinity);
-        lakeRegion = new Region("Lake", AffinityManager.waterAffinity);
+        desertRegion = new Region("Desert", AffinityManager.fireAffinity, ItemManager.sand, ItemManager.succulent);
+        forestRegion = new Region("Forest", AffinityManager.grassAffinity, ItemManager.wood, ItemManager.berries);
+        lakeRegion = new Region("Lake", AffinityManager.waterAffinity, ItemManager.water, ItemManager.mushrooms);
 
-        forestRegion.UnlockRegion();
 
         regions.Add(forestRegion);
         regions.Add(lakeRegion);
         regions.Add(desertRegion);
+
+        forestRegion.UnlockRegion();
+        desertRegion.UnlockRegion();
+        lakeRegion.UnlockRegion();
     }
 
     public void SelectRegion(Region region)

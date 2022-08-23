@@ -21,11 +21,12 @@ public class InteractablePet : Interactable
         DialogManager.instance.ShowDialog(interactDialog, () =>{
             GameManager.instance.ShowPetInfo(petInfo);
         }, () => {
+            //assign to a task (show the map first)
             GameManager.instance.ShowMapForAssignment();
         }, () => {
-            //show whatever the hell we end up putting here
+            //make the pet your companion
         }, () => {
-            //hide the prompt    
+            DialogManager.instance.ShowSimpleDialog("See ya later " + petInfo.petName + "!");
         });
     }
 

@@ -14,6 +14,11 @@ public class TamedPetSpawner : MonoBehaviour
         PetInfo.onAssignTaskCallback += RefreshAllSpawns;
     }
 
+    private void OnDisable()
+    {
+        PetInfo.onAssignTaskCallback -= RefreshAllSpawns;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("Player"))
@@ -22,13 +27,21 @@ public class TamedPetSpawner : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.transform.CompareTag("Player"))
+        {
+            RemoveAllSpawns();
+        }
+    }
+
     private void SpawnPresentPets()
     {
         List<PetInfo> pets = GameManager.instance.petManager.currentPets;
         for (int i = 0; i < pets.Count; i++)
         {
-            Debug.Log(pets[i].petName + "'s task is " + pets[i].currentTask.TaskName);
-            if (pets[i].currentTask.TaskName == "")
+//            Debug.Log(pets[i].petName + "'s task is " + pets[i].currentTask.TaskName);
+            if (pets[i].currentTask.taskType == Task.TaskType.IDLE)
             {
                 SpawnPet(pets[i]);
             }
@@ -45,6 +58,7 @@ public class TamedPetSpawner : MonoBehaviour
         newPet.transform.position = transform.position;
         newPet.transform.SetParent(transform);
         newPet.GetComponent<OverworldPet>().SetPetInfo(petInfo);
+        newPet.GetComponent<OverworldPet>().SetPetToTame();
         activePets.Add(petInfo);
         activePetObjects.Add(newPet);
     }
@@ -63,15 +77,20 @@ public class TamedPetSpawner : MonoBehaviour
         }
     }
 
-    public void RefreshAllSpawns()
+    private void RemoveAllSpawns()
     {
-        Debug.Log("Refreshing spawns");
-        for (int i = activePetObjects.Count-1; i >=0; i--)
+        for (int i = activePetObjects.Count - 1; i >= 0; i--)
         {
             Destroy(activePetObjects[i]);
             activePetObjects.RemoveAt(i);
             activePets.RemoveAt(i);
         }
+    }
+
+
+    public void RefreshAllSpawns()
+    {
+        RemoveAllSpawns();
         SpawnPresentPets();
     }
 }

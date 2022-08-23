@@ -26,6 +26,11 @@ the player will be presented with a graphical representation of the 3 pets.
     private PetInfo selectedPet;
     public PetInfo SelectedPet { get { return selectedPet; } set { } }
 
+    //overworld animator controllers
+    [SerializeField] private RuntimeAnimatorController bulbosOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController charbyOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController squirtOverworldAnimator;
+
     public void SetupPets()
     {
         Bulbos = new PetInfo("Bulbos", 18, 12, 6, AffinityManager.grassAffinity, 
@@ -41,14 +46,18 @@ the player will be presented with a graphical representation of the 3 pets.
 
         //for testing purposes only
         Task task = new Task();
+        task.TaskName = "";
         PetInfo starter = new PetInfo(Bulbos.petName, Bulbos.Strength.BaseValue, Bulbos.Smarts.BaseValue, Bulbos.Speed.BaseValue, Bulbos.affinity, Bulbos.description);
         starter.currentTask = task;
+        starter.overworldAnimator = bulbosOverworldAnimator;
         AddPetToList(starter);
         PetInfo starter2 = new PetInfo(Charby.petName, Charby.Strength.BaseValue, Charby.Smarts.BaseValue, Charby.Speed.BaseValue, Charby.affinity, Charby.description);
         starter2.currentTask = task;
+        starter2.overworldAnimator = charbyOverworldAnimator;
         AddPetToList(starter2);
         PetInfo starter3 = new PetInfo(Squirt.petName, Squirt.Strength.BaseValue, Squirt.Smarts.BaseValue, Squirt.Speed.BaseValue, Squirt.affinity, Squirt.description);
         starter3.currentTask = task;
+        starter3.overworldAnimator = squirtOverworldAnimator;
         AddPetToList(starter3);
     }
 
@@ -57,6 +66,7 @@ the player will be presented with a graphical representation of the 3 pets.
     public void AddPetToList(PetInfo newPet)
     {
         currentPets.Add(newPet);
+        GameClock.onMinuteChangedCallback += newPet.IncrementNeeds;
     }
 
     public void SelectPet(PetInfo petInfo)

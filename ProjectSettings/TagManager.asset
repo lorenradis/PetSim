@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Farm
   layers:
   - Default
   - TransparentFX
@@ -11,7 +12,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - EditorOnly
   - 
   - 
   - 
@@ -44,6 +45,12 @@ TagManager:
   - name: Ground
     uniqueID: 1951234229
     locked: 0
+  - name: BelowObjects
+    uniqueID: 3075445851
+    locked: 0
   - name: Objects
     uniqueID: 2126695425
+    locked: 0
+  - name: EditorOnly
+    uniqueID: 2099517187
     locked: 0
