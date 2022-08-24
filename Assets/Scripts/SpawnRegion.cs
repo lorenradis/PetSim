@@ -8,12 +8,17 @@ public class SpawnRegion : MonoBehaviour {
 
     [SerializeField] private GameObject overworldPetPrefab;
 
+    private void Start()
+    {
+        Debug.Log("Hey I'm a spawn region and I exist");
+    }
+
     private void SpawnPet()
     {
         int index = Random.Range(0, availableSpawns.Count);
         PetInfo petToSpawn = availableSpawns[index];
         PetInfo newPet = new PetInfo(petToSpawn.petName, petToSpawn.Strength.BaseValue, petToSpawn.Smarts.BaseValue, petToSpawn.Speed.BaseValue,
-        petToSpawn.affinity, petToSpawn.description);
+        petToSpawn.affinity, petToSpawn.description, petToSpawn.overworldAnimator);
         GameObject newSpawn = Instantiate(overworldPetPrefab) as GameObject;
         newSpawn.GetComponent<OverworldPet>().SetPetInfo(newPet);
     }

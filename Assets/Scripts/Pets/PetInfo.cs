@@ -46,14 +46,23 @@ public class PetInfo
     public delegate void OnAssignTask();
     public static OnAssignTask onAssignTaskCallback;
 
-    public enum PetState { IDLE, ONTASK, OTHER }//maybe we'll use this to clean up what a pet is doing and where they are?
+    public enum PetState { IDLE, ONTASK, PARTNER, OTHER }//maybe we'll use this to clean up what a pet is doing and where they are?
+    public PetState petState;
+
+    private void ChangeState(PetState newState)
+    {
+        if (petState != newState)
+        {
+            petState = newState;
+        }
+    }
 
     public PetInfo()
     {
 
     }
 
-    public PetInfo(string newName, int newStr, int newSmrt, int newSpd, Affinity newAffinity, string desc)
+    public PetInfo(string newName, int newStr, int newSmrt, int newSpd, Affinity newAffinity, string desc, RuntimeAnimatorController newAnimator)
     {
         petName = newName;
 
@@ -81,16 +90,32 @@ public class PetInfo
         description = desc;
 
         affinity = newAffinity;
+
+        overworldAnimator = newAnimator;
     }
 
     public void IncrementNeeds()
     {
+        Debug.Log("Incrementing needs");
         ticks++;
         if (ticks >= needFrequency)
         {
+            ticks = 0;
             food--;
             play--;
             clean--;
+        }
+    }
+
+    public void SetPartner(bool isPartner)
+    {
+        if (isPartner)
+        {
+            ChangeState(PetState.PARTNER);
+        }
+        else
+        {
+            ChangeState(PetState.IDLE);
         }
     }
 
@@ -100,7 +125,10 @@ public class PetInfo
         currentTask.myRegion = region;
 
         if (currentTask.taskType != Task.TaskType.IDLE)
+        {
+            ChangeState(PetState.ONTASK);
             GameClock.onMinuteChangedCallback += AdvanceTaskTimer;
+        }
         if (onAssignTaskCallback != null)
         {
             onAssignTaskCallback.Invoke();
@@ -115,6 +143,7 @@ public class PetInfo
 
     public void CompleteCurrentTask()
     {
+        ChangeState(PetState.IDLE);
         int amount = Random.Range(1, 10);
         int secondaryAmount = 0;
         int roll = Random.Range(1, 100);
@@ -123,39 +152,57 @@ public class PetInfo
             secondaryAmount = Mathf.Clamp(amount / 2, 1, amount / 2);
         }
         string message = petName + " brought back " + amount + " ";
+        string secondaryMessage = "What luck!  While they were out they also found ";
+
+        DialogManager.instance.ShowSimpleDialog(petName + " completed their task to " + currentTask.TaskName + "!  Welcome back " + petName + "!");
+
         switch (currentTask.taskType)
         {
             case Task.TaskType.GATHER:
                 message += currentTask.myRegion.resource.itemName;
+                DialogManager.instance.ShowSimpleDialog(message);
                 GameManager.instance.itemManager.AddResource(currentTask.Resource, amount);
-
-                GameManager.instance.itemManager.AddFood(currentTask.Food, secondaryAmount);
-
+                if (secondaryAmount > 0)
+                {
+                    GameManager.instance.itemManager.AddFood(currentTask.Food, secondaryAmount);
+                    secondaryMessage += secondaryAmount + " " + currentTask.Food.itemName + "!";
+                    DialogManager.instance.ShowSimpleDialog(secondaryMessage);
+                }
                 break;
             case Task.TaskType.FOOD:
                 message += currentTask.myRegion.food.itemName;
+                DialogManager.instance.ShowSimpleDialog(message);
                 GameManager.instance.itemManager.AddFood(currentTask.Food, amount);
-                GameManager.instance.itemManager.AddResource(currentTask.Resource, secondaryAmount);
+                if (secondaryAmount > 0)
+                {
+                    GameManager.instance.itemManager.AddResource(currentTask.Resource, secondaryAmount);
+                    secondaryMessage += secondaryAmount + " " + currentTask.Resource.itemName + "!";
+                    DialogManager.instance.ShowSimpleDialog(secondaryMessage);
+                }
                 break;
             case Task.TaskType.EXPLORE:
                 message = petName + " explored the " + currentTask.myRegion.regionName + " region, increasing your knowledge by " + amount;
                 currentTask.myRegion.GainExperience(amount);
-                roll = Random.Range(1, 100);
-                if(roll < 50)
+                if(secondaryAmount>0)
                 {
-                    GameManager.instance.itemManager.AddResource(currentTask.Resource, secondaryAmount);
+                    roll = Random.Range(1, 100);
+                    if (roll < 50)
+                    {
+                        GameManager.instance.itemManager.AddResource(currentTask.Resource, secondaryAmount);
+                        secondaryMessage += secondaryAmount + " " + currentTask.Resource.itemName + "!";
+                    }
+                    else
+                    {
+                        GameManager.instance.itemManager.AddFood(currentTask.Food, secondaryAmount);
+                        secondaryMessage += secondaryAmount + " " + currentTask.Food.itemName + "!";
+                    }
+                    DialogManager.instance.ShowSimpleDialog(secondaryMessage);
                 }
-                else
-                {
-                    GameManager.instance.itemManager.AddFood(currentTask.Food, secondaryAmount);
-                }
+
                 break;
             default:
                 break;
         }
-
-        DialogManager.instance.ShowSimpleDialog(petName + " completed their task to " + currentTask.TaskName + "!  Welcome back " + petName + "!");
-        DialogManager.instance.ShowSimpleDialog(message);
 
         AssignTask(new Task(), null);
 

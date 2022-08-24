@@ -21,6 +21,8 @@ public class CompanionPet : MovingObject
     private float timeInState = 0f;
     private float randomTime;
 
+    private PetInfo petInfo;
+
     private Animator animator;
     private SpriteRenderer spriteRenderer;
 
@@ -109,5 +111,17 @@ public class CompanionPet : MovingObject
         SetMoveMod(1.5f);
         MoveToTarget(player);
         ChangeState(PetState.FOLLOW);
+    }
+
+    public void SetPetInfo(PetInfo newPet)
+    {
+        petInfo = newPet;
+        if (animator == null)
+            animator = GetComponent<Animator>();
+        animator.runtimeAnimatorController = petInfo.overworldAnimator;
+        if(GetComponent<InteractablePet>())
+        {
+            GetComponent<InteractablePet>().SetPetInfo(petInfo);
+        }
     }
 }

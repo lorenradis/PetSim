@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    public GameObject partnerPetPrefab;
+    private GameObject currentPartnerPet;
+
     //Scene Change Region
     [SerializeField] private Animator sceneTransitionAnimator;
     private SceneInfo currentScene;
@@ -234,6 +238,19 @@ public class GameManager : MonoBehaviour
     public void HideInventory()
     {
         uiManager.HideInventory();
+        ChangeState(GameState.NORMAL);
+    }
+
+    public void ShowRegionInfo()
+    {
+        uiManager.ShowRegionInfo();
+        ChangeState(GameState.MENU);
+    }
+
+    public void HideRegionInfo()
+    {
+        uiManager.HideRegionInfo();
+        ChangeState(GameState.NORMAL);
     }
 
     public void CloseCurrentMenu()
@@ -263,6 +280,21 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeIn());
         Player.position = playerStartPosition;
         player.GetComponent<PlayerControls>().FacingVector = playerFacing;
+        if(petManager.PartnerPet != null)
+        {
+            SpawnPartnerPet();
+        }
+    }
+
+    public void SpawnPartnerPet()
+    {
+        if(currentPartnerPet == null)
+        {
+            GameObject newPartner = Instantiate(partnerPetPrefab, Vector2.zero, Quaternion.identity) as GameObject;
+            currentPartnerPet = newPartner;
+        }
+        currentPartnerPet.transform.position = player.position;
+        currentPartnerPet.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet);
     }
 
     private IEnumerator FadeIn()

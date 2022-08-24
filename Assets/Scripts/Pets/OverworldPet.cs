@@ -185,7 +185,7 @@ public class OverworldPet : MovingObject
         SetMoveMod(1.5f);
     }
 
-    private void StartFleeing(Transform newTarget)
+    public void StartFleeing(Transform newTarget)
     {
         StartCoroutine(StartFleeingRoutine(newTarget));
     }

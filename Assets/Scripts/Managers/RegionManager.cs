@@ -25,6 +25,15 @@ public class RegionManager  {
         forestRegion = new Region("Forest", AffinityManager.grassAffinity, ItemManager.wood, ItemManager.berries);
         lakeRegion = new Region("Lake", AffinityManager.waterAffinity, ItemManager.water, ItemManager.mushrooms);
 
+        forestRegion.AddLevelUnlock(new LevelUnlock(3, () => { forestRegion.levelSpecificObjects[0] = false; }, false), true); //exit from forest to lake
+        forestRegion.AddLevelUnlock(new LevelUnlock(4, () => { forestRegion.levelSpecificObjects[1] = true; }, false), false); //doorway to house
+
+        forestRegion.AddSpawn(PetManager.Bulbos, false, 2);
+        forestRegion.AddSpawn(PetManager.Bulbos, true, 2);
+        forestRegion.AddSpawn(PetManager.Squirt, false, 0);
+        forestRegion.AddSpawn(PetManager.Squirt, false, 1);
+        forestRegion.AddSpawn(PetManager.Charby, true, 0);
+        forestRegion.AddSpawn(PetManager.Charby, true, 1);
 
         regions.Add(forestRegion);
         regions.Add(lakeRegion);

@@ -12,11 +12,13 @@ public class TamedPetSpawner : MonoBehaviour
     private void Start()
     {
         PetInfo.onAssignTaskCallback += RefreshAllSpawns;
+        PetManager.onPartnerChangedCallback += RefreshAllSpawns;
     }
 
     private void OnDisable()
     {
         PetInfo.onAssignTaskCallback -= RefreshAllSpawns;
+        PetManager.onPartnerChangedCallback -= RefreshAllSpawns;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -41,7 +43,7 @@ public class TamedPetSpawner : MonoBehaviour
         for (int i = 0; i < pets.Count; i++)
         {
 //            Debug.Log(pets[i].petName + "'s task is " + pets[i].currentTask.TaskName);
-            if (pets[i].currentTask.taskType == Task.TaskType.IDLE)
+            if (pets[i].petState == PetInfo.PetState.IDLE)
             {
                 SpawnPet(pets[i]);
             }
@@ -65,10 +67,9 @@ public class TamedPetSpawner : MonoBehaviour
 
     public void RemoveAssignedPets()
     {
-
         for (int i = activePets.Count-1; i >= 0; i--)
         {
-            if(activePets[i].currentTask.TaskName != "")
+            if(activePets[i].petState != PetInfo.PetState.IDLE)
             {
                 Destroy(activePetObjects[i]);
                 activePetObjects.RemoveAt(i);
@@ -90,7 +91,6 @@ public class TamedPetSpawner : MonoBehaviour
 
     public void RefreshAllSpawns()
     {
-        RemoveAllSpawns();
-        SpawnPresentPets();
+        RemoveAssignedPets();
     }
 }

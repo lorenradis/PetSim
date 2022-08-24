@@ -54,6 +54,11 @@ public class UIManager
     [SerializeField] private GameObject inGameMenuPanel;
     [SerializeField] private Button[] menuButtons;
 
+    //region info region
+    [SerializeField] private GameObject regionInfoPanel;
+    [SerializeField] private TextMeshProUGUI regionInfoText;
+    [SerializeField] private Button closeRegionInfoButton;
+
     //inventory region
     [SerializeField] private GameObject inventoryPanel;
 
@@ -216,7 +221,7 @@ public class UIManager
         int slotIndex = 0;
         for (int i = 0; i < inventory.allItems.Count; i++)
         {
-            if(inventory.allItems[i].quantity > 0)
+            if (inventory.allItems[i].quantity > 0)
             {
                 itemSlots[slotIndex].SetItem(inventory.allItems[i]);
                 itemSlots[slotIndex].gameObject.SetActive(true);
@@ -259,23 +264,48 @@ public class UIManager
         ShowIngameMenu();
     }
 
+    public void ShowRegionInfo()
+    {
+        HideIngameMenu();
+        regionInfoPanel.SetActive(true);
+        regionInfoText.text = "";
+        foreach (Region region in GameManager.instance.regionManager.regions)
+        {
+            regionInfoText.text += region.regionName + " - Affinity: " + region.affinity.affinityName + ", Level: " + region.Level + ", Experience: " + region.Experience + "/" + region.ToNextLevel + " \n";
+        }
+    }
+
+    public void HideRegionInfo()
+    {
+        regionInfoPanel.SetActive(false);
+    }
+
     public GameManager.GameState CloseCurrentMenu()
     {
         if (inGameMenuPanel.activeSelf)
         {
             inGameMenuPanel.SetActive(false);
             return GameManager.GameState.NORMAL;
-        }else if(petInfoPanel.activeSelf)
+        }
+        else if (petInfoPanel.activeSelf)
         {
             petInfoPanel.SetActive(false);
             return GameManager.GameState.NORMAL;
-        }else if(farmInfoPanel.activeSelf)
+        }
+        else if (farmInfoPanel.activeSelf)
         {
             farmInfoPanel.SetActive(false);
             return GameManager.GameState.NORMAL;
-        }else if(inventoryPanel.activeSelf)
+        }
+        else if (inventoryPanel.activeSelf)
         {
             inventoryPanel.SetActive(false);
+            ShowIngameMenu();
+            return GameManager.GameState.MENU;
+        }
+        else if (regionInfoPanel.activeSelf)
+        {
+            regionInfoPanel.SetActive(false);
             ShowIngameMenu();
             return GameManager.GameState.MENU;
         }
