@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: FarmScene
   entrances:
-  - {x: 85, y: 43.5}
-  - {x: 48, y: 46.5}
+  - {x: 25, y: 12}
+  - {x: 56, y: 72}
+  - {x: 119, y: 47.5}
+  minBounds: {x: 0, y: 0}
+  maxBounds: {x: 0, y: 0}

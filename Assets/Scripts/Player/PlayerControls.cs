@@ -17,8 +17,11 @@ public class PlayerControls : MonoBehaviour
 
     private float moveSpeed = 0f;
     private float minMoveSpeed = .1f;
-    private float maxMoveSpeed = 4f;
+    private float maxMoveSpeed = 5f;
     private float moveMod = 1f;
+    private float runMod = 1.75f;
+    private float walkMod = 1f;
+
 
     private float acceleration = 35f;
 
@@ -172,13 +175,13 @@ public class PlayerControls : MonoBehaviour
     private void StartRunning()
     {
         isRunning = true;
-        moveMod = 2f;
+        moveMod = runMod;
     }
 
     private void StopRunning()
     {
         isRunning = false;
-        moveMod = 1f;
+        moveMod = walkMod;
     }
 
     private void AttemptInteract()
@@ -208,7 +211,6 @@ public class PlayerControls : MonoBehaviour
         {
             GameManager.instance.farmManager.SetTileState(targetSquare.x, targetSquare.y, tileToPlace);
             StartCoroutine(PauseMovement(.2f));
-
         }
     }
 

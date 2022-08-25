@@ -86,14 +86,18 @@ public class MovingObject : MonoBehaviour {
         }
     }
 
+    private Vector2[] directions = new Vector2[8];
+    private float[] interestLevels = new float[8];
+    private float[] dangerLevels = new float[8];
+
     private Vector2 CalculateMovementVector(Vector2 newDestination)
     {
         Vector2 targetVector = (newDestination - rb2d.position).normalized;
         Vector2 move = Vector2.zero;
 
-        Vector2[] directions = new Vector2[8];
-        float[] interestLevels = new float[8];
-        float[] dangerLevels = new float[8];
+        //Vector2[] directions = new Vector2[8];
+        //float[] interestLevels = new float[8];
+        //float[] dangerLevels = new float[8];
 
         directions[0] = Vector2.up;
         directions[1] = new Vector2(1, 1).normalized;

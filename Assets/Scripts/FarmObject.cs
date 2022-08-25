@@ -14,6 +14,8 @@ public class FarmObject : MonoBehaviour
     public RuleTile waterRuleTile;
     public Tile basicTile;
 
+    private BoxCollider2D bounds;
+
     public RuleTile fenceTile;
 
     private void OnEnable()
@@ -29,17 +31,27 @@ public class FarmObject : MonoBehaviour
     private void Start()
     {
         DrawFarm();
-
+        bounds = GetComponent<BoxCollider2D>();
+        bounds.size = new Vector2(GameManager.instance.farmManager.Width, GameManager.instance.farmManager.Height);
+        bounds.offset = bounds.size * .5f;
     }
 
     private void DrawFarm()
     {
         FarmManager farm = GameManager.instance.farmManager;
-        for (int x = 0; x < farm.Width; x++)
+        for (int x = -1; x <= farm.Width; x++)
         {
-            for (int y = 0; y < farm.Height; y++)
+            for (int y = -1; y <= farm.Height; y++)
             {
-                DrawTileAtCoords(farm.gridTiles[x, y], x, y);
+                if (x < 0 || x == farm.Width || y <00 || y == farm.Height)
+                {
+                    if(y > -1 || x > 3)
+                        objectsBelowPlayerTilemap.SetTile(new Vector3Int(x, y), fenceTile);
+                }
+                else
+                {
+                    DrawTileAtCoords(farm.gridTiles[x, y], x, y);
+                }
             }
         }
     }

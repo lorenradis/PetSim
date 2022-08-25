@@ -13,6 +13,9 @@ public class FarmManager
     private int height;
     public int Height { get { return height; } set { } }
 
+    private const int startX = 32;
+    private const int startY = 18;
+
     public delegate void OnTileChanged();
     public static OnTileChanged onTileChangedCallback;
 
@@ -55,6 +58,9 @@ public class FarmManager
 
     public void SetTileState(int x, int y, TileState newTileState)
     {
+        x -= startX;
+        y -= startY;
+
         if (x >= 0 && x < width && y >= 0 && y < height)
         {
             gridTiles[x, y] = newTileState;

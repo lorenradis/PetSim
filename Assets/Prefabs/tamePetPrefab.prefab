@@ -173,7 +173,7 @@ MonoBehaviour:
   moveSpeed: 3
   blockingLayer:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 128
   petInfo:
     petName: 
     Strength:

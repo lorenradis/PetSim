@@ -12,6 +12,7 @@ public class SpriteSorter : MonoBehaviour
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = (int)(transform.position.y * -100) + offset;
     }
 
     private void Update()

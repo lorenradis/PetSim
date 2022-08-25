@@ -39,6 +39,7 @@ public class UIManager
     [SerializeField] private Button mapCloseButton;
 
     //farm tools region
+    [SerializeField] private GameObject farmControlsPanel;
     [SerializeField] private Image leftToolImage;
     [SerializeField] private Image centerToolImage;
     [SerializeField] private Image rightToolImage;
@@ -278,6 +279,16 @@ public class UIManager
     public void HideRegionInfo()
     {
         regionInfoPanel.SetActive(false);
+    }
+
+    public void ShowFarmControls()
+    {
+        farmControlsPanel.SetActive(true);
+    }
+
+    public void HideFarmControls()
+    {
+        farmControlsPanel.SetActive(false);
     }
 
     public GameManager.GameState CloseCurrentMenu()

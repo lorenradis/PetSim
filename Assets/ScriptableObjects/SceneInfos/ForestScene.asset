@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: ForestScene
   entrances:
-  - {x: 0, y: 0}
+  - {x: 41, y: 18}
+  minBounds: {x: 0, y: 0}
+  maxBounds: {x: 0, y: 0}

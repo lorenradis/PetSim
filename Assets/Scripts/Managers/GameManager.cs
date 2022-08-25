@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     public TaskManager taskManager;
     public ItemManager itemManager;
     public FarmManager farmManager;
+    public GlobalLightManager globalLightManager;
 
     public static GameManager instance = null;
 
@@ -90,7 +91,8 @@ public class GameManager : MonoBehaviour
         taskManager.SetupTasks();
         //uiManager = new UIManager();
         uiManager.Setup();
-        farmManager.SetupFarm(44, 44);
+        farmManager.SetupFarm(55, 35);
+        globalLightManager.Setup();
     }
 
     private void Start()
@@ -278,11 +280,21 @@ public class GameManager : MonoBehaviour
     private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         StartCoroutine(FadeIn());
+
         Player.position = playerStartPosition;
         player.GetComponent<PlayerControls>().FacingVector = playerFacing;
         if(petManager.PartnerPet != null)
         {
             SpawnPartnerPet();
+        }
+
+        if(GameObject.FindGameObjectWithTag("Farm") != null)
+        {
+            uiManager.ShowFarmControls();
+        }
+        else
+        {
+            uiManager.HideFarmControls();
         }
     }
 

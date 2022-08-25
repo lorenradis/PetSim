@@ -13,7 +13,7 @@ TagManager:
   - Water
   - UI
   - EditorOnly
-  - 
+  - BlockingLayer
   - 
   - 
   - 
@@ -51,6 +51,12 @@ TagManager:
   - name: Objects
     uniqueID: 2126695425
     locked: 0
+  - name: AboveObjects
+    uniqueID: 1254925247
+    locked: 0
   - name: EditorOnly
+    uniqueID: 2099517187
+    locked: 0
+  - name: BlockingLayer
     uniqueID: 2099517187
     locked: 0
