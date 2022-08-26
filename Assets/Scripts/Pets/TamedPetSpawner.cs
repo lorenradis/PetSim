@@ -92,5 +92,24 @@ public class TamedPetSpawner : MonoBehaviour
     public void RefreshAllSpawns()
     {
         RemoveAssignedPets();
+        //loop through all pets the player owns, if they are NOT on assignment or a partner AND not present in the active pets list then spawn them and add them to the list
+        foreach(PetInfo pet in GameManager.instance.petManager.currentPets)
+        {
+            if(pet.petState == PetInfo.PetState.IDLE)
+            {
+                bool toSpawn = true;
+                for(int i = 0; i < activePets.Count; i++)
+                {
+                    if(activePets[i] == pet)
+                    {
+                        toSpawn = false;
+                    }
+                }
+                if(toSpawn)
+                {
+                    SpawnPet(pet);
+                }
+            }
+        }
     }
 }

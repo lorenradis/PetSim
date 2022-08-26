@@ -12,6 +12,8 @@ public class UIManager
 {
     [SerializeField] private TextMeshProUGUI timeText;
 
+    private int pageIndex = 0;
+
     //pet info region
     [SerializeField] private GameObject petInfoPanel;
     [SerializeField] private Image petPortraitImage;
@@ -61,7 +63,12 @@ public class UIManager
     [SerializeField] private Button closeRegionInfoButton;
 
     //inventory region
-    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private GameObject itemsPanel;
+    [SerializeField] private Button closeItemsButton;
+    [SerializeField] private GameObject resourcesPanel;
+    [SerializeField] private Button closeResourcesButton;
+    [SerializeField] private GameObject foodsPanel;
+    [SerializeField] private Button closeFoodsButton;
 
     [SerializeField] private ItemSlot[] itemSlots;
     [SerializeField] private ItemSlot[] resourceSlots;
@@ -214,9 +221,9 @@ public class UIManager
 
     }
 
-    public void ShowInventory()
+    public void ShowItems()
     {
-        inventoryPanel.SetActive(true);
+        itemsPanel.SetActive(true);
         ItemManager inventory = GameManager.instance.itemManager;
         //there are buttons for showing items, foods and resources
         int slotIndex = 0;
@@ -229,7 +236,30 @@ public class UIManager
                 slotIndex++;
             }
         }
-        slotIndex = 0;
+        if(itemSlots[0].gameObject.activeSelf)
+            EventSystem.current.SetSelectedGameObject(itemSlots[0].gameObject);
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(closeItemsButton.gameObject);
+        }
+    }
+
+    public void HideItems()
+    {
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            itemSlots[i].gameObject.SetActive(false);
+        }
+        itemsPanel.SetActive(false);
+        ShowIngameMenu();
+    }
+
+    public void ShowResources()
+    {
+        resourcesPanel.SetActive(true);
+        HideIngameMenu();
+        int slotIndex = 0;
+        ItemManager inventory = GameManager.instance.itemManager;
         for (int i = 0; i < inventory.allResources.Count; i++)
         {
             if (inventory.allResources[i].quantity > 0)
@@ -239,7 +269,31 @@ public class UIManager
                 slotIndex++;
             }
         }
-        slotIndex = 0;
+
+        if (resourceSlots[0].gameObject.activeSelf)
+            EventSystem.current.SetSelectedGameObject(resourceSlots[0].gameObject);
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(closeResourcesButton.gameObject);
+        }
+    }
+
+    public void HideResources()
+    {
+        for (int i = 0; i < resourceSlots.Length; i++)
+        {
+            resourceSlots[i].gameObject.SetActive(false);
+        }
+        resourcesPanel.SetActive(false);
+        ShowIngameMenu();
+    }
+
+    public void ShowFoods()
+    {
+        int slotIndex = 0;
+        ItemManager inventory = GameManager.instance.itemManager;
+        foodsPanel.SetActive(true);
+        HideIngameMenu();
         for (int i = 0; i < inventory.allFoods.Count; i++)
         {
             if (inventory.allFoods[i].quantity > 0)
@@ -249,19 +303,21 @@ public class UIManager
                 slotIndex++;
             }
         }
-
-        EventSystem.current.SetSelectedGameObject(itemSlots[0].gameObject);
+        if (foodSlots[0].gameObject.activeSelf)
+            EventSystem.current.SetSelectedGameObject(foodSlots[0].gameObject);
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(closeFoodsButton.gameObject);
+        }
     }
 
-    public void HideInventory()
+    public void HideFoods()
     {
-        for (int i = 0; i < itemSlots.Length; i++)
+        for (int i = 0; i < foodSlots.Length; i++)
         {
-            itemSlots[i].gameObject.SetActive(false);
-            resourceSlots[i].gameObject.SetActive(false);
             foodSlots[i].gameObject.SetActive(false);
         }
-        inventoryPanel.SetActive(false);
+        foodsPanel.SetActive(false);
         ShowIngameMenu();
     }
 
@@ -291,6 +347,17 @@ public class UIManager
         farmControlsPanel.SetActive(false);
     }
 
+    public void ChangePage(int amount)
+    {
+        /*
+         * some ui gameobjects will be arrays rather than individual items - inventory for instance.
+         * int pageIndex will reset to 0 every time a new menu is opened
+         * showinventory() will reveal inventoryPanels[pageIndex]
+         * then advancing the page index will first check if the currently active panel is one of the multi page panels
+         * if so, pageindex ++ (and loops back to zero) and then we call showinventory again
+         */
+    }
+
     public GameManager.GameState CloseCurrentMenu()
     {
         if (inGameMenuPanel.activeSelf)
@@ -305,12 +372,25 @@ public class UIManager
         }
         else if (farmInfoPanel.activeSelf)
         {
-            farmInfoPanel.SetActive(false);
-            return GameManager.GameState.NORMAL;
+            HideFarmInfo();
+            ShowIngameMenu();
+            return GameManager.GameState.MENU;
         }
-        else if (inventoryPanel.activeSelf)
+        else if (itemsPanel.activeSelf)
         {
-            inventoryPanel.SetActive(false);
+            HideItems();
+            ShowIngameMenu();
+            return GameManager.GameState.MENU;
+        }
+        else if (resourcesPanel.activeSelf)
+        {
+            HideResources();
+            ShowIngameMenu();
+            return GameManager.GameState.MENU;
+        }
+        else if (foodsPanel.activeSelf)
+        {
+            HideFoods();
             ShowIngameMenu();
             return GameManager.GameState.MENU;
         }

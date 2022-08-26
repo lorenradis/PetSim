@@ -49,7 +49,7 @@ public class GlobalLightManager
         nextTime -= previousTime;
         previousTime -= previousTime;
 
-        Debug.Log("Progress from start of " + currentTime + " to " + nextTime + " is " + currentTime / nextTime);
+//        Debug.Log("Progress from start of " + currentTime + " to " + nextTime + " is " + currentTime / nextTime);
 
         Color color = Color.Lerp(startColor, endColor, currentTime / nextTime);
 

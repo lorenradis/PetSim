@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         taskManager.SetupTasks();
         //uiManager = new UIManager();
         uiManager.Setup();
-        farmManager.SetupFarm(55, 35);
+        farmManager.SetupFarm(25, 15);
         globalLightManager.Setup();
     }
 
@@ -108,7 +108,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-
         switch (gameState)
         {
             case GameState.STARTUP:
@@ -230,19 +229,42 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.NORMAL);
     }
 
-    public void ShowInventory()
+    public void ShowItems()
     {
         HideIngameMenu();
-        uiManager.ShowInventory();
+        uiManager.ShowItems();
         ChangeState(GameState.MENU);
     }
 
     public void HideInventory()
     {
-        uiManager.HideInventory();
+        uiManager.HideItems();
         ChangeState(GameState.NORMAL);
     }
 
+    public void ShowResources()
+    {
+        uiManager.ShowResources();
+        ChangeState(GameState.MENU); 
+    }
+
+    public void HideResources()
+    {
+        uiManager.HideResources();
+        ChangeState(GameState.NORMAL);
+    }
+
+    public void ShowFoods()
+    {
+        uiManager.ShowFoods();
+        ChangeState(GameState.MENU);
+    }
+
+    public void HideFoods()
+    {
+        uiManager.HideFoods();
+        ChangeState(GameState.NORMAL);
+    }
     public void ShowRegionInfo()
     {
         uiManager.ShowRegionInfo();
