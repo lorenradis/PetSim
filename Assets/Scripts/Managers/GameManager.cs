@@ -45,7 +45,8 @@ public class GameManager : MonoBehaviour
 
 
     public GameObject partnerPetPrefab;
-    private GameObject currentPartnerPet;
+    private List<GameObject> partnerPetObjects = new List<GameObject>();
+    private List<PetInfo> partnerPets = new List<PetInfo>();
 
     //Scene Change Region
     [SerializeField] private Animator sceneTransitionAnimator;
@@ -305,9 +306,9 @@ public class GameManager : MonoBehaviour
 
         Player.position = playerStartPosition;
         player.GetComponent<PlayerControls>().FacingVector = playerFacing;
-        if(petManager.PartnerPet != null)
+        if(petManager.PartnerPet1 != null)
         {
-            SpawnPartnerPet();
+            SpawnPartnerPets();
         }
 
         if(GameObject.FindGameObjectWithTag("Farm") != null)
@@ -320,15 +321,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SpawnPartnerPet()
+    public void SpawnPartnerPets()
     {
-        if(currentPartnerPet == null)
+        if(partnerPetObjects.Count > 0)
         {
-            GameObject newPartner = Instantiate(partnerPetPrefab, Vector2.zero, Quaternion.identity) as GameObject;
-            currentPartnerPet = newPartner;
+            foreach(GameObject pet in partnerPetObjects)
+            {
+                Destroy(pet);
+            }
+            partnerPetObjects.Clear();
         }
-        currentPartnerPet.transform.position = player.position;
-        currentPartnerPet.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet);
+
+        GameObject newPartner;
+
+        if(petManager.PartnerPet1 != null)
+        {
+            Debug.Log(petManager.PartnerPet1.petName);
+            newPartner = Instantiate(partnerPetPrefab, player.position, Quaternion.identity) as GameObject;
+            partnerPetObjects.Add(newPartner);
+            newPartner.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet1);
+        }
+        if(petManager.PartnerPet2 != null)
+        {
+            Debug.Log(petManager.PartnerPet2.petName);
+            newPartner = Instantiate(partnerPetPrefab, player.position, Quaternion.identity) as GameObject;
+            partnerPetObjects.Add(newPartner);
+            newPartner.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet2);
+        }
     }
 
     private IEnumerator FadeIn()

@@ -125,14 +125,13 @@ public class PlayerControls : MonoBehaviour
         {
             AttemptInteract();
         }
-        if (Input.GetKey("joystick button 1")) //b button
+        if (Input.GetKeyDown("joystick button 1")) //b button
         {
-            if (!isRunning)
-                StartRunning();
+            //use ability of equipped pet
         }
         else if (Input.GetKeyUp("joystick button 1"))
         {
-            StopRunning();
+
         }
         if (Input.GetKeyDown("joystick button 2")) // x button
         {
@@ -141,7 +140,9 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKeyDown("joystick button 3")) // y button
         {
             //if on farm, use tool
-            SetTerrainType();
+            PlaceTerrainTile();
+            MeleeAttack();
+
         }
         if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 5"))
         {
@@ -205,7 +206,20 @@ public class PlayerControls : MonoBehaviour
         ChangeState(PlayerState.IDLE);
     }
 
-    private void SetTerrainType()
+    private void MeleeAttack()
+    {
+        animator.SetFloat("inputX", facingVector.x);
+        animator.SetFloat("inputY", facingVector.y);
+        animator.SetTrigger("attack");
+        StartCoroutine(SuccessiveHitChecks());
+    }
+
+    private IEnumerator SuccessiveHitChecks()
+    {
+        yield return null;
+    }
+
+    private void PlaceTerrainTile()
     {
         if (GameObject.FindGameObjectWithTag("Farm") != null)
         {

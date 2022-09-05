@@ -6,7 +6,7 @@ public class InteractablePet : Interactable
 {
     private PetInfo petInfo;
 
-    public enum PetState { WILD, TAME }
+    public enum PetState { WILD, TAME, PARTNER }
     public PetState petState;
 
     private void Start()
@@ -71,13 +71,36 @@ public class InteractablePet : Interactable
                     //assign to a task (show the map first)
                     GameManager.instance.ShowMapForAssignment();
                 }, () => {
-                    GameManager.instance.petManager.SetPartnerPet(petInfo);
-                    DialogManager.instance.ShowSimpleDialog("You invited " + petInfo.petName + " to join you on your adventure, welcome to the team " + petInfo.petName + "!");
-                    GameManager.instance.SpawnPartnerPet();
-                    Destroy(gameObject);
+                    if (GameManager.instance.petManager.SetPartnerPet(petInfo))
+                    {
+                        DialogManager.instance.ShowSimpleDialog("You invited " + petInfo.petName + " to join you on your adventure, welcome to the team " + petInfo.petName + "!");
+                        GameManager.instance.SpawnPartnerPets();
+                        Destroy(gameObject);
+                    }
                 }, () => {
                     DialogManager.instance.ShowSimpleDialog("See ya later " + petInfo.petName + "!");
                 });
+                break;
+            case PetState.PARTNER:
+                GameManager.instance.petManager.SelectPet(petInfo);
+
+                interactDialog = new Dialog("", petInfo.petName, null, false, "Check", "Dismiss", "Cancel", "");
+
+                DialogManager.instance.ShowDialog(interactDialog, () =>
+                {
+                    GameManager.instance.ShowPetInfo(petInfo);
+                }, () =>
+                {
+                    GameManager.instance.petManager.DismissPartnerPet(petInfo);
+                    DialogManager.instance.ShowSimpleDialog("You sent " + petInfo.petName + " back to the farm.  See you at home " + petInfo.petName + "!");
+                    GameManager.instance.SpawnPartnerPets();
+                }, () =>
+                {
+                    DialogManager.instance.ShowSimpleDialog("See ya later " + petInfo.petName + "!");
+                });
+
+                break;
+            default:
                 break;
         }
     }

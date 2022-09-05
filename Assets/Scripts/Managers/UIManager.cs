@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,7 +8,7 @@ using UnityEngine.EventSystems;
 
 using TMPro;
 
-[System.Serializable]
+[Serializable]
 public class UIManager
 {
     [SerializeField] private TextMeshProUGUI timeText;
@@ -74,6 +75,11 @@ public class UIManager
     [SerializeField] private ItemSlot[] resourceSlots;
     [SerializeField] private ItemSlot[] foodSlots;
 
+    //startup screen region
+    [SerializeField] private GameObject starterSelectPanel;
+    [SerializeField] private Button starter1Button;
+    [SerializeField] private Button starter2Button;
+    [SerializeField] private Button starter3Button;
 
     public void Setup()
     {
@@ -356,6 +362,34 @@ public class UIManager
          * then advancing the page index will first check if the currently active panel is one of the multi page panels
          * if so, pageindex ++ (and loops back to zero) and then we call showinventory again
          */
+    }
+
+    public void ShowStarterSelectScreen()
+    {
+        starterSelectPanel.SetActive(true);
+        PetInfo selectedPet;
+        starter1Button.onClick.AddListener(delegate
+        {
+            selectedPet = PetManager.Bulbos;
+            MakeStarterSelection(selectedPet);
+        });
+        starter2Button.onClick.AddListener(delegate
+        {
+            selectedPet = PetManager.Charby;
+            MakeStarterSelection(selectedPet);
+        });
+        starter3Button.onClick.AddListener(delegate
+        {
+            selectedPet = PetManager.Squirt;
+            MakeStarterSelection(selectedPet);
+        });
+    }
+
+    private void MakeStarterSelection(PetInfo pet)
+    {
+        PetInfo petToAdd = new PetInfo(pet.petName, pet.Strength.BaseValue, pet.Smarts.BaseValue, pet.Speed.BaseValue, pet.affinity, pet.description, pet.overworldAnimator);
+        GameManager.instance.petManager.AddPetToList(petToAdd);
+        DialogManager.instance.ShowSimpleDialog("You selected " + pet.petName + " as your starter, congrats!");
     }
 
     public GameManager.GameState CloseCurrentMenu()

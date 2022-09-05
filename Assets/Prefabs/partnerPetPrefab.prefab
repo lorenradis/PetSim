@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7124526758297731035}
   - component: {fileID: -4571247726236984896}
   - component: {fileID: 8850000816992613070}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: partnerPetPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b1c3fe6eee046bc8b0d53d9f40387b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  petState: 0
+  petState: 2
 --- !u!114 &-4571247726236984896
 MonoBehaviour:
   m_ObjectHideFlags: 0

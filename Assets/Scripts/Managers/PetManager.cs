@@ -22,18 +22,33 @@ the player will be presented with a graphical representation of the 3 pets.
     public static PetInfo Bulbos;
     public static PetInfo Charby;
     public static PetInfo Squirt;
+    public static PetInfo Stunky;
 
     private PetInfo selectedPet;
     public PetInfo SelectedPet { get { return selectedPet; } set { } }
 
-    private PetInfo partnerPet = null;
-    public PetInfo PartnerPet { get {
-            return partnerPet; } }
+    private PetInfo partnerPet1 = null;
+    public PetInfo PartnerPet1
+    {
+        get
+        {
+            return partnerPet1;
+        }
+    }
+    private PetInfo partnerPet2 = null;
+    public PetInfo PartnerPet2
+    {
+        get
+        {
+            return partnerPet2;
+        }
+    }
 
     //overworld animator controllers
     [SerializeField] private RuntimeAnimatorController bulbosOverworldAnimator;
     [SerializeField] private RuntimeAnimatorController charbyOverworldAnimator;
     [SerializeField] private RuntimeAnimatorController squirtOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController stunkyOverworldAnimator;
 
     public delegate void OnPartnerChanged();
     public static OnPartnerChanged onPartnerChangedCallback;
@@ -47,9 +62,12 @@ the player will be presented with a graphical representation of the 3 pets.
         Squirt = new PetInfo("Squirt", 6, 18, 12, AffinityManager.waterAffinity,
         "Cunning and quick, but a tad lacking in the brawn department - Squirt are most at home in lakes, rivers, oceans and wetlands of the world", squirtOverworldAnimator);
 
+        Stunky = new PetInfo("Stunky", 12, 12, 12, AffinityManager.fireAffinity, "He's a real stinker!", stunkyOverworldAnimator);
+
         petTemplates.Add(Bulbos);
         petTemplates.Add(Charby);
         petTemplates.Add(Squirt);
+        petTemplates.Add(Stunky);
 
         //for testing purposes only
         Task task = new Task();
@@ -66,8 +84,6 @@ the player will be presented with a graphical representation of the 3 pets.
         starter3.currentTask = task;
         starter3.overworldAnimator = squirtOverworldAnimator;
         AddPetToList(starter3);
-
-        partnerPet = Squirt;
     }
 
     public void AddPetToList(PetInfo newPet)
@@ -81,14 +97,49 @@ the player will be presented with a graphical representation of the 3 pets.
         selectedPet = petInfo;
     }
 
-    public void SetPartnerPet(PetInfo petInfo)
+    public bool SetPartnerPet(PetInfo petInfo)
     {
-        if (partnerPet != null)
+        if(partnerPet1 != null)
         {
-            partnerPet.SetPartner(false);
+            if(partnerPet2 != null)
+            {
+                DialogManager.instance.ShowSimpleDialog("You already have the maximum number of pets, dismiss one or more before inviting someone else to join you.");
+                return false;
+            }
+            else
+            {
+                partnerPet2 = petInfo;
+                partnerPet2.SetPartner(true);
+            }
         }
-        partnerPet = petInfo;
-        partnerPet.SetPartner(true);
+        else
+        {
+            partnerPet1 = petInfo;
+            partnerPet1.SetPartner(true);
+        }
+
+        if(onPartnerChangedCallback != null)
+        {
+            onPartnerChangedCallback.Invoke();
+        }
+        return true;
+    }
+
+    public void DismissPartnerPet(PetInfo petInfo)
+    {
+        if(partnerPet1 == petInfo)
+        {
+            partnerPet1 = null;
+            petInfo.SetPartner(false);
+        }else if(partnerPet2 == petInfo)
+        {
+            partnerPet2 = null;
+            petInfo.SetPartner(false);
+        }
+        else
+        {
+            Debug.Log("Unable to dismiss " + petInfo.petName + ", they do not appear to be a pet");
+        }
         if(onPartnerChangedCallback != null)
         {
             onPartnerChangedCallback.Invoke();
