@@ -60,7 +60,6 @@ game manager will call clock.tick when..... when we're in a state that allows ti
         minute = ticks % 60;
         hour = (ticks / 60) % 24;
         day = 1 + (ticks / 60 / 24);
-
     }
 
     public void Tick()

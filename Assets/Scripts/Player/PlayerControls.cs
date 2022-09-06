@@ -9,6 +9,8 @@ public class PlayerControls : MonoBehaviour
     private Collider2D col2d;
     private Rigidbody2D rb2d;
 
+    [SerializeField] private Animator hitAnimator;
+
     private float attackRadius = .2f;
     private float attackRange = 1f;
     public Transform checkSource;
@@ -19,13 +21,14 @@ public class PlayerControls : MonoBehaviour
     public Vector2 FacingVector { get { return facingVector; } set { facingVector = value; } }
     private Vector2Int targetSquare;
 
-    private float moveSpeed = 0f;
-    private float minMoveSpeed = .1f;
-    private float maxMoveSpeed = 5f;
+    private float moveSpeed = 5f;
     private float moveMod = 1f;
     private float runMod = 1.75f;
     private float walkMod = 1f;
+    private float knockbackForce = 10f;
+    private Vector2 knockbackVector;
 
+    private PlayerInfo playerInfo;
 
     private float acceleration = 35f;
 
@@ -54,13 +57,7 @@ public class PlayerControls : MonoBehaviour
         }
     }
 
-    public void UnlockTileType(FarmManager.TileState tileState)
-    {
-        if (!unlockedTiles.Contains(tileState))
-        {
-            unlockedTiles.Add(tileState);
-        }
-    }
+
 
     private void Start()
     {
@@ -69,6 +66,8 @@ public class PlayerControls : MonoBehaviour
         col2d = GetComponent<Collider2D>();
         rb2d = GetComponent<Rigidbody2D>();
 
+        playerInfo = GameManager.instance.playerInfo;
+        
         //for debug purposes
         UnlockTileType(FarmManager.TileState.BASIC);
         UnlockTileType(FarmManager.TileState.LONGGRASS);
@@ -130,13 +129,12 @@ public class PlayerControls : MonoBehaviour
             AttemptInteract();
         }
         if (Input.GetKeyDown("joystick button 1")) //b button
-        {
-            //use ability of equipped pet
+        {            //if on farm with a partner pet, use tool
+            PlaceTerrainTile();
         }
         else if (Input.GetKeyUp("joystick button 1"))
         {
-            //if on farm with a partner pet, use tool
-            PlaceTerrainTile();
+
         }
         if (Input.GetKeyDown("joystick button 2")) // x button
         {
@@ -161,6 +159,19 @@ public class PlayerControls : MonoBehaviour
             if (tileTypeIndex >= unlockedTiles.Count)
                 tileTypeIndex = 0;
             SetCurrentTileType(tileTypeIndex);
+        }
+    }
+
+    private void ResetUnlockedTileTypes()
+    {
+        unlockedTiles.Clear();
+    }
+
+    public void UnlockTileType(FarmManager.TileState tileState)
+    {
+        if (!unlockedTiles.Contains(tileState))
+        {
+            unlockedTiles.Add(tileState);
         }
     }
 
@@ -210,165 +221,73 @@ public class PlayerControls : MonoBehaviour
 
     private void MeleeAttack()
     {
-        animator.SetFloat("inputX", facingVector.x);
-        animator.SetFloat("inputY", facingVector.y);
-        animator.SetTrigger("attack");
-        StartCoroutine(PauseMovement(.1f));
-        StartCoroutine(SuccessiveHitChecks());
+        int meleeEnergy = 5;
+        if(playerInfo.HasEnergy(meleeEnergy))
+        {
+            playerInfo.DecreaseEnergy(meleeEnergy);
+            animator.SetFloat("inputX", facingVector.x);
+            animator.SetFloat("inputY", facingVector.y);
+            animator.SetTrigger("attack");
+            StartCoroutine(PauseMovement(.25f));
+            StartCoroutine(SuccessiveHitChecks());
+        }
+
     }
 
     private IEnumerator SuccessiveHitChecks()
     {
-        yield return null;
-        float x = facingVector.x;
-        float y = facingVector.y;
-
-        Vector2 checkVector;
-        if(Mathf.Abs(x) > Mathf.Abs(y))
+        spriteRenderer.sortingOrder += 1000;
+        RaycastHit2D[] hits = Physics2D.CircleCastAll(checkSource.position, attackRadius, facingVector, attackRange, blockingLayer);
+        bool didHit = false;
+        foreach(RaycastHit2D hit in hits)
         {
-            if(x > 0) //player is facing right
+            yield return null;
+            if (hit.transform.GetComponent<OverworldPet>())
             {
-                checkVector = new Vector2(1, 1).normalized;
-                RaycastHit2D[] hits = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach(RaycastHit2D hit in hits)
+                if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
                 {
-                    if(hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if(hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
+                    didHit = true;
+                    //obviously change this later, this is just to see if hitting works
+                    Destroy(hit.transform.gameObject);
                 }
-
-                yield return null;
-
-                checkVector = new Vector2(1, 0).normalized;
-                RaycastHit2D[] hits2 = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits2)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
-
             }
-            else //player is facing left
+            else if (hit.transform.GetComponent<GardenObstacleObject>())
             {
-                checkVector = new Vector2(-1,-1).normalized;
-                RaycastHit2D[] hits = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
-
-                yield return null;
-
-                checkVector = new Vector2(-1, 0).normalized;
-                RaycastHit2D[] hits2 = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits2)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
+                didHit = true;
+                hit.transform.GetComponent<GardenObstacleObject>().TakeDamage();
             }
         }
-        else
+        yield return new WaitForSeconds(.1f);
+        if(didHit)
         {
-            if(y >0) //player is facing up
-            {
-                checkVector = new Vector2(-1, 1).normalized;
-                RaycastHit2D[] hits = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
-
-                yield return null;
-
-                checkVector = new Vector2(0,1).normalized;
-                RaycastHit2D[] hits2 = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits2)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
-            }
-            else //player is facing down
-            {
-                checkVector = new Vector2(1, -1).normalized;
-                RaycastHit2D[] hits = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
-
-                yield return null;
-
-                checkVector = new Vector2(0,-1).normalized;
-                RaycastHit2D[] hits2 = Physics2D.CircleCastAll(checkSource.position, attackRadius, checkVector, attackRange, blockingLayer);
-                foreach (RaycastHit2D hit in hits2)
-                {
-                    if (hit.transform.GetComponent<OverworldPet>())
-                    {
-                        if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
-                        {
-                            //obviously change this later, this is just to see if hitting works
-                            Destroy(hit.transform.gameObject);
-                        }
-                    }
-                }
-            }
+            hitAnimator.transform.position = (Vector2)checkSource.position + facingVector;
+            hitAnimator.SetTrigger("hit");
         }
-        yield return null;
+        yield return new WaitForSeconds(.1f);
+        spriteRenderer.sortingOrder -= 1000;
+    }
+
+    public void TakeDamage(int amount)
+    {
+
     }
 
     private void PlaceTerrainTile()
     {
-        if (GameObject.FindGameObjectWithTag("Farm") != null)
+        if (GameObject.FindGameObjectWithTag("Farm") == null)
+            return;
+        int terraformCost = 10;
+        if (playerInfo.HasEnergy(terraformCost))
         {
+            playerInfo.DecreaseEnergy(terraformCost);
             GameManager.instance.farmManager.SetTileState(targetSquare.x, targetSquare.y, tileToPlace);
             StartCoroutine(PauseMovement(.2f));
         }
+        else
+        {
+            DialogManager.instance.ShowSimpleDialog("You don't have the energy to do that right now");
+        }
+
     }
 
     private void LateUpdate()
@@ -384,19 +303,12 @@ public class PlayerControls : MonoBehaviour
 
         if (playerState == PlayerState.MOVING)
         {
-            moveSpeed += acceleration * Time.deltaTime;
-        }
-        else
-        {
-            moveSpeed -= acceleration * 2f * Time.deltaTime;
-        }
-
-        moveSpeed = Mathf.Clamp(moveSpeed, 0f, maxMoveSpeed);
-
-        if (moveSpeed > minMoveSpeed)
-        {
             Vector2 newPosition = Vector2.MoveTowards(rb2d.position, rb2d.position + facingVector.normalized, moveSpeed * moveMod * Time.deltaTime);
             rb2d.MovePosition(newPosition);
+        }else if(playerState == PlayerState.KNOCKBACK)
+        {
+            rb2d.MovePosition(rb2d.position + knockbackVector * knockbackForce * Time.deltaTime);
         }
+
     }
 }

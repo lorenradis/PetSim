@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     }
 
     //Game State Region
-    public enum GameState { STARTUP, NORMAL, MENU, PAUSE, LOADING }
+    public enum GameState { STARTUP, NORMAL, MENU, CUTSCENE, PAUSE, LOADING }
     public GameState gameState;
     private GameState previousState;
     private void ChangeState(GameState newState)
@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour
     //Scene Change Region
     [SerializeField] private Animator sceneTransitionAnimator;
     private SceneInfo currentScene;
+    public SceneInfo CurrentScene { get { return currentScene; } set { } }
     private SceneInfo previousScene;
     private Vector2 playerStartPosition;
     private Vector2 playerFacing;
@@ -66,7 +67,9 @@ public class GameManager : MonoBehaviour
     public ItemManager itemManager;
     public FarmManager farmManager;
     public StoryProgression storyProgression;
+    public PlayerInfo playerInfo;
     public GlobalLightManager globalLightManager;
+    public AudioManager audioManager;
 
     public static GameManager instance = null;
 
@@ -94,6 +97,7 @@ public class GameManager : MonoBehaviour
         //uiManager = new UIManager();
         uiManager.Setup();
         farmManager.SetupFarm(25, 15);
+        playerInfo = new PlayerInfo(960, 960);
         globalLightManager.Setup();
     }
 
@@ -174,6 +178,16 @@ public class GameManager : MonoBehaviour
     public void ExitMenuState()
     {
         ChangeState(previousState);
+    }
+
+    public void EnterCutsceneState()
+    {
+        ChangeState(GameState.CUTSCENE);
+    }
+
+    public void ExitCutsceneState()
+    {
+        ChangeState(GameState.NORMAL);
     }
 
     public void ShowPetInfo(PetInfo petInfo)
@@ -288,6 +302,24 @@ public class GameManager : MonoBehaviour
     {
         ChangeState(GameState.MENU);
         uiManager.ShowStarterSelectScreen();
+    }
+
+    public void GoToSleep()
+    {
+        StartCoroutine(RenderPlayerSleep());
+    }
+
+    private IEnumerator RenderPlayerSleep()
+    {
+        sceneTransitionAnimator.SetTrigger("fadeOut");
+        //player sleepy song
+        yield return new WaitForSeconds(.5f);
+        playerInfo.IncreaseEnergy(1000);
+        int duration = 8 * 60;
+
+        gameClock.SetTime(gameClock.Ticks + duration);
+        
+        sceneTransitionAnimator.SetTrigger("fadeIn");
     }
 
     public void LoadNewScene(SceneInfo sceneInfo, int entrance)

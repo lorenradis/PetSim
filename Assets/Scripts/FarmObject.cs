@@ -18,6 +18,10 @@ public class FarmObject : MonoBehaviour
 
     public RuleTile fenceTile;
 
+    //obstacle region
+    public GameObject rockPrefab;
+    public GameObject stumpPrefab;
+
     private void OnEnable()
     {
         FarmManager.onTileChangedCallback += DrawFarm;
@@ -63,7 +67,20 @@ public class FarmObject : MonoBehaviour
             {
                 DrawTileAtCoords(farm.gridTiles[x, y], x, y);
             }
-
+        }
+        for (int i = 0; i < farm.CurrentObstacles.Count; i++)
+        {
+            GameObject newObstacle;
+            switch (farm.CurrentObstacles[i].obstacleType)
+            {
+                case GardenObstacle.ObstacleType.ROCK:
+                    newObstacle = Instantiate(rockPrefab, new Vector2(farm.CurrentObstacles[i].gridPosition.x + FarmManager.startX, farm.CurrentObstacles[i].gridPosition.y + FarmManager.startY), Quaternion.identity) as GameObject;
+                    break;
+                case GardenObstacle.ObstacleType.STUMP:
+                    newObstacle = Instantiate(stumpPrefab, new Vector2(farm.CurrentObstacles[i].gridPosition.x + FarmManager.startX, farm.CurrentObstacles[i].gridPosition.y + FarmManager.startY), Quaternion.identity) as GameObject;
+                    break;
+                default: break;
+            }
         }
     }
 
@@ -74,6 +91,7 @@ public class FarmObject : MonoBehaviour
         switch (tileState)
         {
             case FarmManager.TileState.BASIC:
+            case FarmManager.TileState.OBSTRUCTED:
                 groundTileMap.SetTile(newPosition, basicTile);
                 break;
             case FarmManager.TileState.LONGGRASS:

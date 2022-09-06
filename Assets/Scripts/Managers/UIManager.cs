@@ -81,9 +81,13 @@ public class UIManager
     [SerializeField] private Button starter2Button;
     [SerializeField] private Button starter3Button;
 
+    //playerinfo region
+    [SerializeField] private Slider energySlider;
+
     public void Setup()
     {
         GameClock.onMinuteChangedCallback += DisplayTime;
+        PlayerInfo.onEnergyChangedCallback += DisplayPlayerEnergy;
         mapButtons[0] = region1Button;
         mapButtons[1] = region2Button;
         mapButtons[2] = region3Button;
@@ -93,6 +97,12 @@ public class UIManager
     private void DisplayTime()
     {
         timeText.text = GameManager.instance.gameClock.StringTime;
+    }
+
+    private void DisplayPlayerEnergy()
+    {
+        energySlider.maxValue = GameManager.instance.playerInfo.maxEnergy;
+        energySlider.value = GameManager.instance.playerInfo.energy;
     }
 
     public void ShowPetInfo(PetInfo petInfo)

@@ -13,8 +13,8 @@ public class TaskManager
 
     public void SetupTasks()
     {
-        GatherResources = new Task("Gather Resources", 60, 1,null, null, Task.TaskType.GATHER);
-        ForageFood = new Task("Forage for Food", 60, 1, null, null, Task.TaskType.FOOD);
+        GatherResources = new Task("Gather Resources", 60, 10,null, null, Task.TaskType.GATHER);
+        ForageFood = new Task("Forage for Food", 60, 10, null, null, Task.TaskType.FOOD);
         Explore = new Task("Explore", 60, 1, null, null, Task.TaskType.EXPLORE);
     }
 }

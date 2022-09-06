@@ -30,9 +30,11 @@ public class RegionManager  {
 
         forestRegion.AddSpawn(PetManager.Bulbos, false, 0);
         forestRegion.AddSpawn(PetManager.Bulbos, true, 1);
-        forestRegion.AddSpawn(PetManager.Squirt, true, 0);
         forestRegion.AddSpawn(PetManager.Squirt, false, 1);
+        forestRegion.AddSpawn(PetManager.Squirt, true, 0);
         forestRegion.AddSpawn(PetManager.Charby, false, 2);
+        forestRegion.AddSpawn(PetManager.Bulbos, true, 2);
+        forestRegion.AddSpawn(PetManager.Squirt, true, 2);
 
         regions.Add(forestRegion);
         regions.Add(lakeRegion);

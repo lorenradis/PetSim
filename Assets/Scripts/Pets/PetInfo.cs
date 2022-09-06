@@ -24,6 +24,9 @@ public class PetInfo
 
     public int level;
 
+    public int happiness;
+    public int maxHappiness;
+
     public int food;
     public int play;
     public int clean;
