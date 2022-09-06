@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     public TaskManager taskManager;
     public ItemManager itemManager;
     public FarmManager farmManager;
+    public StoryProgression storyProgression;
     public GlobalLightManager globalLightManager;
 
     public static GameManager instance = null;
@@ -281,6 +282,12 @@ public class GameManager : MonoBehaviour
     public void CloseCurrentMenu()
     {
         ChangeState(uiManager.CloseCurrentMenu());
+    }
+
+    public void ChooseStarter()
+    {
+        ChangeState(GameState.MENU);
+        uiManager.ShowStarterSelectScreen();
     }
 
     public void LoadNewScene(SceneInfo sceneInfo, int entrance)

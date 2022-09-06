@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: LabScene
   entrances:
-  - {x: 28, y: 0.5}
+  - {x: 22.5, y: 0.5}
   minBounds: {x: 0, y: 0}
   maxBounds: {x: 0, y: 0}

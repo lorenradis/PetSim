@@ -15,3 +15,6 @@ MonoBehaviour:
   sceneName: HomeScene
   entrances:
   - {x: 0, y: 2}
+  - {x: 1.5, y: 5}
+  minBounds: {x: 0, y: 0}
+  maxBounds: {x: 0, y: 0}

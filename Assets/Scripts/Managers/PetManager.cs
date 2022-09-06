@@ -70,6 +70,7 @@ the player will be presented with a graphical representation of the 3 pets.
         petTemplates.Add(Stunky);
 
         //for testing purposes only
+        return;
         Task task = new Task();
         task.TaskName = "";
         PetInfo starter = new PetInfo(Bulbos.petName, Bulbos.Strength.BaseValue, Bulbos.Smarts.BaseValue, Bulbos.Speed.BaseValue, Bulbos.affinity, Bulbos.description, Bulbos.overworldAnimator);

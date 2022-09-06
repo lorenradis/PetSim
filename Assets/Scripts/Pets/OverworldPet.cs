@@ -14,8 +14,8 @@ public class OverworldPet : MovingObject
 
     private float sightRadius = 8f;
 
-    private enum PetState { WILD, TAME, FRIEND }
-    private PetState petState;
+    public enum PetState { WILD, TAME, FRIEND }
+    public PetState petState;
 
     private enum MoveState { IDLE, WANDER, CHASE, FLEE }
     private MoveState moveState;

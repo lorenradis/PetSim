@@ -383,12 +383,14 @@ public class UIManager
             selectedPet = PetManager.Squirt;
             MakeStarterSelection(selectedPet);
         });
+        EventSystem.current.SetSelectedGameObject(starter1Button.gameObject);
     }
 
     private void MakeStarterSelection(PetInfo pet)
     {
         PetInfo petToAdd = new PetInfo(pet.petName, pet.Strength.BaseValue, pet.Smarts.BaseValue, pet.Speed.BaseValue, pet.affinity, pet.description, pet.overworldAnimator);
         GameManager.instance.petManager.AddPetToList(petToAdd);
+        GameManager.instance.CloseCurrentMenu();
         DialogManager.instance.ShowSimpleDialog("You selected " + pet.petName + " as your starter, congrats!");
     }
 
@@ -433,6 +435,10 @@ public class UIManager
             regionInfoPanel.SetActive(false);
             ShowIngameMenu();
             return GameManager.GameState.MENU;
+        }else if(starterSelectPanel.activeSelf)
+        {
+            starterSelectPanel.SetActive(false);
+            return GameManager.GameState.NORMAL;
         }
         return GameManager.GameState.MENU;
     }
