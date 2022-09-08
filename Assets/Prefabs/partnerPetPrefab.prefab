@@ -57,7 +57,7 @@ MonoBehaviour:
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
   m_AlphaBlendOnOverlap: 0
-  m_OverlapOperation: 0
+  m_OverlapOperation: 1
   m_NormalMapDistance: 3
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
@@ -212,7 +212,7 @@ Animator:
   m_GameObject: {fileID: 7124526758297731013}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 8dae8dc6f0f4443909161cfc4517f519, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0a4065c31238a479fac504580589ee2d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

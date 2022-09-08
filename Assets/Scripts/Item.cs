@@ -10,6 +10,8 @@ public class Item
 
     public Sprite icon;
 
+    public int foodPoints = 10;
+
     public Item()
     {
 

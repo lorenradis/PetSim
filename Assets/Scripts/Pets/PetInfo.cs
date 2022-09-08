@@ -5,7 +5,6 @@ using System.Collections.Generic;
 [System.Serializable]
 public class PetInfo
 {
-
     public string petName;
 
     public Stat Strength;
@@ -13,6 +12,18 @@ public class PetInfo
     public Stat Speed;
     public Stat Luck;
 
+    private int anxiety;
+    public int Anxiety
+    {
+        get { return anxiety; }
+        set { anxiety = Mathf.Clamp(value, 0, 100); }
+    }
+    private int aggression;
+    public int Aggression
+    {
+        get { return aggression; }
+        set { aggression = Mathf.Clamp(value, 0, 100); }
+    }
     public int health;
     public int maxHealth;
     public int energy;
@@ -23,6 +34,15 @@ public class PetInfo
     public int experience;
 
     public int level;
+
+    public int researchEXP;
+    public int researchLevel;
+    public int EXPToNextResearchLevel { get { return researchLevel * researchLevel * researchLevel * 10; } }
+    //level 1 learn pet name and affinity
+    //level 2 learn hated food
+    //level 3 learn loved food
+    //level 4 learn ??
+    //level 5 learn ??
 
     public int happiness;
     public int maxHappiness;
@@ -40,7 +60,11 @@ public class PetInfo
 
     public Affinity affinity;
 
+    public Sprite icon;
+    public Sprite portrait;
+
     public RuntimeAnimatorController overworldAnimator;
+    public RuntimeAnimatorController battleAnimator;
 
     public float moveMod = 1f;
 
@@ -49,8 +73,11 @@ public class PetInfo
     public delegate void OnAssignTask();
     public static OnAssignTask onAssignTaskCallback;
 
-    public enum PetState { IDLE, ONTASK, PARTNER, OTHER }//maybe we'll use this to clean up what a pet is doing and where they are?
+    public enum PetState { IDLE, ONTASK, PARTNER, OTHER }
     public PetState petState;
+
+    public Item lovedFood;
+    public Item hatedFood;
 
     private void ChangeState(PetState newState)
     {
@@ -65,7 +92,8 @@ public class PetInfo
 
     }
 
-    public PetInfo(string newName, int newStr, int newSmrt, int newSpd, Affinity newAffinity, string desc, RuntimeAnimatorController newAnimator)
+    public PetInfo(string newName, int newStr, int newSmrt, int newSpd, int newAnx, int newAggro, Affinity newAffinity, string desc,
+        RuntimeAnimatorController newAnimator, RuntimeAnimatorController newBattleAnimator,Sprite newIcon, Sprite newPortrait, Item newLovedFood, Item newHatedFood)
     {
         petName = newName;
 
@@ -73,6 +101,9 @@ public class PetInfo
         Smarts = new Stat("Smarts", newSmrt);
         Speed = new Stat("Speed", newSpd);
         Luck = new Stat("Luck", 0);
+
+        anxiety = newAnx;
+        aggression = newAggro;
 
         maxHealth = Mathf.FloorToInt(Strength.Value * Random.Range(1.95f, 2.05f));
         health = maxHealth;
@@ -95,6 +126,13 @@ public class PetInfo
         affinity = newAffinity;
 
         overworldAnimator = newAnimator;
+        battleAnimator = newBattleAnimator;
+
+        icon = newIcon;
+        portrait = newPortrait;
+
+        hatedFood = newHatedFood;
+        lovedFood = newLovedFood;
     }
 
     public void IncrementNeeds()
@@ -120,6 +158,12 @@ public class PetInfo
         {
             ChangeState(PetState.IDLE);
         }
+    }
+
+    public void SetAggressionAndAnxiety()
+    {
+        anxiety = Mathf.FloorToInt(Random.Range(.75f, 1.025f) * anxiety);
+        aggression = Mathf.FloorToInt(Random.Range(.75f, 1.25f) * aggression);
     }
 
     public void AssignTask(Task task, Region region)
@@ -213,5 +257,47 @@ public class PetInfo
 
         if (onAssignTaskCallback != null)
             onAssignTaskCallback.Invoke();
+    }
+
+    public void GainResearchEXP(int amount)
+    {
+        researchEXP += amount;
+        if(researchEXP >= EXPToNextResearchLevel)
+        {
+            IncreaseResearchLevel();
+        }
+    }
+
+    public string GetLevelKnowledge(int _level)
+    {
+        switch(_level)
+        {
+            case 1:
+                return "This pet is called " + petName + ", and they have an affinity for " + affinity.affinityName;
+                break;
+            case 2:
+                return "They don't seem to care for " + hatedFood.itemName + " very much at all.";
+                break;
+            case 3:
+                return "They REALLY love " + lovedFood.itemName + "!";
+                break;
+            case 4:
+                return "level 4, i dunno";
+                break;
+            case 5:
+                return "level 5, wow";
+                break;
+            default:break;
+        }
+        return "something sure broke in here!";
+    }
+
+    private void IncreaseResearchLevel()
+    {
+        researchLevel++;
+        if(researchEXP  >= EXPToNextResearchLevel)
+        {
+            IncreaseResearchLevel();
+        }
     }
 }

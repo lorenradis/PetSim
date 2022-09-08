@@ -24,6 +24,13 @@ public class ItemManager
     public static Item succulent; //desert food
     public Sprite succulentSprite;
 
+    private Item selectedItem;
+    public Item SelectedItem { get { return selectedItem; } }
+
+    public int maxItems = 99;
+    public int maxResources = 50;
+    public int maxFoods = 9;
+
     public ItemManager()
     {
 
@@ -61,15 +68,30 @@ public class ItemManager
     public void AddFood(Item item, int amount)
     {
         item.quantity += amount;
+        if(item.quantity > maxFoods)
+        {
+            DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you had to discard some of the " + item.itemName);
+            item.quantity = maxFoods;
+        }
     }
 
     public void AddResource(Item item, int amount)
     {
         item.quantity += amount;
+        if (item.quantity > maxResources)
+        {
+            DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you had to discard some of the " + item.itemName);
+            item.quantity = maxResources;
+        }
     }
 
     public void AddItem(Item item, int amount)
     {
 
+    }
+
+    public void SelectItem(Item item)
+    {
+        selectedItem = item;
     }
 }

@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 7124526758297731015}
   - component: {fileID: 7124526758297731036}
   - component: {fileID: 7124526758297731014}
-  - component: {fileID: 7124526758297731035}
   - component: {fileID: -4571247726236984896}
-  - component: {fileID: 6459826776098271911}
+  - component: {fileID: 2245943175599924175}
+  - component: {fileID: 456211975268523133}
   m_Layer: 7
   m_Name: wildPetPrefab
   m_TagString: Untagged
@@ -188,6 +188,8 @@ MonoBehaviour:
     Luck:
       baseValue: 0
       value: 0
+    baseAnxiety: 0
+    baseAggression: 0
     health: 0
     maxHealth: 0
     energy: 0
@@ -196,6 +198,10 @@ MonoBehaviour:
     maxStamina: 0
     experience: 0
     level: 0
+    researchEXP: 0
+    researchLevel: 0
+    happiness: 0
+    maxHappiness: 0
     food: 0
     play: 0
     clean: 0
@@ -203,26 +209,26 @@ MonoBehaviour:
     description: 
     affinity:
       affinityName: 
+    icon: {fileID: 0}
+    portrait: {fileID: 0}
     overworldAnimator: {fileID: 0}
+    battleAnimator: {fileID: 0}
     moveMod: 1
     currentTask:
       statRequired: 0
       taskType: 0
     petState: 0
+    lovedFood:
+      itemName: 
+      quantity: 0
+      icon: {fileID: 0}
+      foodPoints: 10
+    hatedFood:
+      itemName: 
+      quantity: 0
+      icon: {fileID: 0}
+      foodPoints: 10
   flipSprite: 1
-  petState: 0
---- !u!114 &7124526758297731035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7124526758297731013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28b1c3fe6eee046bc8b0d53d9f40387b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   petState: 0
 --- !u!114 &-4571247726236984896
 MonoBehaviour:
@@ -238,8 +244,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: 0
   isMobile: 1
---- !u!61 &6459826776098271911
-BoxCollider2D:
+--- !u!58 &2245943175599924175
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -251,16 +257,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.75}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 2, y: 2}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: 0.5}
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 1.5}
-  m_EdgeRadius: 0
+  m_Radius: 1
+--- !u!114 &456211975268523133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7124526758297731013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac91d7083a8ce4b14bd796fa6fa1bda9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

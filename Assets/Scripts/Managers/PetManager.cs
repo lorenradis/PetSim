@@ -19,6 +19,12 @@ the player will be presented with a graphical representation of the 3 pets.
 
     public List<PetInfo> currentPets = new List<PetInfo>();
 
+    public int maxPets = 7;
+    public int level2Max = 15;
+    public int level3Max = 20;
+    public int level4Max = 24;
+    public int level5Max = 26;
+
     public static PetInfo Bulbos;
     public static PetInfo Charby;
     public static PetInfo Squirt;
@@ -46,56 +52,76 @@ the player will be presented with a graphical representation of the 3 pets.
 
     //overworld animator controllers
     [SerializeField] private RuntimeAnimatorController bulbosOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController bulbosBattleAnimator;
+    [SerializeField] private Sprite bulbosIcon;
+    [SerializeField] private Sprite bulbosPortrait;
+
     [SerializeField] private RuntimeAnimatorController charbyOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController charbyBattleAnimator;
+    [SerializeField] private Sprite charbyIcon;
+    [SerializeField] private Sprite charbyPortrait;
+
     [SerializeField] private RuntimeAnimatorController squirtOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController squirtBattleAnimator;
+    [SerializeField] private Sprite squirtIcon;
+    [SerializeField] private Sprite squirtPortrait;
+
     [SerializeField] private RuntimeAnimatorController stunkyOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController stunkyBattleAnimator;
+    [SerializeField] private Sprite stunkyIcon;
+    [SerializeField] private Sprite stunkyPortrait;
 
     public delegate void OnPartnerChanged();
     public static OnPartnerChanged onPartnerChangedCallback;
 
     public void SetupPets()
     {
-        Bulbos = new PetInfo("Bulbos", 18, 12, 6, AffinityManager.grassAffinity, 
-        "Strong and intelligent, but far from the fastest of beasts - Bulbos are most at home in the forests and other areas full of green growing things.", bulbosOverworldAnimator);
-        Charby = new PetInfo("Charby", 12, 6, 18, AffinityManager.fireAffinity,
-        "Fast and powerful, but not the brightest of bulbs - if you'll forgive the pun - Charby are most at home in sweltering temperatures and dry climes", charbyOverworldAnimator);
-        Squirt = new PetInfo("Squirt", 6, 18, 12, AffinityManager.waterAffinity,
-        "Cunning and quick, but a tad lacking in the brawn department - Squirt are most at home in lakes, rivers, oceans and wetlands of the world", squirtOverworldAnimator);
+        Bulbos = new PetInfo("Bulbos", 18, 12, 6, 50, 50, AffinityManager.grassAffinity, 
+        "Strong and intelligent, but far from the fastest of beasts - Bulbos are most at home in the forests and other areas full of green growing things.",
+        bulbosOverworldAnimator, bulbosOverworldAnimator, bulbosIcon, bulbosPortrait, ItemManager.berries, ItemManager.mushrooms);
 
-        Stunky = new PetInfo("Stunky", 12, 12, 12, AffinityManager.fireAffinity, "He's a real stinker!", stunkyOverworldAnimator);
+        Charby = new PetInfo("Charby", 12, 6, 18, 25, 75, AffinityManager.fireAffinity,
+        "Fast and powerful, but not the brightest of bulbs - if you'll forgive the pun - Charby are most at home in sweltering temperatures and dry climes",
+        charbyOverworldAnimator, charbyOverworldAnimator,charbyIcon, charbyPortrait, ItemManager.succulent, ItemManager.berries);
+
+        Squirt = new PetInfo("Squirt", 6, 18, 12, 75, 25, AffinityManager.waterAffinity,
+        "Cunning and quick, but a tad lacking in the brawn department - Squirt are most at home in lakes, rivers, oceans and wetlands of the world",
+        squirtOverworldAnimator, squirtOverworldAnimator,squirtIcon, squirtPortrait, ItemManager.mushrooms, ItemManager.succulent);
+
+
+        Stunky = new PetInfo("Stunky", 12, 12, 12, 25, 75, AffinityManager.fireAffinity, "He's a real stinker!",
+            stunkyOverworldAnimator, stunkyOverworldAnimator, stunkyIcon, stunkyPortrait, ItemManager.mushrooms, ItemManager.succulent);
 
         petTemplates.Add(Bulbos);
         petTemplates.Add(Charby);
         petTemplates.Add(Squirt);
         petTemplates.Add(Stunky);
 
-        //for testing purposes only
-        return;
-        Task task = new Task();
-        task.TaskName = "";
-        PetInfo starter = new PetInfo(Bulbos.petName, Bulbos.Strength.BaseValue, Bulbos.Smarts.BaseValue, Bulbos.Speed.BaseValue, Bulbos.affinity, Bulbos.description, Bulbos.overworldAnimator);
-        starter.currentTask = task;
-        starter.overworldAnimator = bulbosOverworldAnimator;
-        AddPetToList(starter);
-        PetInfo starter2 = new PetInfo(Charby.petName, Charby.Strength.BaseValue, Charby.Smarts.BaseValue, Charby.Speed.BaseValue, Charby.affinity, Charby.description, Charby.overworldAnimator);
-        starter2.currentTask = task;
-        starter2.overworldAnimator = charbyOverworldAnimator;
-        AddPetToList(starter2);
-        PetInfo starter3 = new PetInfo(Squirt.petName, Squirt.Strength.BaseValue, Squirt.Smarts.BaseValue, Squirt.Speed.BaseValue, Squirt.affinity, Squirt.description, Squirt.overworldAnimator);
-        starter3.currentTask = task;
-        starter3.overworldAnimator = squirtOverworldAnimator;
-        AddPetToList(starter3);
     }
 
-    public void AddPetToList(PetInfo newPet)
+    public bool AddPetToList(PetInfo newPet)
     {
-        currentPets.Add(newPet);
-        GameClock.onMinuteChangedCallback += newPet.IncrementNeeds;
+        if (currentPets.Count < maxPets)
+        {
+            currentPets.Add(newPet);
+            GameClock.onMinuteChangedCallback += newPet.IncrementNeeds;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void SelectPet(PetInfo petInfo)
     {
         selectedPet = petInfo;
+    }
+
+    public PetInfo CopyPetFromTemplate(PetInfo pet)
+    {
+        PetInfo newPet = new PetInfo(pet.petName, pet.Strength.BaseValue, pet.Smarts.BaseValue, pet.Speed.BaseValue, pet.Anxiety, pet.Aggression, pet.affinity, pet.description, pet.overworldAnimator, pet.battleAnimator, pet.icon, pet.portrait,pet.lovedFood, pet.hatedFood);
+        return newPet;
     }
 
     public bool SetPartnerPet(PetInfo petInfo)
@@ -124,6 +150,38 @@ the player will be presented with a graphical representation of the 3 pets.
             onPartnerChangedCallback.Invoke();
         }
         return true;
+    }
+
+    public bool IncreasePetKnowledge(string petName, int amount)
+    {
+        foreach(PetInfo pet in petTemplates)
+        {
+            if(pet.petName == petName)
+            {
+                int level = pet.researchLevel;
+                pet.GainResearchEXP(amount);
+                if(pet.researchLevel > level)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+        Debug.Log("Pet not found");
+        return false;
+    }
+
+    public string GetPetKnowledge(string petName)
+    {
+        foreach(PetInfo pet in petTemplates)
+        {
+            if(pet.petName == petName)
+            {
+                return pet.GetLevelKnowledge(pet.researchLevel);
+            }
+        }
+        Debug.Log("Pet Not Found");
+        return "";
     }
 
     public void DismissPartnerPet(PetInfo petInfo)

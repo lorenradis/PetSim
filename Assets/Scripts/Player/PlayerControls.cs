@@ -25,6 +25,7 @@ public class PlayerControls : MonoBehaviour
     private float moveMod = 1f;
     private float runMod = 1.75f;
     private float walkMod = 1f;
+    private float sneakMod = .5f;
     private float knockbackForce = 10f;
     private Vector2 knockbackVector;
 
@@ -33,6 +34,9 @@ public class PlayerControls : MonoBehaviour
     private float acceleration = 35f;
 
     private bool isRunning;
+    private bool isSneaking;
+    public bool IsSneaking { get { return isSneaking; } }
+    public bool IsMoving { get { return playerState == PlayerState.MOVING; } }
 
     public int playerNumber = 1;
 
@@ -144,21 +148,30 @@ public class PlayerControls : MonoBehaviour
         {
             MeleeAttack();
         }
-        if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown("joystick button 5"))
+        if (Input.GetKeyDown("joystick button 5")) // L button
         {
             //cycle one tile type to the left
+            StartSneaking();
+            
             tileTypeIndex--;
             if (tileTypeIndex < 0)
                 tileTypeIndex = unlockedTiles.Count - 1;
             SetCurrentTileType(tileTypeIndex);
+        }else if(Input.GetKeyUp("joystick button 5"))
+        {
+            StopSneaking();
         }
-        else if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown("joystick button 4"))
+        if (Input.GetKeyDown("joystick button 4")) // R button
         {
             //cycle one tile type to the right
+            StartRunning();
             tileTypeIndex++;
             if (tileTypeIndex >= unlockedTiles.Count)
                 tileTypeIndex = 0;
             SetCurrentTileType(tileTypeIndex);
+        }else if(Input.GetKeyUp("joystick button 4"))
+        {
+            StopRunning();
         }
     }
 
@@ -184,6 +197,18 @@ public class PlayerControls : MonoBehaviour
         }
         //play animation
         //play sound
+    }
+
+    private void StartSneaking()
+    {
+        isSneaking = true;
+        moveMod = sneakMod;
+    }
+
+    private void StopSneaking()
+    {
+        isSneaking = false;
+        moveMod = walkMod;
     }
 
     private void StartRunning()

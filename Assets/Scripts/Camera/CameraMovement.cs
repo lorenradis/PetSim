@@ -6,7 +6,7 @@ public class CameraMovement : MonoBehaviour
 {
     private Transform target;
 
-    [Range(4, 40)][SerializeField]private float moveSpeed = 14f;
+    [Range(4, 40)] [SerializeField] private float moveSpeed = 14f;
     private float cutsceneMoveSpeed = 2f;
 
     [SerializeField]
@@ -29,13 +29,16 @@ public class CameraMovement : MonoBehaviour
         minBounds = new Vector2(-1000, -1000);
         maxBounds = new Vector2(1000, 1000);
         offset = Vector2.zero;
-        target = GameManager.instance.Player;
-        transform.position = target.position;
+        if (GameManager.instance.gameState != GameManager.GameState.BATTLE)
+        {
+            target = GameManager.instance.Player;
+            transform.position = target.position;
+        }
     }
 
     private void Update()
     {
-        if (target == null)
+        if (target == null && GameManager.instance.gameState != GameManager.GameState.BATTLE)
             target = GameManager.instance.Player;
     }
 
@@ -43,7 +46,9 @@ public class CameraMovement : MonoBehaviour
     {
         Vector3 targetPosition;
         Vector3 newPosition;
-        switch(cameraMode)
+        if (GameManager.instance.gameState == GameManager.GameState.BATTLE)
+            return;
+        switch (cameraMode)
         {
             case CameraMode.NORMAL:
                 if (target == null)
@@ -67,7 +72,7 @@ public class CameraMovement : MonoBehaviour
                     transform.position = new Vector3(newPosition.x, newPosition.y, -10f);
                 }
                 break;
-            default:break;
+            default: break;
         }
     }
 

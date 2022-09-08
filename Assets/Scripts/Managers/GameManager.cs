@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
+using PetSim;
+
 public class GameManager : MonoBehaviour
 {
 
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
                 player = GameObject.FindGameObjectWithTag("Player").transform;
                 return player;
             }
+            Debug.Log("Someone called the Player");
             GameObject playerObject = Instantiate(playerPrefab);
             player = playerObject.transform;
             return player;
@@ -30,7 +33,7 @@ public class GameManager : MonoBehaviour
     }
 
     //Game State Region
-    public enum GameState { STARTUP, NORMAL, MENU, CUTSCENE, PAUSE, LOADING }
+    public enum GameState { STARTUP, NORMAL, MENU, CUTSCENE, PAUSE, LOADING, BATTLE }
     public GameState gameState;
     private GameState previousState;
     private void ChangeState(GameState newState)
@@ -43,10 +46,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public GameObject partnerPetPrefab;
     private List<GameObject> partnerPetObjects = new List<GameObject>();
     private List<PetInfo> partnerPets = new List<PetInfo>();
+    private PetInfo encounteredPet;
+    public PetInfo EncounteredPet { get { return encounteredPet; } set { encounteredPet = value; } }
 
     //Scene Change Region
     [SerializeField] private Animator sceneTransitionAnimator;
@@ -55,6 +59,13 @@ public class GameManager : MonoBehaviour
     private SceneInfo previousScene;
     private Vector2 playerStartPosition;
     private Vector2 playerFacing;
+
+    //scene persistence region?
+    public List<GameObject> activeSpawnObjects = new List<GameObject>();
+    public List<ActiveSpawnInfo> activeSpawns = new List<ActiveSpawnInfo>();
+    public GameObject wildPetPrefab;
+    public GameObject itemObjectPrefab;
+    public List<Transform> baitObjects = new List<Transform>();
 
     //Managers Region
 
@@ -88,8 +99,9 @@ public class GameManager : MonoBehaviour
         SetupClock();
         affinityManager = new AffinityManager();
         affinityManager.SetupAffinities();
-        petManager.SetupPets();
+        audioManager = GetComponent<AudioManager>();
         itemManager.SetupItems();
+        petManager.SetupPets();
         regionManager = new RegionManager();
         regionManager.SetupRegions();
         taskManager = new TaskManager();
@@ -188,6 +200,17 @@ public class GameManager : MonoBehaviour
     public void ExitCutsceneState()
     {
         ChangeState(GameState.NORMAL);
+    }
+
+    public void ShowPetsInfo()
+    {
+        uiManager.ShowPetsInfo();
+        EnterMenuState();
+    }
+
+    public void HidePetsInfo()
+    {
+        uiManager.HidePetsInfo();
     }
 
     public void ShowPetInfo(PetInfo petInfo)
@@ -304,6 +327,33 @@ public class GameManager : MonoBehaviour
         uiManager.ShowStarterSelectScreen();
     }
 
+    public void PlaceItem(Item item, Vector2 location)
+    {
+        GameObject newItemObject = Instantiate(itemObjectPrefab, location, Quaternion.identity) as GameObject;
+        newItemObject.GetComponent<ItemObject>().SetItem(item);
+    }
+
+    public void StartBattleWithPet(GameObject petObject)
+    {
+        encounteredPet = petObject.GetComponent<OverworldPet>().petInfo;
+        activeSpawnObjects.Remove(petObject);
+        StartCoroutine(FadeToBattle());
+        for (int i = 0; i < activeSpawnObjects.Count; i++)
+        {
+            ActiveSpawnInfo newSpawnInfo = new ActiveSpawnInfo();
+            newSpawnInfo.petInfo = activeSpawnObjects[i].GetComponent<OverworldPet>().petInfo;
+            newSpawnInfo.myPosition = activeSpawnObjects[i].transform.position;
+            activeSpawns.Add(newSpawnInfo);
+        }
+
+        activeSpawnObjects.Clear();
+    }
+
+    public void ReturnFromBattle()
+    {
+        StartCoroutine(FadeToNewScene(previousScene.sceneName));
+    }
+
     public void GoToSleep()
     {
         StartCoroutine(RenderPlayerSleep());
@@ -312,7 +362,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator RenderPlayerSleep()
     {
         sceneTransitionAnimator.SetTrigger("fadeOut");
-        //player sleepy song
+        //play sleepy song
         yield return new WaitForSeconds(.5f);
         playerInfo.IncreaseEnergy(1000);
         int duration = 8 * 60;
@@ -328,35 +378,64 @@ public class GameManager : MonoBehaviour
         currentScene = sceneInfo;
         playerStartPosition = sceneInfo.entrances[entrance];
         playerFacing = player.GetComponent<PlayerControls>().FacingVector;
-        ChangeState(GameState.LOADING);
         StartCoroutine(FadeToNewScene(sceneInfo.sceneName));
     }
 
     private IEnumerator FadeToNewScene(string sceneName)
     {
+        if(gameState != GameState.BATTLE)
+        {
+            activeSpawns.Clear();
+        }
+        ChangeState(GameState.LOADING);
         sceneTransitionAnimator.SetTrigger("fadeOut");
         yield return new WaitForSeconds(.5f);
         SceneManager.LoadScene(sceneName);
     }
 
+    private IEnumerator FadeToBattle()
+    {
+        sceneTransitionAnimator.SetTrigger("fadeOut");
+        //play encounter sound
+        playerStartPosition = player.position;
+        playerFacing = player.GetComponent<PlayerControls>().FacingVector;
+        previousScene = currentScene;
+        ChangeState(GameState.BATTLE);
+        yield return new WaitForSeconds(.5f);
+        SceneManager.LoadScene("BattleScene");
+        sceneTransitionAnimator.SetTrigger("fadeIn");
+    }
+
     private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
-        StartCoroutine(FadeIn());
+        baitObjects.Clear();
+        if(gameState != GameState.BATTLE)
+        {
+            StartCoroutine(FadeIn());
+            Player.position = playerStartPosition;
+            player.GetComponent<PlayerControls>().FacingVector = playerFacing;
+            if(petManager.PartnerPet1 != null || petManager.PartnerPet2 != null)
+            {
+                SpawnPartnerPets();
+            }
 
-        Player.position = playerStartPosition;
-        player.GetComponent<PlayerControls>().FacingVector = playerFacing;
-        if(petManager.PartnerPet1 != null)
-        {
-            SpawnPartnerPets();
-        }
+            for (int i = 0; i < activeSpawns.Count; i++)
+            {
+                GameObject newWildPet = Instantiate(wildPetPrefab, activeSpawns[i].myPosition, Quaternion.identity) as GameObject;
+                activeSpawnObjects.Add(newWildPet);
+                newWildPet.GetComponent<OverworldPet>().SetPetInfo(activeSpawns[i].petInfo);
+            }
 
-        if(GameObject.FindGameObjectWithTag("Farm") != null)
-        {
-            uiManager.ShowFarmControls();
-        }
-        else
-        {
-            uiManager.HideFarmControls();
+            activeSpawns.Clear();
+
+            if(GameObject.FindGameObjectWithTag("Farm") != null)
+            {
+                uiManager.ShowFarmControls();
+            }
+            else
+            {
+                uiManager.HideFarmControls();
+            }
         }
     }
 
@@ -394,5 +473,22 @@ public class GameManager : MonoBehaviour
         sceneTransitionAnimator.SetTrigger("fadeIn");
         yield return new WaitForSeconds(.5f);
         ChangeState(GameState.NORMAL);
+    }
+}
+
+namespace PetSim
+{
+    [System.Serializable]
+    public struct ProjectCost
+    {
+        public Item item;
+            public int quantity;
+    }
+
+    [System.Serializable]
+    public struct ActiveSpawnInfo
+    {
+        public Vector2 myPosition;
+        public PetInfo petInfo;
     }
 }

@@ -65,12 +65,20 @@ public class WildPetSpawner : MonoBehaviour
 
     private void SpawnNewPet()
     {
-        float randomX = Random.Range(-bounds.size.x / 2, bounds.size.x / 2);
-        float randomY = Random.Range(-bounds.size.y * .5f, bounds.size.y * .5f);
-        Vector2 newPosition = new Vector2(transform.position.x + randomX, transform.position.y + randomY);
+        Vector2 newPosition = Vector2.zero + (Vector2)transform.position;
+        do
+        {
+            float randomX = Random.Range(-bounds.size.x / 2, bounds.size.x / 2);
+            float randomY = Random.Range(-bounds.size.y * .5f, bounds.size.y * .5f);
+            newPosition = new Vector2(transform.position.x + randomX, transform.position.y + randomY);
+        } while (Vector2.Distance(GameManager.instance.Player.position, newPosition) < 3f);
         PetInfo petToSpawn = GameManager.instance.regionManager.regions[regionIndex].GetSpawn();
-        PetInfo petInfo = new PetInfo(petToSpawn.petName, petToSpawn.Strength.BaseValue, petToSpawn.Smarts.BaseValue, petToSpawn.Speed.BaseValue, petToSpawn.affinity, petToSpawn.description, petToSpawn.overworldAnimator);
+        PetInfo petInfo = GameManager.instance.petManager.CopyPetFromTemplate(petToSpawn);
+        petInfo.SetAggressionAndAnxiety();
         GameObject newPetObject = Instantiate(wildPetPrefab, newPosition, Quaternion.identity) as GameObject;
+
+        GameManager.instance.activeSpawnObjects.Add(newPetObject);
+
         newPetObject.transform.SetParent(transform);
         newPetObject.GetComponent<OverworldPet>().SetPetInfo(petInfo);
         newPetObject.GetComponent<OverworldPet>().SetPetToWild();

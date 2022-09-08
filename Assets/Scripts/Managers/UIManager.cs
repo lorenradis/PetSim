@@ -33,6 +33,11 @@ public class UIManager
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private Button closePetInfoPanelButton;
 
+    //petsInfo Region
+    [SerializeField] private GameObject petsInfoPanel;
+    [SerializeField] private PetSlot[] petSlots;
+    [SerializeField] private Button closePetsInfoButton;
+
     //map region
     [SerializeField] private GameObject mapPanel;
     [SerializeField] private Button region1Button;
@@ -105,8 +110,40 @@ public class UIManager
         energySlider.value = GameManager.instance.playerInfo.energy;
     }
 
+    public void ShowPetsInfo()
+    {
+        petsInfoPanel.SetActive(true);
+        HideIngameMenu();
+        for (int i = 0; i < petSlots.Length; i++)
+        {
+            if(GameManager.instance.petManager.currentPets.Count > i)
+            {
+                petSlots[i].gameObject.SetActive(true);
+                petSlots[i].SetPetInfo(GameManager.instance.petManager.currentPets[i]);
+            }
+            else
+            {
+                petSlots[i].gameObject.SetActive(false);
+            }
+        }
+        if(petSlots[0].gameObject.activeSelf)
+        {
+            EventSystem.current.SetSelectedGameObject(petSlots[0].gameObject);
+        }
+        else
+        {
+            EventSystem.current.SetSelectedGameObject(closePetsInfoButton.gameObject);
+        }
+    }
+
+    public void HidePetsInfo()
+    {
+        petsInfoPanel.SetActive(false);
+    }
+
     public void ShowPetInfo(PetInfo petInfo)
     {
+        HidePetsInfo();
         petInfoPanel.SetActive(true);
         petNameText.text = petInfo.petName;
         petStrengthText.text = "Strength: " + petInfo.Strength.Value;
@@ -119,6 +156,7 @@ public class UIManager
         petCleanText.text = "Clean: " + petInfo.clean;
         petHappyText.text = "Happy: ";
 
+        petPortraitImage.sprite = petInfo.portrait;
 
         petAffinityText.text = "Affinity: " + petInfo.affinity.affinityName;
         petAgeText.text = "Age: ";
@@ -398,7 +436,7 @@ public class UIManager
 
     private void MakeStarterSelection(PetInfo pet)
     {
-        PetInfo petToAdd = new PetInfo(pet.petName, pet.Strength.BaseValue, pet.Smarts.BaseValue, pet.Speed.BaseValue, pet.affinity, pet.description, pet.overworldAnimator);
+        PetInfo petToAdd = GameManager.instance.petManager.CopyPetFromTemplate(pet);
         GameManager.instance.petManager.AddPetToList(petToAdd);
         GameManager.instance.CloseCurrentMenu();
         DialogManager.instance.ShowSimpleDialog("You selected " + pet.petName + " as your starter, congrats!");
@@ -410,6 +448,11 @@ public class UIManager
         {
             inGameMenuPanel.SetActive(false);
             return GameManager.GameState.NORMAL;
+        }else if(petsInfoPanel.activeSelf)
+        {
+            HidePetsInfo();
+            ShowIngameMenu();
+            return GameManager.GameState.MENU;
         }
         else if (petInfoPanel.activeSelf)
         {

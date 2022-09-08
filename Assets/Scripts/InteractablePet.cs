@@ -26,6 +26,9 @@ public class InteractablePet : Interactable
         {
             case PetState.WILD:
 
+                GameManager.instance.StartBattleWithPet(gameObject);
+                return;
+
                 interactDialog = new Dialog("", petInfo.petName, null, false, "Check", "Give", "Invite", "Cancel");
 
                 DialogManager.instance.ShowDialog(interactDialog, () => {

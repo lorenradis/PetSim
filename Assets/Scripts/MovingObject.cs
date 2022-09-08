@@ -11,7 +11,7 @@ public class MovingObject : MonoBehaviour {
     private float moveSpeed = 3f;
     private float moveMod = 1f;
 
-    private Transform target;
+    protected Transform target;
     private Vector2 direction;
     private Vector2 destination;
 
