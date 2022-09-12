@@ -1,19 +1,3 @@
-/*
-
-map regions will also need to be named scriptableobjects like scenes would have been, they can all have unique bgms and light values
-if they're named scriptable objects then we CAN save them in the game manager between scene loads.
-
-what else is still "to do?" other than just content creation?  What systems are needed?
-
-actually create the inventory UI and scripts
-
-i don't think items can be used yet, in or out of battle.
-
-consider adding multiple players and multiple enemies to the battle system.
-
-*/
-
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -34,7 +18,9 @@ public class SaveManager
 
     public void SaveGameData()
     {
-        
+
+        activeSave = new SaveData();
+
         string dataPath = Application.persistentDataPath;
 
         var serializer = new XmlSerializer(typeof(SaveData));
@@ -42,7 +28,33 @@ public class SaveManager
 
         activeSave.playerPosition = GameManager.instance.Player.position;
 
-        activeSave.currentScene = GameManager.instance.CurrentScene.sceneName;
+        activeSave.playerEnergy = GameManager.instance.playerInfo.energy;
+        activeSave.playerHealth = GameManager.instance.playerInfo.health;
+
+        activeSave.currentScene = GameManager.instance.CurrentScene;
+        activeSave.lastEntrance = GameManager.instance.LastEntrance;
+
+        activeSave.storyProgression = GameManager.instance.storyProgression;
+        for (int x = 0; x < GameManager.instance.farmManager.Width; x++)
+        {
+            for (int y = 0; y < GameManager.instance.farmManager.Height; y++)
+            {
+                activeSave.farmTiles.Add(GameManager.instance.farmManager.gridTiles[x, y]);
+            }
+        }
+
+        activeSave.time = GameManager.instance.gameClock.Ticks;
+
+        activeSave.berryQuantity = ItemManager.berries.quantity;
+        activeSave.mushroomQuantity = ItemManager.mushrooms.quantity;
+        activeSave.succulentQuantity = ItemManager.succulent.quantity;
+
+        /*
+        for (int i = 0; i < GameManager.instance.petManager.currentPets.Count; i++)
+        {
+            activeSave.ownedPets.Add(GameManager.instance.petManager.currentPets[i]);
+        }
+        */
 
         serializer.Serialize(stream, activeSave);
         stream.Close();
@@ -60,9 +72,38 @@ public class SaveManager
             var stream = new FileStream(dataPath + "/" + activeSave.saveName + ".sav", FileMode.Open);
             activeSave = serializer.Deserialize(stream) as SaveData;
 
-            GameManager.instance.Player.position= activeSave.playerPosition;
+            GameManager.instance.PlayerStartPosition = activeSave.playerPosition;
 
-            SceneManager.LoadScene(activeSave.currentScene);
+            GameManager.instance.playerInfo.energy = activeSave.playerEnergy;
+            GameManager.instance.playerInfo.health = activeSave.playerHealth;
+
+            GameManager.instance.storyProgression = activeSave.storyProgression;
+
+            int tileIndex = 0;
+            for (int x = 0; x < GameManager.instance.farmManager.Width; x++)
+            {
+                for (int y = 0; y < GameManager.instance.farmManager.Height; y++)
+                {
+                    GameManager.instance.farmManager.gridTiles[x, y] = activeSave.farmTiles[tileIndex];
+                    tileIndex++;
+                }
+            }
+
+
+            ItemManager.berries.quantity = activeSave.berryQuantity;
+            ItemManager.mushrooms.quantity = activeSave.mushroomQuantity;
+            ItemManager.succulent.quantity = activeSave.succulentQuantity;
+
+            GameManager.instance.gameClock.SetTime(activeSave.time);
+
+            /*
+            for (int i = 0; i < activeSave.ownedPets.Count; i++)
+            {
+                GameManager.instance.petManager.currentPets.Add(activeSave.ownedPets[i]);
+            }
+            */
+
+            GameManager.instance.LoadNewScene(activeSave.currentScene, activeSave.playerPosition);
 
             stream.Close();
             hasLoaded = true;
@@ -96,11 +137,31 @@ public class SaveManager
 public class SaveData
 {
 
+    public SaveData() { }
+
     public string saveName;
+
+    //player info
 
     public Vector2 playerPosition;
 
-    public string currentScene;
+    public int playerHealth;
+    public int playerEnergy;
+    public int playerMoney;
 
+    //world info
 
+    public SceneInfo currentScene;
+    public int time;
+    public int lastEntrance;
+
+    public StoryProgression storyProgression;
+
+    public List<FarmManager.TileState> farmTiles = new List<FarmManager.TileState>();
+
+    //public List<PetInfo> ownedPets = new List<PetInfo>();
+
+    public int berryQuantity;
+    public int mushroomQuantity;
+    public int succulentQuantity;
 }

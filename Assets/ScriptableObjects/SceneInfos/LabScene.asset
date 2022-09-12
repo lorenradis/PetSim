@@ -15,5 +15,5 @@ MonoBehaviour:
   sceneName: LabScene
   entrances:
   - {x: 22.5, y: 0.5}
-  minBounds: {x: 0, y: 0}
-  maxBounds: {x: 0, y: 0}
+  minBounds: {x: -7, y: -7}
+  maxBounds: {x: 18, y: 6}

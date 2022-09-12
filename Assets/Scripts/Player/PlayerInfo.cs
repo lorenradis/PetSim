@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[System.Serializable]
 public class PlayerInfo 
 {
     public int health;
@@ -21,6 +21,28 @@ public class PlayerInfo
         maxEnergy = newEnergy;
         energy = newEnergy;
         GameClock.onMinuteChangedCallback += DecreaseEnergy;
+    }
+
+    public void Decreasehealth()
+    {
+
+    }
+
+    public void DecreaseHealth(int amount)
+    {
+        health -= amount;
+        Reconcile();
+    }
+
+    public void IncreaseHealth()
+    {
+
+    }
+
+    public void IncreaseHealth(int amount)
+    {
+        health += amount;
+        Reconcile();
     }
 
     public void DecreaseEnergy()

@@ -16,3 +16,5 @@ MonoBehaviour:
   entrances:
   - {x: 12, y: 18.5}
   - {x: 58, y: 19.5}
+  minBounds: {x: 18, y: 15}
+  maxBounds: {x: 55, y: 24}

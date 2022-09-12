@@ -10,6 +10,8 @@ public class GlobalLightManager
 
     public Light2D globalLight;
 
+    public Color currentColor { get { return globalLight.color; } }
+
     public GlobalLightManager() { }
 
     public void Setup()

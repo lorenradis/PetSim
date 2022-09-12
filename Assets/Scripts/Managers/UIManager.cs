@@ -63,6 +63,10 @@ public class UIManager
     [SerializeField] private GameObject inGameMenuPanel;
     [SerializeField] private Button[] menuButtons;
 
+    //system menu region
+    [SerializeField] private GameObject systemMenuPanel;
+    [SerializeField] private Button[] systemMenuButtons;
+
     //region info region
     [SerializeField] private GameObject regionInfoPanel;
     [SerializeField] private TextMeshProUGUI regionInfoText;
@@ -401,6 +405,17 @@ public class UIManager
         farmControlsPanel.SetActive(false);
     }
 
+    public void ShowSystemMenu()
+    {
+        systemMenuPanel.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(systemMenuButtons[0].gameObject);
+    }
+
+    public void HideSystemMenu()
+    {
+        systemMenuPanel.SetActive(false);
+    }
+
     public void ChangePage(int amount)
     {
         /*
@@ -491,6 +506,10 @@ public class UIManager
         }else if(starterSelectPanel.activeSelf)
         {
             starterSelectPanel.SetActive(false);
+            return GameManager.GameState.NORMAL;
+        }else if(systemMenuPanel.activeSelf)
+        {
+            systemMenuPanel.SetActive(false);
             return GameManager.GameState.NORMAL;
         }
         return GameManager.GameState.MENU;

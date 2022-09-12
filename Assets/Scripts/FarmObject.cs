@@ -22,6 +22,8 @@ public class FarmObject : MonoBehaviour
     public GameObject rockPrefab;
     public GameObject stumpPrefab;
 
+    private List<GameObject> obstacleObjects = new List<GameObject>();
+
     private void OnEnable()
     {
         FarmManager.onTileChangedCallback += DrawFarm;
@@ -68,6 +70,14 @@ public class FarmObject : MonoBehaviour
                 DrawTileAtCoords(farm.gridTiles[x, y], x, y);
             }
         }
+
+        for (int i = obstacleObjects.Count-1; i>=0 ; i--)
+        {
+            Destroy(obstacleObjects[i]);
+        }
+
+        obstacleObjects.Clear();
+
         for (int i = 0; i < farm.CurrentObstacles.Count; i++)
         {
             GameObject newObstacle;
@@ -75,9 +85,13 @@ public class FarmObject : MonoBehaviour
             {
                 case GardenObstacle.ObstacleType.ROCK:
                     newObstacle = Instantiate(rockPrefab, new Vector2(farm.CurrentObstacles[i].gridPosition.x + FarmManager.startX, farm.CurrentObstacles[i].gridPosition.y + FarmManager.startY), Quaternion.identity) as GameObject;
+                    newObstacle.transform.SetParent(transform);
+                    obstacleObjects.Add(newObstacle);
                     break;
                 case GardenObstacle.ObstacleType.STUMP:
                     newObstacle = Instantiate(stumpPrefab, new Vector2(farm.CurrentObstacles[i].gridPosition.x + FarmManager.startX, farm.CurrentObstacles[i].gridPosition.y + FarmManager.startY), Quaternion.identity) as GameObject;
+                    newObstacle.transform.SetParent(transform);
+                    obstacleObjects.Add(newObstacle);
                     break;
                 default: break;
             }

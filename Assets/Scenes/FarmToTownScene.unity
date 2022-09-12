@@ -22562,7 +22562,7 @@ GameObject:
   - component: {fileID: 106588887}
   - component: {fileID: 106588886}
   m_Layer: 0
-  m_Name: SceneTransitionTrigger (1)
+  m_Name: SceneTransitionTrigger ToTown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22640,11 +22640,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1822235074675447551, guid: 606dceb283ae04546a8e4a8066888a2d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 55.5
       objectReference: {fileID: 0}
     - target: {fileID: 1822235074675447551, guid: 606dceb283ae04546a8e4a8066888a2d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 22.8
       objectReference: {fileID: 0}
     - target: {fileID: 1822235074675447551, guid: 606dceb283ae04546a8e4a8066888a2d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -45397,9 +45397,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1330208398336502931, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
+      propertyPath: entranceToUse
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4629736959449652537, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_Name
-      value: SceneTransitionTrigger
+      value: SceneTransitionTriggerToFarm
       objectReference: {fileID: 0}
     - target: {fileID: 6303041650775036578, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_RootOrder

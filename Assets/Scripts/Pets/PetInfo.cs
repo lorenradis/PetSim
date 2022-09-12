@@ -47,6 +47,8 @@ public class PetInfo
     public int happiness;
     public int maxHappiness;
 
+    public int playerDamageAmount = 1;
+
     public int food;
     public int play;
     public int clean;

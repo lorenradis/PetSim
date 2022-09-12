@@ -39,6 +39,6 @@ public class GardenObstacleObject : MonoBehaviour
                 break;
             }
         }
-        Destroy(gameObject);
+        Destroy(gameObject, 4f/12f);
     }
 }

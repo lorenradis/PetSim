@@ -26,8 +26,10 @@ public class CameraMovement : MonoBehaviour
 
     private void Start()
     {
-        minBounds = new Vector2(-1000, -1000);
-        maxBounds = new Vector2(1000, 1000);
+        if(minBounds == Vector2.zero)
+            minBounds = new Vector2(-1000, -1000);
+        if (maxBounds == Vector2.zero) 
+            maxBounds = new Vector2(1000, 1000);
         offset = Vector2.zero;
         if (GameManager.instance.gameState != GameManager.GameState.BATTLE)
         {
@@ -79,14 +81,12 @@ public class CameraMovement : MonoBehaviour
 
     public void SetMinBounds(Vector2 newBounds)
     {
-        Vector2 camSizeOffset = new Vector2(Camera.main.orthographicSize * 16f / 9f, Camera.main.orthographicSize);
-        minBounds = newBounds + camSizeOffset;
+        minBounds = newBounds;
     }
 
     public void SetMaxBounds(Vector2 newBounds)
     {
-        Vector2 camSizeOffset = new Vector2(Camera.main.orthographicSize * 16f / 9f, Camera.main.orthographicSize);
-        maxBounds = newBounds - camSizeOffset;
+        maxBounds = newBounds;
     }
 
     public void SetMoveSpeed(float newMoveSpeed)

@@ -62,6 +62,14 @@ game manager will call clock.tick when..... when we're in a state that allows ti
         day = 1 + (ticks / 60 / 24);
     }
 
+    public void AdvanceTime(int minutes)
+    {
+        for (int i = 0; i < ticks; i++)
+        {
+            AdvanceMinute();
+        }
+    }
+
     public void Tick()
     {
         elapsedTime += Time.deltaTime;

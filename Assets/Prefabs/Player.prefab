@@ -101,7 +101,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1837655567052825036
 Transform:
   m_ObjectHideFlags: 0
@@ -199,6 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3069957306491042323}
   - component: {fileID: 5299815573648231741}
+  - component: {fileID: 7186064015009403942}
   m_Layer: 0
   m_Name: Light 2D
   m_TagString: Untagged
@@ -300,6 +301,19 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!114 &7186064015009403942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3763472887566588856}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3638999fd504b4541a9a60f06c16a9dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &5177430335331771387
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,7 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df766ff8bedc141fd93f926856b13d06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitAnimator: {fileID: 6409069531891509561}
+  hitEffectPrefab: {fileID: 3355156561704931062}
   checkSource: {fileID: 6666554959213178216}
   blockingLayer:
     serializedVersion: 2

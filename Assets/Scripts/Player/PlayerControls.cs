@@ -9,7 +9,7 @@ public class PlayerControls : MonoBehaviour
     private Collider2D col2d;
     private Rigidbody2D rb2d;
 
-    [SerializeField] private Animator hitAnimator;
+    [SerializeField] private GameObject hitEffectPrefab;
 
     private float attackRadius = .2f;
     private float attackRange = 1f;
@@ -21,7 +21,7 @@ public class PlayerControls : MonoBehaviour
     public Vector2 FacingVector { get { return facingVector; } set { facingVector = value; } }
     private Vector2Int targetSquare;
 
-    private float moveSpeed = 5f;
+    private float moveSpeed = 3.75f;
     private float moveMod = 1f;
     private float runMod = 1.75f;
     private float walkMod = 1f;
@@ -132,7 +132,7 @@ public class PlayerControls : MonoBehaviour
         {
             AttemptInteract();
         }
-        if (Input.GetKeyDown("joystick button 1")) //b button
+        if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.E)) //b button
         {            //if on farm with a partner pet, use tool
             PlaceTerrainTile();
         }
@@ -140,15 +140,15 @@ public class PlayerControls : MonoBehaviour
         {
 
         }
-        if (Input.GetKeyDown("joystick button 2")) // x button
+        if (Input.GetKeyDown("joystick button 2") || Input.GetKeyDown(KeyCode.X)) // x button
         {
             GameManager.instance.ShowIngameMenu();
         }
-        if (Input.GetKeyDown("joystick button 3")) // y button
+        if (Input.GetKeyDown("joystick button 3") || Input.GetKeyDown(KeyCode.Q)) // y button
         {
             MeleeAttack();
         }
-        if (Input.GetKeyDown("joystick button 5")) // L button
+        if (Input.GetKeyDown("joystick button 5") || Input.GetKeyDown(KeyCode.C)) // R button
         {
             //cycle one tile type to the left
             StartSneaking();
@@ -157,11 +157,11 @@ public class PlayerControls : MonoBehaviour
             if (tileTypeIndex < 0)
                 tileTypeIndex = unlockedTiles.Count - 1;
             SetCurrentTileType(tileTypeIndex);
-        }else if(Input.GetKeyUp("joystick button 5"))
+        }else if(Input.GetKeyUp("joystick button 5") || Input.GetKeyUp(KeyCode.C))
         {
             StopSneaking();
         }
-        if (Input.GetKeyDown("joystick button 4")) // R button
+        if (Input.GetKeyDown("joystick button 4") || Input.GetKeyDown(KeyCode.Z)) // L button
         {
             //cycle one tile type to the right
             StartRunning();
@@ -169,7 +169,7 @@ public class PlayerControls : MonoBehaviour
             if (tileTypeIndex >= unlockedTiles.Count)
                 tileTypeIndex = 0;
             SetCurrentTileType(tileTypeIndex);
-        }else if(Input.GetKeyUp("joystick button 4"))
+        }else if(Input.GetKeyUp("joystick button 4") || Input.GetKeyUp(KeyCode.Z))
         {
             StopRunning();
         }
@@ -247,26 +247,27 @@ public class PlayerControls : MonoBehaviour
     private void MeleeAttack()
     {
         int meleeEnergy = 5;
+        Debug.Log("Performing melee attack");
         if(playerInfo.HasEnergy(meleeEnergy))
         {
             playerInfo.DecreaseEnergy(meleeEnergy);
             animator.SetFloat("inputX", facingVector.x);
             animator.SetFloat("inputY", facingVector.y);
             animator.SetTrigger("attack");
-            StartCoroutine(PauseMovement(.25f));
+            StartCoroutine(PauseMovement(5f/12f));
             StartCoroutine(SuccessiveHitChecks());
         }
 
     }
 
+
     private IEnumerator SuccessiveHitChecks()
     {
-        spriteRenderer.sortingOrder += 1000;
         RaycastHit2D[] hits = Physics2D.CircleCastAll(checkSource.position, attackRadius, facingVector, attackRange, blockingLayer);
         bool didHit = false;
+
         foreach(RaycastHit2D hit in hits)
         {
-            yield return null;
             if (hit.transform.GetComponent<OverworldPet>())
             {
                 if (hit.transform.GetComponent<OverworldPet>().petState == OverworldPet.PetState.WILD)
@@ -279,17 +280,14 @@ public class PlayerControls : MonoBehaviour
             else if (hit.transform.GetComponent<GardenObstacleObject>())
             {
                 didHit = true;
+                GameObject newEffect = Instantiate(hitEffectPrefab, hit.transform.position, Quaternion.identity);
+                newEffect.SetActive(true);
+                Destroy(newEffect, 1f);
                 hit.transform.GetComponent<GardenObstacleObject>().TakeDamage();
+                break;
             }
         }
-        yield return new WaitForSeconds(.1f);
-        if(didHit)
-        {
-            hitAnimator.transform.position = (Vector2)checkSource.position + facingVector;
-            hitAnimator.SetTrigger("hit");
-        }
-        yield return new WaitForSeconds(.1f);
-        spriteRenderer.sortingOrder -= 1000;
+        yield return null;
     }
 
     public void TakeDamage(int amount)
@@ -301,6 +299,9 @@ public class PlayerControls : MonoBehaviour
     {
         if (GameObject.FindGameObjectWithTag("Farm") == null)
             return;
+
+        animator.SetTrigger("touch");
+
         int terraformCost = 10;
         if (playerInfo.HasEnergy(terraformCost))
         {

@@ -53,12 +53,16 @@ public class GameManager : MonoBehaviour
     public PetInfo EncounteredPet { get { return encounteredPet; } set { encounteredPet = value; } }
 
     //Scene Change Region
+    [SerializeField] private SceneInfo[] allScenes;
     [SerializeField] private Animator sceneTransitionAnimator;
     private SceneInfo currentScene;
     public SceneInfo CurrentScene { get { return currentScene; } set { } }
     private SceneInfo previousScene;
     private Vector2 playerStartPosition;
+    public Vector2 PlayerStartPosition { get { return playerStartPosition; } set { playerStartPosition = value; } }
     private Vector2 playerFacing;
+    private int lastEntrance = 0;
+    public int LastEntrance { get { return lastEntrance; } }
 
     //scene persistence region?
     public List<GameObject> activeSpawnObjects = new List<GameObject>();
@@ -81,6 +85,7 @@ public class GameManager : MonoBehaviour
     public PlayerInfo playerInfo;
     public GlobalLightManager globalLightManager;
     public AudioManager audioManager;
+    public SaveManager saveManager;
 
     public static GameManager instance = null;
 
@@ -109,8 +114,9 @@ public class GameManager : MonoBehaviour
         //uiManager = new UIManager();
         uiManager.Setup();
         farmManager.SetupFarm(25, 15);
-        playerInfo = new PlayerInfo(960, 960);
+        playerInfo = new PlayerInfo(3, 960);
         globalLightManager.Setup();
+        saveManager = new SaveManager();
     }
 
     private void Start()
@@ -164,7 +170,7 @@ public class GameManager : MonoBehaviour
             case GameState.PAUSE:
                 if (Input.GetKeyDown("joystick button 7") || Input.GetKeyDown(KeyCode.Return))
                 {
-                    UnpauseGame();
+                    //UnpauseGame();
                 }
                 break;
             default:
@@ -174,12 +180,12 @@ public class GameManager : MonoBehaviour
 
     private void PauseGame()
     {
-        ChangeState(GameState.PAUSE);
+        ShowSystemMenu();
     }
 
     private void UnpauseGame()
     {
-        ChangeState(GameState.NORMAL);
+        HideSystemMenu();
     }
 
     public void EnterMenuState()
@@ -316,6 +322,18 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.NORMAL);
     }
 
+    public void ShowSystemMenu()
+    {
+        uiManager.ShowSystemMenu();
+        ChangeState(GameState.MENU);
+    }
+
+    public void HideSystemMenu()
+    {
+        uiManager.HideSystemMenu();
+        ChangeState(GameState.NORMAL);
+    }
+
     public void CloseCurrentMenu()
     {
         ChangeState(uiManager.CloseCurrentMenu());
@@ -354,6 +372,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(FadeToNewScene(previousScene.sceneName));
     }
 
+    public void ReturnFromFainting()
+    {
+        StartCoroutine(FadeToNewScene(previousScene.sceneName));
+    }
+
     public void GoToSleep()
     {
         StartCoroutine(RenderPlayerSleep());
@@ -364,11 +387,14 @@ public class GameManager : MonoBehaviour
         sceneTransitionAnimator.SetTrigger("fadeOut");
         //play sleepy song
         yield return new WaitForSeconds(.5f);
-        playerInfo.IncreaseEnergy(1000);
+
         int duration = 8 * 60;
 
-        gameClock.SetTime(gameClock.Ticks + duration);
-        
+        gameClock.AdvanceTime(duration);
+
+        playerInfo.IncreaseEnergy(1000);
+        playerInfo.IncreaseHealth(1000);
+
         sceneTransitionAnimator.SetTrigger("fadeIn");
     }
 
@@ -376,7 +402,17 @@ public class GameManager : MonoBehaviour
     {
         previousScene = currentScene;
         currentScene = sceneInfo;
+        lastEntrance = entrance;
         playerStartPosition = sceneInfo.entrances[entrance];
+        playerFacing = player.GetComponent<PlayerControls>().FacingVector;
+        StartCoroutine(FadeToNewScene(sceneInfo.sceneName));
+    }
+
+    public void LoadNewScene(SceneInfo sceneInfo, Vector2 newPlayerPosition)
+    {
+        previousScene = currentScene;
+        currentScene = sceneInfo;
+        playerStartPosition = newPlayerPosition;
         playerFacing = player.GetComponent<PlayerControls>().FacingVector;
         StartCoroutine(FadeToNewScene(sceneInfo.sceneName));
     }
@@ -411,6 +447,8 @@ public class GameManager : MonoBehaviour
         baitObjects.Clear();
         if(gameState != GameState.BATTLE)
         {
+            Camera.main.GetComponent<CameraMovement>().SetMinBounds(currentScene.minBounds);
+            Camera.main.GetComponent<CameraMovement>().SetMaxBounds(currentScene.maxBounds);
             StartCoroutine(FadeIn());
             Player.position = playerStartPosition;
             player.GetComponent<PlayerControls>().FacingVector = playerFacing;
@@ -473,6 +511,27 @@ public class GameManager : MonoBehaviour
         sceneTransitionAnimator.SetTrigger("fadeIn");
         yield return new WaitForSeconds(.5f);
         ChangeState(GameState.NORMAL);
+    }
+
+    public void SaveGame()
+    {
+        Dialog confirmSaveDialog = new Dialog("Save your current game?", "", null, false, "Yes", "No", "", "");
+        DialogManager.instance.ShowDialog(confirmSaveDialog, () => {
+            saveManager.SaveGameData();
+        }, () => {
+            HideSystemMenu();
+        });
+    }
+
+    public void LoadGame()
+    {
+        Dialog confirmLoadDialog = new Dialog("Reload from your most recent save?", "", null, false, "Yes", "No", "", "");
+        DialogManager.instance.ShowDialog(confirmLoadDialog, () => {
+            saveManager.LoadGameData();
+        }, () => {
+            HideSystemMenu();
+        });
+
     }
 }
 

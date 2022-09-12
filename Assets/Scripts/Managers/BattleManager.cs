@@ -15,6 +15,10 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Button befriendButton;
     [SerializeField] private Button runButton;
 
+    [SerializeField] private Image[] heartIcons;
+    [SerializeField] private Sprite fullHeart;
+    [SerializeField] private Sprite emptyHeart;
+
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private ItemSlot[] itemSlots;
     [SerializeField] private Button closeInventoryButton;
@@ -73,6 +77,7 @@ public class BattleManager : MonoBehaviour
     private void SetPlayerInfo(PlayerInfo newPlayerInfo)
     {
         playerInfo = newPlayerInfo;
+        UpdatePlayerHealthDisplay();
     }
 
     private void Update()
@@ -243,6 +248,7 @@ public class BattleManager : MonoBehaviour
         }
 
         ChangePetAnxiety(-amount);
+        ChangePetAggression(-amount);
 
         ChangeState(BattleState.ENEMYTURN);
     }
@@ -251,8 +257,8 @@ public class BattleManager : MonoBehaviour
     {
         HidePlayerControls();
         ChangeState(BattleState.BEFRIEND);
-        int roll = Random.Range(0, encounteredPet.Anxiety);
-        if(roll < 20)
+        int roll = Random.Range(0, 100);
+        if(roll >= encounteredPet.Anxiety + encounteredPet.Aggression)
         {
             StartCoroutine(RenderBefriendAttempt(true));
         }
@@ -260,7 +266,9 @@ public class BattleManager : MonoBehaviour
         {
             StartCoroutine(RenderBefriendAttempt(false));
             int newAnxiety = Random.Range(0, 20);
+            int newAggression = Random.Range(0, 20);
             ChangePetAnxiety(newAnxiety);
+            ChangePetAggression(newAggression);
         }
     }
 
@@ -313,6 +321,35 @@ public class BattleManager : MonoBehaviour
         GameManager.instance.ReturnFromBattle();
     }
 
+    private void ChangePlayerHealth(int amount)
+    {
+        if(amount > 0)
+        {
+            playerInfo.IncreaseHealth(amount);
+        }
+        else
+        {
+            playerInfo.DecreaseHealth(Mathf.Abs(amount));
+        }
+        UpdatePlayerHealthDisplay();
+    }
+
+    private void UpdatePlayerHealthDisplay()
+    {
+        for (int i = 0; i < heartIcons.Length; i++)
+        {
+            if(i < playerInfo.maxHealth)
+            {
+                heartIcons[i].enabled = true;
+                heartIcons[i].sprite = i < playerInfo.health ? fullHeart : emptyHeart;
+            }
+            else
+            {
+                heartIcons[i].enabled = false;
+            }
+        }
+    }
+
     private void ChangePetAnxiety(int amount)
     {
         encounteredPet.Anxiety += amount;
@@ -330,21 +367,36 @@ public class BattleManager : MonoBehaviour
     private IEnumerator RenderPetTurn()
     {
         petIsActing = true;
-        int roll = Random.Range(1, 255);
+        int roll = Random.Range(0, 255);
         if(roll < encounteredPet.Anxiety)
         {
             //pet runs
             yield return DisplayDialog("The " + encounteredPet.petName + " nervously glances to the side... and makes a break for it!", BattleState.ENEMYTURN);
             GameManager.instance.ReturnFromBattle();
             yield break;
+        }else if(roll < encounteredPet.Aggression)
+        {
+            yield return DisplayDialog("The " + encounteredPet.petName + " lashes out at you!", BattleState.ENEMYTURN);
+            ChangePlayerHealth(-encounteredPet.playerDamageAmount);
+            if(playerInfo.health < 1)
+            {
+                yield return DisplayDialog("You've taken too much damage to continue, your vision fades to black as you lose consciousness...", BattleState.ENEMYTURN);
+                GameManager.instance.ReturnFromFainting();
+                yield break;
+            }
+            else
+            {
+                yield return DisplayDialog("You took " + encounteredPet.playerDamageAmount + " damage!", BattleState.ENEMYTURN);
+            }
+
         }
         else
         {
             yield return DisplayDialog("The " + encounteredPet.petName + " is thinking things over", BattleState.ENEMYTURN);
             //pet abides
-            ChangeState(BattleState.IDLE);
-            petIsActing = false;
         }
+        ChangeState(BattleState.IDLE);
+        petIsActing = false;
     }
 
     private IEnumerator DisplayDialog(string message, BattleState nextState)
@@ -353,7 +405,7 @@ public class BattleManager : MonoBehaviour
 
         dialogPanel.SetActive(true);
 
-        float waitTime = .05f;
+        float waitTime = .025f;
         float speedup;
         dialogText.text = message;
         dialogText.maxVisibleCharacters = 0;

@@ -12,7 +12,7 @@ public class OverworldPet : MovingObject
 
     public bool flipSprite;
 
-    private float sightRadius = 8f;
+    private float sightRadius = 5f;
 
     public enum PetState { WILD, TAME, FRIEND }
     public PetState petState;
@@ -113,7 +113,7 @@ public class OverworldPet : MovingObject
                     case MoveState.ALERT:
                         if (GameManager.instance.Player.GetComponent<PlayerControls>().IsMoving && !GameManager.instance.Player.GetComponent<PlayerControls>().IsSneaking)
                         {
-                            int roll = Random.Range(1, 100);
+                            int roll = Random.Range(0, 256);
                             if (roll < petInfo.Aggression)
                             {
                                 petInfo.Aggression *= 2;
