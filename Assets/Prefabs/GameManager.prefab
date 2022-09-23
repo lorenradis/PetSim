@@ -7893,10 +7893,10 @@ MonoBehaviour:
     squirtBattleAnimator: {fileID: 0}
     squirtIcon: {fileID: 1676724814, guid: a107d139784e7478c83138e3537991cb, type: 3}
     squirtPortrait: {fileID: -1833344631, guid: 863993b6e6c4c4c93953936e655b2b14, type: 3}
-    stunkyOverworldAnimator: {fileID: 0}
-    stunkyBattleAnimator: {fileID: 0}
-    stunkyIcon: {fileID: 0}
-    stunkyPortrait: {fileID: 0}
+    stunkyOverworldAnimator: {fileID: 22100000, guid: 10b14255285c34889a79d4ac7da7e360, type: 2}
+    stunkyBattleAnimator: {fileID: 22100000, guid: 10b14255285c34889a79d4ac7da7e360, type: 2}
+    stunkyIcon: {fileID: -255921602, guid: ded5b1bf1a9b9402a8767e6df75873a0, type: 3}
+    stunkyPortrait: {fileID: -1497318075, guid: ded5b1bf1a9b9402a8767e6df75873a0, type: 3}
   affinityManager:
     affinities: []
   regionManager:
@@ -8146,6 +8146,7 @@ MonoBehaviour:
       currentScene: {fileID: 0}
       time: 0
       lastEntrance: 0
+      farmTiles: 
       berryQuantity: 0
       mushroomQuantity: 0
       succulentQuantity: 0

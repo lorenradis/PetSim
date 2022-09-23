@@ -455,6 +455,10 @@ public class UIManager
         GameManager.instance.petManager.AddPetToList(petToAdd);
         GameManager.instance.CloseCurrentMenu();
         DialogManager.instance.ShowSimpleDialog("You selected " + pet.petName + " as your starter, congrats!");
+        if(GameManager.instance.petManager.PartnerPet1 == null || GameManager.instance.petManager.PartnerPet2 == null)
+                {
+            GameManager.instance.petManager.SetPartnerPet(GameManager.instance.petManager.currentPets[GameManager.instance.petManager.currentPets.Count - 1]);
+        }
     }
 
     public GameManager.GameState CloseCurrentMenu()
