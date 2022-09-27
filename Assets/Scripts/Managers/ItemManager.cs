@@ -41,19 +41,31 @@ public class ItemManager
         dummyItem = new Item("Dummy");
         dummyItem.icon = dummyIcon;
         dummyItem.quantity = 10;
+        dummyItem.itemType = Item.ItemType.ITEM;
 
         wood = new Item("Wood");
         wood.icon = woodSprite;
+        wood.itemType = Item.ItemType.RESOURCE;
+
         berries = new Item("Berries");
         berries.icon = berrySprite;
+        berries.itemType = Item.ItemType.FOOD;
+
         water = new Item("Water");
         water.icon = waterSprite;
+        water.itemType = Item.ItemType.RESOURCE;
+
         mushrooms = new Item("Mushrooms");
         mushrooms.icon = mushroomSprite;
+        mushrooms.itemType = Item.ItemType.FOOD;
+
         sand = new Item("Sand");
         sand.icon = sandSprite;
+        sand.itemType = Item.ItemType.RESOURCE;
+
         succulent = new Item("Succulent");
         succulent.icon = succulentSprite;
+        succulent.itemType = Item.ItemType.FOOD;
 
         allItems.Add(dummyItem);
 
@@ -65,29 +77,31 @@ public class ItemManager
         allFoods.Add(succulent);
     }
 
-    public void AddFood(Item item, int amount)
+    public bool AddItem(Item item, int amount)
     {
         item.quantity += amount;
-        if(item.quantity > maxFoods)
+
+        switch(item.itemType)
         {
-            DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you had to discard some of the " + item.itemName);
-            item.quantity = maxFoods;
+            case Item.ItemType.FOOD:
+                if (item.quantity > maxFoods)
+                {
+                    item.quantity = maxFoods;
+                    return false;
+                }
+                break;
+            case Item.ItemType.RESOURCE:
+                if (item.quantity > maxResources)
+                {
+                    item.quantity = maxResources;
+                    return false;
+                }
+                break;
+            case Item.ItemType.ITEM:
+
+                break;
         }
-    }
-
-    public void AddResource(Item item, int amount)
-    {
-        item.quantity += amount;
-        if (item.quantity > maxResources)
-        {
-            DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you had to discard some of the " + item.itemName);
-            item.quantity = maxResources;
-        }
-    }
-
-    public void AddItem(Item item, int amount)
-    {
-
+        return true;
     }
 
     public void SelectItem(Item item)

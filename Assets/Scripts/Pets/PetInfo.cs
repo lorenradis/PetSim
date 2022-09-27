@@ -210,10 +210,23 @@ public class PetInfo
             case Task.TaskType.GATHER:
                 message += currentTask.myRegion.resource.itemName;
                 DialogManager.instance.ShowSimpleDialog(message);
-                GameManager.instance.itemManager.AddResource(currentTask.Resource, amount);
+                if(GameManager.instance.itemManager.AddItem(currentTask.Resource, amount))
+                {
+
+                }
+                else
+                {
+                    DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you discard a few.");
+                }
                 if (secondaryAmount > 0)
                 {
-                    GameManager.instance.itemManager.AddFood(currentTask.Food, secondaryAmount);
+                    if(GameManager.instance.itemManager.AddItem(currentTask.Food, secondaryAmount))
+                        {
+
+                    }else
+                    {
+                        DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you discard a few.");
+                    }
                     secondaryMessage += secondaryAmount + " " + currentTask.Food.itemName + "!";
                     DialogManager.instance.ShowSimpleDialog(secondaryMessage);
                 }
@@ -221,12 +234,25 @@ public class PetInfo
             case Task.TaskType.FOOD:
                 message += currentTask.myRegion.food.itemName;
                 DialogManager.instance.ShowSimpleDialog(message);
-                GameManager.instance.itemManager.AddFood(currentTask.Food, amount);
+                if(GameManager.instance.itemManager.AddItem(currentTask.Food, amount))
+                    {
+
+                }else
+                {
+                    DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you discard a few.");
+                }
                 if (secondaryAmount > 0)
                 {
-                    GameManager.instance.itemManager.AddResource(currentTask.Resource, secondaryAmount);
                     secondaryMessage += secondaryAmount + " " + currentTask.Resource.itemName + "!";
                     DialogManager.instance.ShowSimpleDialog(secondaryMessage);
+                    if(GameManager.instance.itemManager.AddItem(currentTask.Resource, secondaryAmount))
+                    {
+
+                    }
+                    else
+                    {
+                        DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you discard a few.");
+                    }
                 }
                 break;
             case Task.TaskType.EXPLORE:
@@ -237,15 +263,32 @@ public class PetInfo
                     roll = Random.Range(1, 100);
                     if (roll < 50)
                     {
-                        GameManager.instance.itemManager.AddResource(currentTask.Resource, secondaryAmount);
                         secondaryMessage += secondaryAmount + " " + currentTask.Resource.itemName + "!";
+                        DialogManager.instance.ShowSimpleDialog(secondaryMessage);
+                        if (GameManager.instance.itemManager.AddItem(currentTask.Resource, secondaryAmount))
+                        {
+
+                        }
+                        else
+                        {
+
+                            DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you discard a few.");
+                        }
                     }
                     else
                     {
-                        GameManager.instance.itemManager.AddFood(currentTask.Food, secondaryAmount);
                         secondaryMessage += secondaryAmount + " " + currentTask.Food.itemName + "!";
+                        DialogManager.instance.ShowSimpleDialog(secondaryMessage);
+                        if (GameManager.instance.itemManager.AddItem(currentTask.Food, secondaryAmount))
+                        {
+
+                        }
+                        else
+                        {
+                            DialogManager.instance.ShowSimpleDialog("But you don't have enough room, so you discard a few.");
+
+                        }
                     }
-                    DialogManager.instance.ShowSimpleDialog(secondaryMessage);
                 }
 
                 break;

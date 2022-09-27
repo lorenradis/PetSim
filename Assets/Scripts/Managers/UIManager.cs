@@ -103,6 +103,19 @@ public class UIManager
 
     }
 
+    public void ShowGameOverlay()
+    {
+        timeText.gameObject.SetActive(true);
+        energySlider.gameObject.SetActive(true);
+    }
+
+    public void HideGameOverlay()
+    {
+        timeText.gameObject.SetActive(false);
+        farmControlsPanel.gameObject.SetActive(false);
+        energySlider.gameObject.SetActive(false);
+    }
+
     private void DisplayTime()
     {
         timeText.text = GameManager.instance.gameClock.StringTime;

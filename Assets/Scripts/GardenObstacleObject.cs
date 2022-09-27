@@ -39,6 +39,11 @@ public class GardenObstacleObject : MonoBehaviour
                 break;
             }
         }
+
+        if(GetComponent<LootDrop>())
+        {
+            GetComponent<LootDrop>().DropLoot();
+        }
         Destroy(gameObject, 4f/12f);
     }
 }

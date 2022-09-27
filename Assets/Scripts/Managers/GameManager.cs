@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
     public GameObject wildPetPrefab;
     public GameObject itemObjectPrefab;
     public List<Transform> baitObjects = new List<Transform>();
+    public SceneInfo battleScene;
 
     //Managers Region
 
@@ -400,20 +401,26 @@ public class GameManager : MonoBehaviour
 
     public void LoadNewScene(SceneInfo sceneInfo, int entrance)
     {
-        previousScene = currentScene;
+        if (currentScene != null)
+            previousScene = currentScene;
         currentScene = sceneInfo;
         lastEntrance = entrance;
         playerStartPosition = sceneInfo.entrances[entrance];
-        playerFacing = player.GetComponent<PlayerControls>().FacingVector;
+        if(player != null)
+            playerFacing = player.GetComponent<PlayerControls>().FacingVector;
+        else playerFacing = Vector2.down;
         StartCoroutine(FadeToNewScene(sceneInfo.sceneName));
     }
 
     public void LoadNewScene(SceneInfo sceneInfo, Vector2 newPlayerPosition)
     {
-        previousScene = currentScene;
+        if(currentScene != null)
+            previousScene = currentScene;
         currentScene = sceneInfo;
         playerStartPosition = newPlayerPosition;
-        playerFacing = player.GetComponent<PlayerControls>().FacingVector;
+        if (player != null)
+            playerFacing = player.GetComponent<PlayerControls>().FacingVector;
+        else playerFacing = Vector2.down;
         StartCoroutine(FadeToNewScene(sceneInfo.sceneName));
     }
 
@@ -426,6 +433,7 @@ public class GameManager : MonoBehaviour
         ChangeState(GameState.LOADING);
         sceneTransitionAnimator.SetTrigger("fadeOut");
         yield return new WaitForSeconds(.5f);
+        uiManager.HideGameOverlay();
         SceneManager.LoadScene(sceneName);
     }
 
@@ -440,11 +448,13 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         SceneManager.LoadScene("BattleScene");
         sceneTransitionAnimator.SetTrigger("fadeIn");
+        uiManager.HideGameOverlay();
     }
 
     private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         baitObjects.Clear();
+
         if(gameState != GameState.BATTLE)
         {
             Camera.main.GetComponent<CameraMovement>().SetMinBounds(currentScene.minBounds);
@@ -493,14 +503,14 @@ public class GameManager : MonoBehaviour
         if(petManager.PartnerPet1 != null)
         {
             Debug.Log(petManager.PartnerPet1.petName);
-            newPartner = Instantiate(partnerPetPrefab, player.position, Quaternion.identity) as GameObject;
+            newPartner = Instantiate(partnerPetPrefab, (Vector2)player.position + Vector2.down, Quaternion.identity) as GameObject;
             partnerPetObjects.Add(newPartner);
             newPartner.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet1);
         }
         if(petManager.PartnerPet2 != null)
         {
             Debug.Log(petManager.PartnerPet2.petName);
-            newPartner = Instantiate(partnerPetPrefab, player.position, Quaternion.identity) as GameObject;
+            newPartner = Instantiate(partnerPetPrefab, (Vector2)player.position + Vector2.down, Quaternion.identity) as GameObject;
             partnerPetObjects.Add(newPartner);
             newPartner.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet2);
         }
@@ -510,7 +520,15 @@ public class GameManager : MonoBehaviour
     {
         sceneTransitionAnimator.SetTrigger("fadeIn");
         yield return new WaitForSeconds(.5f);
-        ChangeState(GameState.NORMAL);
+        if(currentScene != battleScene)
+        {
+            ChangeState(GameState.NORMAL);
+            uiManager.ShowGameOverlay();
+        }
+        else
+        {
+            ChangeState(GameState.BATTLE);
+        }
     }
 
     public void SaveGame()

@@ -10,9 +10,10 @@ public class InteractableBed : Interactable
     {
         base.OnInteract();
         DialogManager.instance.ShowDialog(sleepDialog, () => {
+            DialogManager.instance.ShowSimpleDialog("Sleep well!");
             GameManager.instance.GoToSleep();
         }, () => {
-
+            DialogManager.instance.ShowSimpleDialog("See you later, bed...");
         });
     }
 }

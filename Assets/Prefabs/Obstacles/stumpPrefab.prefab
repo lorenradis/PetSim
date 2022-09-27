@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5609354663400481691}
   - component: {fileID: 5609354663400481688}
   - component: {fileID: 4918836290160393366}
+  - component: {fileID: 5519217249804093451}
   m_Layer: 7
   m_Name: stumpPrefab
   m_TagString: Untagged
@@ -140,3 +141,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   durability: 10
+--- !u!114 &5519217249804093451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5609354663400481689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22cb3bef31ec546e9ba3345ea5b3cd3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alwaysDrops: []
+  commonDrops: []
+  rareDrops: []
+  epicDrops: []
+  lootChance: 75
+  dropObjectPrefab: {fileID: 0}

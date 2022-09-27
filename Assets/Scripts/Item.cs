@@ -12,6 +12,9 @@ public class Item
 
     public int foodPoints = 10;
 
+    public enum ItemType { FOOD, RESOURCE, ITEM }
+    public ItemType itemType;
+
     public Item()
     {
 

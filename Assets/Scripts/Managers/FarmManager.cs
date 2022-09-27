@@ -73,6 +73,7 @@ public class FarmManager
         gridTiles = new TileState[width, height];
 
         GardenObstacle rockObstacle = new GardenObstacle(Vector2Int.zero, GardenObstacle.ObstacleType.ROCK);
+        
         GardenObstacle stumpObstacle = new GardenObstacle(Vector2Int.zero, GardenObstacle.ObstacleType.STUMP);
 
         gardenObstacles.Add(rockObstacle);
