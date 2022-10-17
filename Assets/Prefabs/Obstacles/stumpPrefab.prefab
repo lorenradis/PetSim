@@ -157,5 +157,11 @@ MonoBehaviour:
   commonDrops: []
   rareDrops: []
   epicDrops: []
+  alwaysWood: 10
+  alwaysStone: 0
+  alwaysClay: 0
+  alwaysIron: 0
+  alwaysCoal: 0
+  alwaysCrystal: 0
   lootChance: 75
-  dropObjectPrefab: {fileID: 0}
+  dropObjectPrefab: {fileID: 5917408467902489600, guid: d3a1d90ace6b4408a8dfcbad6620eadd, type: 3}

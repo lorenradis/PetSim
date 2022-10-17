@@ -33,6 +33,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Slider aggressionSlider;
     private Animator petAnimator;
 
+    private int runFails = 0;
+
     public enum BattleState { SETUP, IDLE, PLAYERTURN, ENEMYTURN, OFFER, OBSERVE, BEFRIEND, FLEE, DIALOG }
     public BattleState battleState;
     private BattleState previousState;
@@ -257,13 +259,15 @@ public class BattleManager : MonoBehaviour
     {
         HidePlayerControls();
         ChangeState(BattleState.BEFRIEND);
-        int roll = Random.Range(0, 100);
+        int roll = Random.Range(0, 100) + GameManager.instance.playerInfo.tameFails * 10;
         if(roll >= encounteredPet.Anxiety + encounteredPet.Aggression)
         {
             StartCoroutine(RenderBefriendAttempt(true));
+            GameManager.instance.playerInfo.tameFails = 0;
         }
         else
         {
+            GameManager.instance.playerInfo.tameFails++;
             StartCoroutine(RenderBefriendAttempt(false));
             int newAnxiety = Random.Range(0, 20);
             int newAggression = Random.Range(0, 20);
@@ -370,10 +374,13 @@ public class BattleManager : MonoBehaviour
         int roll = Random.Range(0, 255);
         if(roll < encounteredPet.Anxiety)
         {
-            //pet runs
-            yield return DisplayDialog("The " + encounteredPet.petName + " nervously glances to the side... and makes a break for it!", BattleState.ENEMYTURN);
-            GameManager.instance.ReturnFromBattle();
-            yield break;
+            runFails++;
+            if (runFails > 2)
+            {            //pet runs
+                yield return DisplayDialog("The " + encounteredPet.petName + " nervously glances to the side... and makes a break for it!", BattleState.ENEMYTURN);
+                GameManager.instance.ReturnFromBattle();
+                yield break;
+            }
         }else if(roll < encounteredPet.Aggression)
         {
             yield return DisplayDialog("The " + encounteredPet.petName + " lashes out at you!", BattleState.ENEMYTURN);

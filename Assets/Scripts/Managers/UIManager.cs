@@ -43,6 +43,8 @@ public class UIManager
     [SerializeField] private Button region1Button;
     [SerializeField] private Button region2Button;
     [SerializeField] private Button region3Button;
+    [SerializeField] private Button region4Button;
+    [SerializeField] private Button region5Button;
     [SerializeField] private Button[] mapButtons = new Button[3];
     [SerializeField] private Button mapCloseButton;
 
@@ -100,6 +102,8 @@ public class UIManager
         mapButtons[0] = region1Button;
         mapButtons[1] = region2Button;
         mapButtons[2] = region3Button;
+        mapButtons[3] = region4Button;
+        mapButtons[4] = region5Button;
 
     }
 

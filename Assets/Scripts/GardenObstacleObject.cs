@@ -42,7 +42,7 @@ public class GardenObstacleObject : MonoBehaviour
 
         if(GetComponent<LootDrop>())
         {
-            GetComponent<LootDrop>().DropLoot();
+            GetComponent<LootDrop>().DelayedDrop(4f/12f);
         }
         Destroy(gameObject, 4f/12f);
     }

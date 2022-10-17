@@ -24,4 +24,11 @@ public class Item
     {
         itemName = newName;
     }
+
+    public Item(string newName, ItemType itemType, Sprite newIcon)
+    {
+        itemName = newName;
+        this.itemType = itemType;
+        icon = newIcon;
+    }
 }

@@ -9,6 +9,8 @@ public class PlayerInfo
     public int energy;
     public int maxEnergy;
 
+    public int tameFails = 0;
+
     public delegate void OnEnergyChanged();
     public static OnEnergyChanged onEnergyChangedCallback;
 
