@@ -18,5 +18,6 @@ MonoBehaviour:
   - {x: 56, y: 72}
   - {x: 119, y: 47.5}
   - {x: 2, y: 21.5}
+  - {x: 24, y: 1}
   minBounds: {x: 10, y: 5.5}
   maxBounds: {x: 113, y: 69}

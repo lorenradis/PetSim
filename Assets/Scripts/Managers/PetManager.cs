@@ -28,7 +28,25 @@ the player will be presented with a graphical representation of the 3 pets.
     public static PetInfo Bulbos;
     public static PetInfo Charby;
     public static PetInfo Squirt;
+    public static PetInfo Bird;
+    public static PetInfo EarthMole;
+    public static PetInfo GrassOpossum;
+    public static PetInfo WaterRaccoon;
     public static PetInfo Stunky;
+    public static PetInfo Earthworm;
+    public static PetInfo Owl;
+    public static PetInfo Toadstool;
+    public static PetInfo Rocky;
+    public static PetInfo FireDog;
+    public static PetInfo Gremlin;
+    public static PetInfo Tumbleweed;
+    public static PetInfo Shrub;
+    public static PetInfo Penguin;
+    public static PetInfo Crab;
+    public static PetInfo Cloud;
+    public static PetInfo Bug;
+    public static PetInfo Geist;
+    public static PetInfo Sprite;
 
     private PetInfo selectedPet;
     public PetInfo SelectedPet { get { return selectedPet; } set { } }
@@ -50,7 +68,7 @@ the player will be presented with a graphical representation of the 3 pets.
         }
     }
 
-    //overworld animator controllers
+    //Pet Graphics to be set in inspector
     [SerializeField] private RuntimeAnimatorController bulbosOverworldAnimator;
     [SerializeField] private RuntimeAnimatorController bulbosBattleAnimator;
     [SerializeField] private Sprite bulbosIcon;
@@ -66,10 +84,100 @@ the player will be presented with a graphical representation of the 3 pets.
     [SerializeField] private Sprite squirtIcon;
     [SerializeField] private Sprite squirtPortrait;
 
+    [SerializeField] private RuntimeAnimatorController birdOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController birdBattleAnimator;
+    [SerializeField] private Sprite birdIcon;
+    [SerializeField] private Sprite birdPortrait;
+
+    [SerializeField] private RuntimeAnimatorController earthMoleOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController earthMoleBattleAnimator;
+    [SerializeField] private Sprite earthMoleIcon;
+    [SerializeField] private Sprite earthMolePortrait;
+
+    [SerializeField] private RuntimeAnimatorController grassOpossumOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController grassOpossumBattleAnimator;
+    [SerializeField] private Sprite grassOpossumIcon;
+    [SerializeField] private Sprite grassOpossumPortrait;
+
+    [SerializeField] private RuntimeAnimatorController waterRaccoonOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController waterRaccoonBattleAnimator;
+    [SerializeField] private Sprite waterRaccoonIcon;
+    [SerializeField] private Sprite waterRaccoonPortrait;
+
     [SerializeField] private RuntimeAnimatorController stunkyOverworldAnimator;
     [SerializeField] private RuntimeAnimatorController stunkyBattleAnimator;
     [SerializeField] private Sprite stunkyIcon;
     [SerializeField] private Sprite stunkyPortrait;
+
+    [SerializeField] private RuntimeAnimatorController earthwormOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController earthwormBattleAnimator;
+    [SerializeField] private Sprite earthwormIcon;
+    [SerializeField] private Sprite earthwormPortrait;
+
+    [SerializeField] private RuntimeAnimatorController owlOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController owlBattleAnimator;
+    [SerializeField] private Sprite owlIcon;
+    [SerializeField] private Sprite owlPortrait;
+
+    [SerializeField] private RuntimeAnimatorController toadstoolOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController toadstoolBattleAnimator;
+    [SerializeField] private Sprite toadstoolIcon;
+    [SerializeField] private Sprite toadstoolPortrait;
+
+    [SerializeField] private RuntimeAnimatorController rockyOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController rockyBattleAnimator;
+    [SerializeField] private Sprite rockyIcon;
+    [SerializeField] private Sprite rockyPortrait;
+
+    [SerializeField] private RuntimeAnimatorController fireDogOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController fireDogBattleAnimator;
+    [SerializeField] private Sprite fireDogIcon;
+    [SerializeField] private Sprite fireDogPortrait;
+
+    [SerializeField] private RuntimeAnimatorController gremlinOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController gremlinBattleAnimator;
+    [SerializeField] private Sprite gremlinIcon;
+    [SerializeField] private Sprite gremlinPortrait;
+
+    [SerializeField] private RuntimeAnimatorController tumbleweedOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController tumbleweedBattleAnimator;
+    [SerializeField] private Sprite tumbleweedIcon;
+    [SerializeField] private Sprite tumbleweedPortrait;
+
+    [SerializeField] private RuntimeAnimatorController shrubOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController shrubBattleAnimator;
+    [SerializeField] private Sprite shrubIcon;
+    [SerializeField] private Sprite shrubPortrait;
+
+    [SerializeField] private RuntimeAnimatorController penguinOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController penguinBattleAnimator;
+    [SerializeField] private Sprite penguinIcon;
+    [SerializeField] private Sprite penguinPortrait;
+
+    [SerializeField] private RuntimeAnimatorController crabOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController crabBattleAnimator;
+    [SerializeField] private Sprite crabIcon;
+    [SerializeField] private Sprite crabPortrait;
+
+    [SerializeField] private RuntimeAnimatorController cloudOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController cloudBattleAnimator;
+    [SerializeField] private Sprite cloudIcon;
+    [SerializeField] private Sprite cloudPortrait;
+
+    [SerializeField] private RuntimeAnimatorController bugOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController bugBattleAnimator;
+    [SerializeField] private Sprite bugIcon;
+    [SerializeField] private Sprite bugPortrait;
+
+    [SerializeField] private RuntimeAnimatorController geistOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController geistBattleAnimator;
+    [SerializeField] private Sprite geistIcon;
+    [SerializeField] private Sprite geistPortrait;
+
+    [SerializeField] private RuntimeAnimatorController spriteOverworldAnimator;
+    [SerializeField] private RuntimeAnimatorController spriteBattleAnimator;
+    [SerializeField] private Sprite spriteIcon;
+    [SerializeField] private Sprite spritePortrait;
 
     public delegate void OnPartnerChanged();
     public static OnPartnerChanged onPartnerChangedCallback;

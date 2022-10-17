@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneName: DesertScene
   entrances:
-  - {x: 0, y: 0}
-  minBounds: {x: 0, y: 0}
-  maxBounds: {x: 0, y: 0}
+  - {x: 34, y: 16}
+  minBounds: {x: -25, y: -14}
+  maxBounds: {x: 25, y: 14}

@@ -33,6 +33,15 @@ EditorBuildSettings:
     path: Assets/Scenes/ForestScene.unity
     guid: ceca1bb7b43ce47edaa9ae3de085489d
   - enabled: 1
+    path: Assets/Scenes/LakeScene.unity
+    guid: ccbeda9cce3214c829d5969d467a83d0
+  - enabled: 1
+    path: Assets/Scenes/DesertScene.unity
+    guid: 4642fdfb24f6e48ab983e224f48372aa
+  - enabled: 1
+    path: Assets/Scenes/MountainScene.unity
+    guid: a67d9d185f58a42daaeb1adf25535dce
+  - enabled: 1
     path: Assets/Scenes/BattleScene.unity
     guid: c9c8e05e519e64af39948338b782a334
   m_configObjects: {}

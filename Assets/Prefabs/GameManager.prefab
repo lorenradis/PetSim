@@ -5072,7 +5072,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7644080231505053936
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8173,6 +8173,8 @@ MonoBehaviour:
     region1Button: {fileID: 8585156671269735700}
     region2Button: {fileID: 4541875212932530014}
     region3Button: {fileID: 610066898064927244}
+    region4Button: {fileID: 0}
+    region5Button: {fileID: 0}
     mapButtons:
     - {fileID: 8585156671269735700}
     - {fileID: 4541875212932530014}
