@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[System.Serializable]
 public class RegionManager  {
 
     public Region desertRegion;
@@ -32,6 +31,8 @@ public class RegionManager  {
         forestRegion.AddLevelUnlock(new LevelUnlock(3, () => { forestRegion.levelSpecificObjects[0] = false; }, false), true); //exit from forest to lake
         forestRegion.AddLevelUnlock(new LevelUnlock(4, () => { forestRegion.levelSpecificObjects[1] = true; }, false), false); //doorway to house
 
+        //every region must have at least 1 common spawn in the morning and night
+
         forestRegion.AddSpawn(PetManager.Bulbos, false, 0);
         forestRegion.AddSpawn(PetManager.Bulbos, true, 1);
         forestRegion.AddSpawn(PetManager.Squirt, false, 1);
@@ -42,10 +43,19 @@ public class RegionManager  {
         forestRegion.AddSpawn(PetManager.Stunky, false, 2);
         forestRegion.AddSpawn(PetManager.Stunky, true, 2);
 
+        lakeRegion.AddSpawn(PetManager.Squirt, false, 0);
+        lakeRegion.AddSpawn(PetManager.Squirt, true, 0);
+
         desertRegion.AddSpawn(PetManager.Charby, true, 0);
         desertRegion.AddSpawn(PetManager.Charby, false, 1);
         desertRegion.AddSpawn(PetManager.Stunky, true, 1);
         desertRegion.AddSpawn(PetManager.Stunky, false, 0);
+
+        caveRegion.AddSpawn(PetManager.EarthMole, false, 0);
+        caveRegion.AddSpawn(PetManager.EarthMole, true, 0);
+
+        mountainRegion.AddSpawn(PetManager.Bird, false, 0);
+        mountainRegion.AddSpawn(PetManager.Bird, true, 0);
 
         regions.Add(forestRegion);
         regions.Add(lakeRegion);

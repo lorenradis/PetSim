@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-[System.Serializable]
+
 public class ItemManager
 {
+
     public List<Item> allItems = new List<Item>();
     public List<Item> allResources = new List<Item>();
     public List<Item> allFoods = new List<Item>();
@@ -13,48 +14,36 @@ public class ItemManager
 
     //resources
     public static Item wood; //forest resource
-    public Sprite woodSprite;
-
     public static Item stone; //forest resource
-    public Sprite stoneSprite;
 
     public static Item clay; //forest resource
-    public Sprite claySprite;
 
     public static Item coal; //forest resource
-    public Sprite coalSprite;
 
     public static Item iron; //forest resource
-    public Sprite ironSprite;
 
     public static Item crystal; //forest resource
-    public Sprite crystalSprite;
 
     public static Item grassFood;
-    public Sprite grassFoodSprite;
+
     public static Item fireFood;
-    public Sprite fireFoodSprite;
+
     public static Item waterFood;
-    public Sprite waterFoodSprite;
+
     public static Item earthFood;
-    public Sprite earthFoodSprite;
+
     public static Item windFood;
-    public Sprite windFoodSprite;
+
+    public static Item lightFood;
+
+    public static Item darkFood;
+
     public static Item healthyFood;
-    public Sprite healthyFoodSprite;
+
     public static Item yummyFood;
-    public Sprite yummyFoodSprite;
+
     public static Item neutralFood;
-    public Sprite neutralFoodSprite;
 
-    public static Item berries; //forest food
-    public Sprite berrySprite;
-
-    public static Item mushrooms; //water food
-    public Sprite mushroomSprite;
-
-    public static Item succulent; //desert food
-    public Sprite succulentSprite;
 
     private Item selectedItem;
     public Item SelectedItem { get { return selectedItem; } }
@@ -63,10 +52,7 @@ public class ItemManager
     public int maxResources = 50;
     public int maxFoods = 9;
 
-    public ItemManager()
-    {
-
-    }
+    public ItemManager() { Debug.Log("I exist"); }
 
     public void SetupItems()
     {
@@ -75,51 +61,73 @@ public class ItemManager
         dummyItem.quantity = 10;
         dummyItem.itemType = Item.ItemType.ITEM;
 
+        //Resource Instantiation
         wood = new Item("Wood");
-        wood.icon = woodSprite;
+        wood.icon = ItemAssets.Instance.woodSprite;
         wood.itemType = Item.ItemType.RESOURCE;
 
         stone = new Item("Stone");
-        stone.icon = stoneSprite;
+        stone.icon = ItemAssets.Instance.stoneSprite;
         stone.itemType = Item.ItemType.RESOURCE;
 
         clay = new Item("Clay");
-        clay.icon = claySprite;
+        clay.icon = ItemAssets.Instance.claySprite;
         clay.itemType = Item.ItemType.RESOURCE;
 
         coal = new Item("Coal");
-        coal.icon = coalSprite;
+        coal.icon = ItemAssets.Instance.coalSprite;
         coal.itemType = Item.ItemType.RESOURCE;
 
         iron = new Item("Iron");
-        iron.icon = ironSprite;
+        iron.icon = ItemAssets.Instance.ironSprite;
         iron.itemType = Item.ItemType.RESOURCE;
 
         crystal = new Item("Crystal");
-        crystal.icon = crystalSprite;
+        crystal.icon = ItemAssets.Instance.crystalSprite;
         crystal.itemType = Item.ItemType.RESOURCE;
 
-        grassFood = new Item("Grass Food", Item.ItemType.FOOD, grassFoodSprite);
-        fireFood = new Item("fire Food", Item.ItemType.FOOD, fireFoodSprite);
-        waterFood = new Item("water Food", Item.ItemType.FOOD, waterFoodSprite);
-        earthFood = new Item("earth Food", Item.ItemType.FOOD, earthFoodSprite);
-        windFood = new Item("wind Food", Item.ItemType.FOOD, windFoodSprite);
-        yummyFood = new Item("yummy Food", Item.ItemType.FOOD, yummyFoodSprite);
-        healthyFood = new Item("healthy Food", Item.ItemType.FOOD, healthyFoodSprite);
-        neutralFood = new Item("neutral Food", Item.ItemType.FOOD, neutralFoodSprite);
+        //Food Instantiation
+        grassFood = new Item("Grass Berries");
+        grassFood.icon = ItemAssets.Instance.grassFoodSprite;
+        grassFood.itemType = Item.ItemType.FOOD;
 
-        berries = new Item("Berries");
-        berries.icon = berrySprite;
-        berries.itemType = Item.ItemType.FOOD;
+        waterFood = new Item("Dew Drops");
+        waterFood.icon = ItemAssets.Instance.waterFoodSprite;
+        waterFood.itemType = Item.ItemType.FOOD;
 
-        mushrooms = new Item("Mushrooms");
-        mushrooms.icon = mushroomSprite;
-        mushrooms.itemType = Item.ItemType.FOOD;
+        fireFood = new Item("Emberries");
+        fireFood.icon = ItemAssets.Instance.fireFoodSprite;
+        fireFood.itemType = Item.ItemType.FOOD;
 
-        succulent = new Item("Succulent");
-        succulent.icon = succulentSprite;
-        succulent.itemType = Item.ItemType.FOOD;
+        earthFood = new Item("Stone Fruit");
+        earthFood.icon = ItemAssets.Instance.earthFoodSprite;
+        earthFood.itemType = Item.ItemType.FOOD;
 
+        windFood = new Item("Piccolo Grass");
+        windFood.icon = ItemAssets.Instance.windFoodSprite;
+        windFood.itemType = Item.ItemType.FOOD;
+
+        lightFood = new Item("Starfruit");
+        lightFood.icon = ItemAssets.Instance.lightFoodSprite;
+        lightFood.itemType = Item.ItemType.FOOD;
+
+        darkFood = new Item("Hellerbross");
+        darkFood.icon = ItemAssets.Instance.darkFoodSprite;
+        darkFood.itemType = Item.ItemType.FOOD;
+
+        yummyFood = new Item("Candy");
+        yummyFood.icon = ItemAssets.Instance.yummyFoodSprite;
+        yummyFood.itemType = Item.ItemType.FOOD;
+
+        healthyFood = new Item("Brussel Sprouts");
+        healthyFood.icon = ItemAssets.Instance.healthyFoodSprite;
+        healthyFood.itemType = Item.ItemType.FOOD;
+
+        neutralFood = new Item("Crackers");
+        neutralFood.icon = ItemAssets.Instance.neutralFoodSprite;
+        neutralFood.itemType = Item.ItemType.FOOD;
+
+        //Lists
         allItems.Add(dummyItem);
 
         allResources.Add(wood);
@@ -128,13 +136,23 @@ public class ItemManager
         allResources.Add(coal);
         allResources.Add(iron);
         allResources.Add(crystal);
-        allFoods.Add(berries);
-        allFoods.Add(mushrooms);
-        allFoods.Add(succulent);
+
+        allFoods.Add(grassFood);
+        allFoods.Add(fireFood);
+        allFoods.Add(waterFood);
+        allFoods.Add(windFood);
+        allFoods.Add(earthFood);
+        allFoods.Add(lightFood);
+        allFoods.Add(darkFood);
+        allFoods.Add(healthyFood);
+        allFoods.Add(yummyFood);
+        allFoods.Add(neutralFood);
     }
 
     public bool AddItem(Item item, int amount)
     {
+        //Debug.Log("I'm adding " + amount + " " + item.itemName + " to the inventory");
+
         item.quantity += amount;
 
         switch(item.itemType)
@@ -157,6 +175,9 @@ public class ItemManager
 
                 break;
         }
+
+        //Debug.Log("We should have " + item.quantity + " total " + item.itemName + " now");
+
         return true;
     }
 

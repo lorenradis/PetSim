@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351f2d9a582a449279185d6afcbc9889, type: 3}
   m_Name: LakeScene
   m_EditorClassIdentifier: 
-  sceneName: 
-  entrances: []
-  minBounds: {x: 0, y: 0}
-  maxBounds: {x: 0, y: 0}
+  sceneName: LakeScene
+  entrances:
+  - {x: -48, y: 0}
+  - {x: 18, y: 26}
+  minBounds: {x: -39, y: -22}
+  maxBounds: {x: 39, y: 22}

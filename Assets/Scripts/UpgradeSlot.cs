@@ -9,6 +9,7 @@ public class UpgradeSlot : MonoBehaviour
 
     private PurchaseableUpgrade upgrade;
     [SerializeField] private Image icon;
+    [SerializeField] private TextMeshProUGUI upgradeNameText;
     [SerializeField] private Image cost1Icon;
     [SerializeField] private Image cost2Icon;
     [SerializeField] private Image cost3Icon;
@@ -28,6 +29,14 @@ public class UpgradeSlot : MonoBehaviour
         costTexts[2] = cost3Text;
         this.upgrade = upgrade;
         int costIndex = 0;
+
+        icon.sprite = upgrade.upgradeIcon;
+        icon.enabled = true;
+        upgradeNameText.text = upgrade.upgradeName;
+
+        cost1Icon.enabled = true;
+        cost2Icon.enabled = true;
+        cost3Icon.enabled = true;
 
         if (upgrade.woodCost > 0)
         {
@@ -65,11 +74,22 @@ public class UpgradeSlot : MonoBehaviour
             costTexts[costIndex].text = "" + upgrade.coalCost;
             costIndex++;
         }
-
+        if(costIndex < 2)
+        {
+            cost2Icon.enabled = false;
+            cost3Icon.enabled = false;
+            cost2Text.text = "";
+            cost3Text.text = "";
+        }else if (costIndex < 3)
+        {
+            cost3Icon.enabled = false;
+            cost3Text.text = "";
+        }
     }
 
     public void AttemptPurchase()
     {
+        GameManager.instance.HideUpgrades();
         if (upgrade.isActive)
         {
             DialogManager.instance.ShowSimpleDialog("Oh, didn't you already purchase the " + upgrade.upgradeName + "?");
@@ -79,21 +99,32 @@ public class UpgradeSlot : MonoBehaviour
             DialogManager.instance.ShowSimpleDialog("Oh, the " + upgrade.upgradeName + " huh?  Good eye!");
             if (CanAfford())
             {
-                Dialog confirmDialog = new Dialog("Yeah, this baby will increase the amount of food you can store, sound good?", "Yes", "No", "", "", () =>
-                {
+                Dialog confirmDialog = new Dialog("Yeah, this baby will increase the amount of food you can store, sound good?", "Shop Keeper", null, true, "Yes", "No", "", "");
+
+                DialogManager.instance.ShowDialog(confirmDialog, () => {
                     DialogManager.instance.ShowSimpleDialog("Great! I should be able to whip this up for you by this time tomorrow.  Thanks bud!");
                     GameManager.instance.itemManager.PayUpgradeCost(upgrade);
-                }, () =>
-                {
-
+                }, () => {
+                    DialogManager.instance.ShowSimpleDialog("Ah, thought better of it?  No worries, let me know if you need anything else!");
                 });
-
             }
             else
             {
                 DialogManager.instance.ShowSimpleDialog("Oh shoot, don't have enough resources for it right now huh?  No worries, come back when you do!");
             }
         }
+    }
+
+    public void Deactivate()
+    {
+        cost1Icon.enabled = false;
+        cost2Icon.enabled = false;
+        cost3Icon.enabled = false;
+        upgradeNameText.text = "";
+        icon.enabled = false;
+        cost1Text.text = "";
+        cost2Text.text = "";
+        cost3Text.text = "";
     }
 
     private bool CanAfford()

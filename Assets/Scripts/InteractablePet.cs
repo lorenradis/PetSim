@@ -69,11 +69,14 @@ public class InteractablePet : Interactable
                 interactDialog = new Dialog("", petInfo.petName, null, false, "Check", "Assign", "Partner", "Cancel");
 
                 DialogManager.instance.ShowDialog(interactDialog, () => {
+                    //CHECK
                     GameManager.instance.ShowPetInfo(petInfo);
                 }, () => {
+                    //ASSIGN
                     //assign to a task (show the map first)
                     GameManager.instance.ShowMapForAssignment();
                 }, () => {
+                    //PARTNER
                     if (GameManager.instance.petManager.SetPartnerPet(petInfo))
                     {
                         DialogManager.instance.ShowSimpleDialog("You invited " + petInfo.petName + " to join you on your adventure, welcome to the team " + petInfo.petName + "!");
@@ -81,6 +84,7 @@ public class InteractablePet : Interactable
                         Destroy(gameObject);
                     }
                 }, () => {
+                    //CANCEL
                     DialogManager.instance.ShowSimpleDialog("See ya later " + petInfo.petName + "!");
                 });
                 break;

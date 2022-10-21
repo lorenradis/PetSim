@@ -15,5 +15,6 @@ MonoBehaviour:
   sceneName: ForestScene
   entrances:
   - {x: 41, y: 18}
+  - {x: 9, y: 96}
   minBounds: {x: 11, y: 15}
   maxBounds: {x: 82, y: 97}

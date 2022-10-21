@@ -11,28 +11,11 @@ public class Dialog
     public string[] responses = new string[0];
 
     public bool isSpeech;
-    private string v1;
-    private string v2;
-    private string v3;
-    private string v4;
-    private string v5;
-    private Action p1;
-    private Action p2;
+
 
     public Dialog()
     {
 
-    }
-
-    public Dialog(string v1, string v2, string v3, string v4, string v5, Action p1, Action p2)
-    {
-        this.v1 = v1;
-        this.v2 = v2;
-        this.v3 = v3;
-        this.v4 = v4;
-        this.v5 = v5;
-        this.p1 = p1;
-        this.p2 = p2;
     }
 
     public Dialog(string newMessage, string newName, Sprite newPortrait, bool _isSpeech, string response1, string response2, string response3, string response4)

@@ -86,6 +86,11 @@ public class UIManager
     [SerializeField] private ItemSlot[] resourceSlots;
     [SerializeField] private ItemSlot[] foodSlots;
 
+    //upgrade region
+    [SerializeField] private GameObject upgradesPanel;
+    [SerializeField] private UpgradeSlot[] upgradeSlots;
+    [SerializeField] private Button[] upgradeButtons;
+
     //startup screen region
     [SerializeField] private GameObject starterSelectPanel;
     [SerializeField] private Button starter1Button;
@@ -412,6 +417,28 @@ public class UIManager
         regionInfoPanel.SetActive(false);
     }
 
+    public void ShowUpgrades(List<PurchaseableUpgrade> upgrades)
+    {
+        upgradesPanel.SetActive(true);
+        for (int i = 0; i < upgradeSlots.Length; i++)
+        {
+            if(i < upgrades.Count)
+            {
+                upgradeSlots[i].SetUpgrade(upgrades[i]);
+            }
+            else
+            {
+                upgradeSlots[i].Deactivate();
+            }
+        }
+        EventSystem.current.SetSelectedGameObject(upgradeButtons[0].gameObject);
+    }
+
+    public void HideUpgrades()
+    {
+        upgradesPanel.SetActive(false);
+    }
+
     public void ShowFarmControls()
     {
         farmControlsPanel.SetActive(true);
@@ -528,7 +555,12 @@ public class UIManager
         {
             starterSelectPanel.SetActive(false);
             return GameManager.GameState.NORMAL;
-        }else if(systemMenuPanel.activeSelf)
+       }else if(upgradesPanel.activeSelf)
+        {
+            HideUpgrades();
+            return GameManager.GameState.NORMAL;
+        }
+        else if(systemMenuPanel.activeSelf)
         {
             systemMenuPanel.SetActive(false);
             return GameManager.GameState.NORMAL;

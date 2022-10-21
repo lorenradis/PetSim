@@ -130,6 +130,7 @@ public class PlayerControls : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown("joystick button 0")) //a button
         {
+            Debug.Log("Game state is " + GameManager.instance.gameState + " and we pressed the A button");
             AttemptInteract();
         }
         if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.E)) //b button
@@ -247,7 +248,6 @@ public class PlayerControls : MonoBehaviour
     private void MeleeAttack()
     {
         int meleeEnergy = 5;
-        Debug.Log("Performing melee attack");
         if(playerInfo.HasEnergy(meleeEnergy))
         {
             playerInfo.DecreaseEnergy(meleeEnergy);

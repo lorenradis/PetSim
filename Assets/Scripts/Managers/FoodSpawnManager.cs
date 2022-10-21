@@ -27,9 +27,9 @@ public class FoodSpawnManager
     {
         //create all food spawn points here and add to list
         //subscribe our updatetime function to the gameclock's ontimechanged delegate
-        FoodSpawnPoint forestSpawn1 = new FoodSpawnPoint(00000, 24 * 60, ItemManager.berries);
-        FoodSpawnPoint forestSpawn2 = new FoodSpawnPoint(00001, 24 * 60, ItemManager.berries);
-        FoodSpawnPoint forestSpawn3 = new FoodSpawnPoint(00002, 24 * 60, ItemManager.berries);
+        FoodSpawnPoint forestSpawn1 = new FoodSpawnPoint(00000, 24 * 60, ItemManager.grassFood);
+        FoodSpawnPoint forestSpawn2 = new FoodSpawnPoint(00001, 24 * 60, ItemManager.grassFood);
+        FoodSpawnPoint forestSpawn3 = new FoodSpawnPoint(00002, 24 * 60, ItemManager.grassFood);
 
         foodSpawnPoints.Add(forestSpawn1);
         foodSpawnPoints.Add(forestSpawn2);

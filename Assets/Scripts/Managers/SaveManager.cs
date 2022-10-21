@@ -45,9 +45,9 @@ public class SaveManager
 
         activeSave.time = GameManager.instance.gameClock.Ticks;
 
-        activeSave.berryQuantity = ItemManager.berries.quantity;
-        activeSave.mushroomQuantity = ItemManager.mushrooms.quantity;
-        activeSave.succulentQuantity = ItemManager.succulent.quantity;
+        activeSave.grassFoodCount = ItemManager.grassFood.quantity;
+        activeSave.waterFoodCount = ItemManager.waterFood.quantity;
+        activeSave.fireFoodCount = ItemManager.fireFood.quantity;
 
         /*
         for (int i = 0; i < GameManager.instance.petManager.currentPets.Count; i++)
@@ -90,9 +90,9 @@ public class SaveManager
             }
 
 
-            ItemManager.berries.quantity = activeSave.berryQuantity;
-            ItemManager.mushrooms.quantity = activeSave.mushroomQuantity;
-            ItemManager.succulent.quantity = activeSave.succulentQuantity;
+            ItemManager.grassFood.quantity = activeSave.grassFoodCount;
+            ItemManager.waterFood.quantity = activeSave.waterFoodCount;
+            ItemManager.fireFood.quantity = activeSave.fireFoodCount;
 
             GameManager.instance.gameClock.SetTime(activeSave.time);
 
@@ -161,7 +161,7 @@ public class SaveData
 
     //public List<PetInfo> ownedPets = new List<PetInfo>();
 
-    public int berryQuantity;
-    public int mushroomQuantity;
-    public int succulentQuantity;
+    public int grassFoodCount;
+    public int waterFoodCount;
+    public int fireFoodCount;
 }

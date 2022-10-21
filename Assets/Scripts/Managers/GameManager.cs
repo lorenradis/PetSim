@@ -82,6 +82,7 @@ public class GameManager : MonoBehaviour
     public TaskManager taskManager;
     public ItemManager itemManager;
     public FarmManager farmManager;
+    public UpgradeManager upgradeManager;
     public StoryProgression storyProgression;
     public PlayerInfo playerInfo;
     public GlobalLightManager globalLightManager;
@@ -103,9 +104,16 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         SetupClock();
+
+    }
+
+    private void Start()
+    {
+        SceneManager.sceneLoaded += OnSceneLoad;
         affinityManager = new AffinityManager();
         affinityManager.SetupAffinities();
         audioManager = GetComponent<AudioManager>();
+        itemManager = new ItemManager();
         itemManager.SetupItems();
         petManager.SetupPets();
         regionManager = new RegionManager();
@@ -115,14 +123,10 @@ public class GameManager : MonoBehaviour
         //uiManager = new UIManager();
         uiManager.Setup();
         farmManager.SetupFarm(25, 15);
+        upgradeManager = new UpgradeManager();
         playerInfo = new PlayerInfo(3, 960);
         globalLightManager.Setup();
         saveManager = new SaveManager();
-    }
-
-    private void Start()
-    {
-        SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     private void SetupClock()
@@ -320,6 +324,18 @@ public class GameManager : MonoBehaviour
     public void HideRegionInfo()
     {
         uiManager.HideRegionInfo();
+        ChangeState(GameState.NORMAL);
+    }
+
+    public void ShowFoodUpgrades()
+    {
+        uiManager.ShowUpgrades(upgradeManager.foodStorageUpgrades);
+        ChangeState(GameState.MENU);
+    }
+
+    public void HideUpgrades()
+    {
+        uiManager.HideUpgrades();
         ChangeState(GameState.NORMAL);
     }
 

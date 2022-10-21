@@ -19,7 +19,7 @@ public class DroppedLoot : MonoBehaviour
 
     private void Start()
     {
-        direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized * Random.Range(.75f, 1.5f);
+        direction = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized * Random.Range(1f, 2f);
         duration = Random.Range(.75f, 1f);
         heightChange = Random.Range(4.5f, 6f);
         zHeight = transform.position.y;
@@ -31,7 +31,7 @@ public class DroppedLoot : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = item.icon;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (isActive)
             return;

@@ -186,19 +186,19 @@ the player will be presented with a graphical representation of the 3 pets.
     {
         Bulbos = new PetInfo("Bulbos", 18, 12, 6, 50, 50, AffinityManager.grassAffinity, 
         "Strong and intelligent, but far from the fastest of beasts - Bulbos are most at home in the forests and other areas full of green growing things.",
-        bulbosOverworldAnimator, bulbosOverworldAnimator, bulbosIcon, bulbosPortrait, ItemManager.berries, ItemManager.mushrooms);
+        bulbosOverworldAnimator, bulbosOverworldAnimator, bulbosIcon, bulbosPortrait, ItemManager.grassFood, ItemManager.waterFood);
 
         Charby = new PetInfo("Charby", 12, 6, 18, 25, 75, AffinityManager.fireAffinity,
         "Fast and powerful, but not the brightest of bulbs - if you'll forgive the pun - Charby are most at home in sweltering temperatures and dry climes",
-        charbyOverworldAnimator, charbyOverworldAnimator,charbyIcon, charbyPortrait, ItemManager.succulent, ItemManager.berries);
+        charbyOverworldAnimator, charbyOverworldAnimator,charbyIcon, charbyPortrait, ItemManager.fireFood, ItemManager.grassFood);
 
         Squirt = new PetInfo("Squirt", 6, 18, 12, 75, 25, AffinityManager.waterAffinity,
         "Cunning and quick, but a tad lacking in the brawn department - Squirt are most at home in lakes, rivers, oceans and wetlands of the world",
-        squirtOverworldAnimator, squirtOverworldAnimator,squirtIcon, squirtPortrait, ItemManager.mushrooms, ItemManager.succulent);
+        squirtOverworldAnimator, squirtOverworldAnimator,squirtIcon, squirtPortrait, ItemManager.waterFood, ItemManager.fireFood);
 
 
         Stunky = new PetInfo("Stunky", 12, 12, 12, 25, 75, AffinityManager.fireAffinity, "He's a real stinker!",
-            stunkyOverworldAnimator, stunkyOverworldAnimator, stunkyIcon, stunkyPortrait, ItemManager.mushrooms, ItemManager.succulent);
+            stunkyOverworldAnimator, stunkyOverworldAnimator, stunkyIcon, stunkyPortrait, ItemManager.waterFood, ItemManager.fireFood);
 
         petTemplates.Add(Bulbos);
         petTemplates.Add(Charby);

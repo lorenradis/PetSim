@@ -120,11 +120,6 @@ public class DialogManager : MonoBehaviour
         }
     }
 
-    public void ShowPrompt(Action action1, Action action2, Action action3, Action action4)
-    {
-
-    }
-
     public void ShowDialog(Dialog newDialog, Action action1)
     {
         dialogs.Add(newDialog);
@@ -289,7 +284,7 @@ public class DialogManager : MonoBehaviour
         for (int i = 0; i < dialog.message.Length + 1; i++)
         {
             dialogText.maxVisibleCharacters = i;
-            speedUp = Input.anyKey ? .5f : 1f;
+            speedUp = Input.anyKey ? .25f : 1f;
             if (dialog.isSpeech)
             {
                 //GameManager.instance.audioManager.PlaySoundEffect(voiceClips[UnityEngine.Random.Range(0, voiceClips.Length)]);

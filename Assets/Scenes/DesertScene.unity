@@ -653,11 +653,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5177430335331771390, guid: 7512a7da973af46c39c3adacd03ebe4b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 33.9
+      value: 32.2
       objectReference: {fileID: 0}
     - target: {fileID: 5177430335331771390, guid: 7512a7da973af46c39c3adacd03ebe4b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.1
+      value: 17.9
       objectReference: {fileID: 0}
     - target: {fileID: 5177430335331771390, guid: 7512a7da973af46c39c3adacd03ebe4b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -993,9 +993,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1330208398336502931, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
+      propertyPath: entranceToUse
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4629736959449652537, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_Name
-      value: SceneTransitionTrigger
+      value: SceneTransitionTriggerToFarm
       objectReference: {fileID: 0}
     - target: {fileID: 6303041650775036578, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_RootOrder
@@ -1003,11 +1007,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6303041650775036578, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 36.4
+      value: 32
       objectReference: {fileID: 0}
     - target: {fileID: 6303041650775036578, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 16.4
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 6303041650775036578, guid: a287bcfa8449b4e3199d908d982fb528, type: 3}
       propertyPath: m_LocalPosition.z
