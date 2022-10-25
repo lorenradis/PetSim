@@ -247,17 +247,22 @@ public class PlayerControls : MonoBehaviour
 
     private void MeleeAttack()
     {
+    //should first check if we're on the farm
         int meleeEnergy = 5;
         if(playerInfo.HasEnergy(meleeEnergy))
         {
-            playerInfo.DecreaseEnergy(meleeEnergy);
-            animator.SetFloat("inputX", facingVector.x);
-            animator.SetFloat("inputY", facingVector.y);
-            animator.SetTrigger("attack");
-            StartCoroutine(PauseMovement(5f/12f));
-            StartCoroutine(SuccessiveHitChecks());
+            //if we're on the farm and the tile in front of us is raw
+                //till the tile in front of us
+            //else
+                playerInfo.DecreaseEnergy(meleeEnergy);
+                animator.SetFloat("inputX", facingVector.x);
+                animator.SetFloat("inputY", facingVector.y);
+                animator.SetTrigger("attack");
+                StartCoroutine(PauseMovement(5f/12f));
+                StartCoroutine(SuccessiveHitChecks());
+        }else{
+            DialogManager.instance.ShowSimpleDialog("You don't have energy for that right now.");
         }
-
     }
 
 
@@ -305,9 +310,11 @@ public class PlayerControls : MonoBehaviour
         int terraformCost = 10;
         if (playerInfo.HasEnergy(terraformCost))
         {
-            playerInfo.DecreaseEnergy(terraformCost);
-            GameManager.instance.farmManager.SetTileState(targetSquare.x, targetSquare.y, tileToPlace);
-            StartCoroutine(PauseMovement(.2f));
+            if(GameManager.instance.farmManager.SetTileState(targetSquare.x, targetSquare.y, tileToPlace))
+            {
+                playerInfo.DecreaseEnergy(terraformCost);
+                StartCoroutine(PauseMovement(.2f));
+            }
         }
         else
         {
