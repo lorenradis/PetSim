@@ -113,6 +113,7 @@ public class FarmManager
 
         if (x >= 0 && x < width && y >= 0 && y < height)
         {
+            //Change this to first check if the tilestate is raw, if raw, display error message, else, do the following:
             gridTiles[x, y] = newTileState;
             if (onTileChangedCallback != null)
                 onTileChangedCallback.Invoke();
