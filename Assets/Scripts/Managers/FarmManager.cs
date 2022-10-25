@@ -103,20 +103,22 @@ public class FarmManager
         }
     }
 
-    public void SetTileState(int x, int y, TileState newTileState)
+    public bool SetTileState(int x, int y, TileState newTileState)
     {
         x -= startX;
         y -= startY;
 
         if (gridTiles[x, y] == TileState.OBSTRUCTED)
-            return;
+            return false;
 
         if (x >= 0 && x < width && y >= 0 && y < height)
         {
             gridTiles[x, y] = newTileState;
             if (onTileChangedCallback != null)
                 onTileChangedCallback.Invoke();
+            return true;
         }
+        return false;
     }
 
     public TileState GetTileStateAtCoords(int x, int y)
