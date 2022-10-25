@@ -13,6 +13,16 @@ public class FarmObject : MonoBehaviour
     public RuleTile dessertRuleTile;
     public RuleTile waterRuleTile;
     public RuleTile basicTile;
+    /*
+    new tile setup
+    public RuleTile grassTile;
+    public RuleTile fireTile;
+    public RuleTile waterTile;
+    public RuleTile earthTile;
+    public RuleTile windTile;
+    public RuleTile rawTile; //starting tile, unworkable
+    public RuleTile fertileTile; //ready to be terraformed or planted
+    */
 
     private BoxCollider2D bounds;
 
