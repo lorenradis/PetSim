@@ -1,10 +1,11 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 [System.Serializable]
 public class FarmManager
 {
 
+    //public enum TileState {RAW, FERTILE, GRASS, FIRE, WATER, EARTH, WIND, OBSTRUCTED}
     public enum TileState { BASIC, LONGGRASS, DESERT, WATER, OBSTRUCTED }
     public TileState[,] gridTiles;
 
