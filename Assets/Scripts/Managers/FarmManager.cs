@@ -6,7 +6,7 @@ public class FarmManager
 {
 
     //public enum TileState {RAW, FERTILE, GRASS, FIRE, WATER, EARTH, WIND, OBSTRUCTED}
-    public enum TileState { BASIC, LONGGRASS, DESERT, WATER, OBSTRUCTED }
+    public enum TileState { RAW, FERTILE, LONGGRASS, DESERT, WATER, OBSTRUCTED }
     public TileState[,] gridTiles;
 
     private int width;
@@ -20,7 +20,8 @@ public class FarmManager
     public delegate void OnTileChanged();
     public static OnTileChanged onTileChangedCallback;
 
-    public Sprite basicSprite;
+    public Sprite rawSprite;
+    public Sprite fertileSprite;
     public Sprite longGrassSprite;
     public Sprite desertSprite;
     public Sprite waterSprite;
@@ -34,6 +35,21 @@ public class FarmManager
         get
         {
             return width * height;
+        }
+        set { }
+    }
+    public int rawTilesCount
+    {
+        get
+        {
+            return CountTilesOfType(TileState.RAW);
+        }
+        set { }
+    }
+    public int fertileTilesCount
+    {
+        get {
+            return CountTilesOfType(TileState.FERTILE);
         }
         set { }
     }
@@ -62,10 +78,7 @@ public class FarmManager
         set { }
     }
 
-    public FarmManager()
-    {
-
-    }
+    public FarmManager(){}
 
     public void SetupFarm(int wide, int high)
     {
@@ -86,7 +99,7 @@ public class FarmManager
         {
             for (int y = 0; y < height; y++)
             {
-                if(x > 0 && x < width-1 && y > 0 && y < height-1 && gridTiles[x, y] == TileState.BASIC)
+                if(x > 0 && x < width-1 && y > 0 && y < height-1 && gridTiles[x, y] == TileState.RAW)
                 {
                     int roll = Random.Range(1, 100);
                     if(roll <= obstacleChance)
@@ -123,17 +136,35 @@ public class FarmManager
         return false;
     }
 
-    public TileState GetTileStateAtCoords(int x, int y)
+    public bool IsInFarmbounds(int x, int y, bool offset)
     {
-        return gridTiles[x, y];
+        if(offset)
+        {
+            x -= startX;
+            y -= startY;
+        }
+        return x >= 0 && x <= width && y >= 0 && y <= height;
+    }
+
+    public TileState GetTileStateAtCoords(int x, int y, bool offset)
+    {
+        if(offset)
+        {
+            x -= startX;
+            y -= startY;
+        }
+
+            return gridTiles[x, y];
     }
 
     public Sprite GetSprite(TileState tile)
     {
         switch (tile)
         {
-            case TileState.BASIC:
-                return basicSprite;
+            case TileState.RAW:
+                return rawSprite;
+            case TileState.FERTILE:
+                return fertileSprite;
             case TileState.LONGGRASS:
                 return longGrassSprite;
             case TileState.WATER:
@@ -141,7 +172,7 @@ public class FarmManager
             case TileState.DESERT:
                 return desertSprite;
         }
-        return basicSprite;
+        return fertileSprite;
     }
 
     private int CountTilesOfType(TileState tile)

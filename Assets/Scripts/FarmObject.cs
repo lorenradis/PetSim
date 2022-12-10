@@ -114,7 +114,8 @@ public class FarmObject : MonoBehaviour
 
         switch (tileState)
         {
-            case FarmManager.TileState.BASIC:
+            case FarmManager.TileState.RAW:
+            case FarmManager.TileState.FERTILE:
             case FarmManager.TileState.OBSTRUCTED:
                 groundTileMap.SetTile(newPosition, basicTile);
                 break;

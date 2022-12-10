@@ -32,10 +32,10 @@ public class GardenObstacleObject : MonoBehaviour
             {
 
                 GameManager.instance.farmManager.CurrentObstacles.RemoveAt(i);
-                GameManager.instance.farmManager.gridTiles[x, y] = FarmManager.TileState.BASIC;
-                GameManager.instance.farmManager.gridTiles[x+1, y] = FarmManager.TileState.BASIC;
-                GameManager.instance.farmManager.gridTiles[x, y+1] = FarmManager.TileState.BASIC;
-                GameManager.instance.farmManager.gridTiles[x+1, y+1] = FarmManager.TileState.BASIC;
+                GameManager.instance.farmManager.gridTiles[x, y] = FarmManager.TileState.FERTILE;
+                GameManager.instance.farmManager.gridTiles[x+1, y] = FarmManager.TileState.FERTILE;
+                GameManager.instance.farmManager.gridTiles[x, y+1] = FarmManager.TileState.FERTILE;
+                GameManager.instance.farmManager.gridTiles[x+1, y+1] = FarmManager.TileState.FERTILE;
                 break;
             }
         }

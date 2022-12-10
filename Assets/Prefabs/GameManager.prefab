@@ -8226,6 +8226,18 @@ MonoBehaviour:
   itemObjectPrefab: {fileID: 9068723517163306041, guid: 11847ee5b2d2645ac8f02b34a51283f5, type: 3}
   baitObjects: []
   battleScene: {fileID: 0}
+  farmSceneInfo: {fileID: 11400000, guid: 167b4d90784ef4f248b6d5cf152e65ed, type: 2}
+  homeSceneInfo: {fileID: 11400000, guid: 266af3c8a8bf04dc4a7d0fd4c48cdc98, type: 2}
+  home2FSceneInfo: {fileID: 11400000, guid: a9abfa5e1d0ed4202b0a49ab4a2d01f4, type: 2}
+  labSceneInfo: {fileID: 11400000, guid: 9976c8a9c7cd84e1fbcbfa6101c161ec, type: 2}
+  starterSceneInfo: {fileID: 0}
+  farmToTownSceneInfo: {fileID: 11400000, guid: 36a9ab0f24da04dccba739d5218811d0, type: 2}
+  townSceneInfo: {fileID: 11400000, guid: 777629d02d066414ab6d5277abbcf0ea, type: 2}
+  forestSceneInfo: {fileID: 11400000, guid: a6576b75fe35d495e9580e8c0c2a185b, type: 2}
+  lakeSceneInfo: {fileID: 11400000, guid: d0c5cfa5509aa41dca624654bedfe5e9, type: 2}
+  desertSceneInfo: {fileID: 11400000, guid: 61f42ca5edc354ed68ea6a21b2f9d399, type: 2}
+  caveSceneInfo: {fileID: 11400000, guid: 4b89918eaaa14492db4782939eec3787, type: 2}
+  mountainSceneInfo: {fileID: 11400000, guid: 5d0ad1509c78d4506babc682bb0cd1f4, type: 2}
   gameClock:
     interval: 0.7
     elapsedTime: 0
@@ -8527,7 +8539,8 @@ MonoBehaviour:
     starter3Button: {fileID: 3156645275135133692}
     energySlider: {fileID: 5463661863002759774}
   farmManager:
-    basicSprite: {fileID: -1789440885, guid: 09e95e74f807a4217a99a683b83f8d7d, type: 3}
+    rawSprite: {fileID: 652669832, guid: 4792355551d2944a4b8d69cf276110d6, type: 3}
+    fertileSprite: {fileID: 286230409, guid: 69a34c18460cc4fce9e793a032e5eaa5, type: 3}
     longGrassSprite: {fileID: -1338584044, guid: 09e95e74f807a4217a99a683b83f8d7d, type: 3}
     desertSprite: {fileID: 1047944992, guid: 09e95e74f807a4217a99a683b83f8d7d, type: 3}
     waterSprite: {fileID: -1115151893, guid: 09e95e74f807a4217a99a683b83f8d7d, type: 3}

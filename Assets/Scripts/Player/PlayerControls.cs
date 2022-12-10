@@ -73,7 +73,7 @@ public class PlayerControls : MonoBehaviour
         playerInfo = GameManager.instance.playerInfo;
         
         //for debug purposes
-        UnlockTileType(FarmManager.TileState.BASIC);
+        UnlockTileType(FarmManager.TileState.FERTILE);
         UnlockTileType(FarmManager.TileState.LONGGRASS);
         UnlockTileType(FarmManager.TileState.DESERT);
         UnlockTileType(FarmManager.TileState.WATER);
@@ -251,15 +251,47 @@ public class PlayerControls : MonoBehaviour
         int meleeEnergy = 5;
         if(playerInfo.HasEnergy(meleeEnergy))
         {
-            //if we're on the farm and the tile in front of us is raw
-                //till the tile in front of us
-            //else
-                playerInfo.DecreaseEnergy(meleeEnergy);
-                animator.SetFloat("inputX", facingVector.x);
-                animator.SetFloat("inputY", facingVector.y);
-                animator.SetTrigger("attack");
-                StartCoroutine(PauseMovement(5f/12f));
+            playerInfo.DecreaseEnergy(meleeEnergy);
+            animator.SetFloat("inputX", facingVector.x);
+            animator.SetFloat("inputY", facingVector.y);
+            animator.SetTrigger("attack");
+            StartCoroutine(PauseMovement(5f / 12f));
+            if (GameObject.FindGameObjectWithTag("Farm") != null && GameManager.instance.farmManager.IsInFarmbounds(targetSquare.x, targetSquare.y, true))
+            {
+                if(GameManager.instance.farmManager.GetTileStateAtCoords(targetSquare.x, targetSquare.y, true) == FarmManager.TileState.OBSTRUCTED)
+                {
+                    //do a circle cast from the targetsquare object
+                    Collider2D[] hits = Physics2D.OverlapCircleAll(targetSquare, .01f);
+                    foreach(Collider2D hit in hits)
+                    {
+                        if(hit.GetComponent<GardenObstacleObject>())
+                        {
+                            GameObject newEffect = Instantiate(hitEffectPrefab, hit.transform.position, Quaternion.identity);
+                            newEffect.SetActive(true);
+                            Destroy(newEffect, 1f);
+                            hit.GetComponentInParent<GardenObstacleObject>().TakeDamage();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //check if the tile can be tilled
+                    if(GameManager.instance.farmManager.GetTileStateAtCoords(targetSquare.x, targetSquare.y, true) == FarmManager.TileState.RAW)
+                    {
+                        GameManager.instance.farmManager.SetTileState(targetSquare.x, targetSquare.y, FarmManager.TileState.FERTILE);
+                        GameObject newEffect = Instantiate(hitEffectPrefab, new Vector2(targetSquare.x, targetSquare.y), Quaternion.identity);
+                        newEffect.SetActive(true);
+                        Destroy(newEffect, 1f);
+                        
+                    }
+                }
+            }
+            else
+            {
                 StartCoroutine(SuccessiveHitChecks());
+            }
+
         }else{
             DialogManager.instance.ShowSimpleDialog("You don't have energy for that right now.");
         }

@@ -56,7 +56,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SceneInfo[] allScenes;
     [SerializeField] private Animator sceneTransitionAnimator;
     private SceneInfo currentScene;
-    public SceneInfo CurrentScene { get { return currentScene; } set { } }
+    public SceneInfo CurrentScene { get { if (currentScene == null)
+            {
+                currentScene = GetCurrentSceneInfo();
+            }
+            return currentScene; } set { } }
     private SceneInfo previousScene;
     private Vector2 playerStartPosition;
     public Vector2 PlayerStartPosition { get { return playerStartPosition; } set { playerStartPosition = value; } }
@@ -71,6 +75,19 @@ public class GameManager : MonoBehaviour
     public GameObject itemObjectPrefab;
     public List<Transform> baitObjects = new List<Transform>();
     public SceneInfo battleScene;
+
+    public SceneInfo farmSceneInfo;
+    public SceneInfo homeSceneInfo;
+    public SceneInfo home2FSceneInfo;
+    public SceneInfo labSceneInfo;
+    public SceneInfo starterSceneInfo;
+    public SceneInfo farmToTownSceneInfo;
+    public SceneInfo townSceneInfo;
+    public SceneInfo forestSceneInfo;
+    public SceneInfo lakeSceneInfo;
+    public SceneInfo desertSceneInfo;
+    public SceneInfo caveSceneInfo;
+    public SceneInfo mountainSceneInfo;
 
     //Managers Region
 
@@ -104,11 +121,6 @@ public class GameManager : MonoBehaviour
         }
         DontDestroyOnLoad(gameObject);
         SetupClock();
-
-    }
-
-    private void Start()
-    {
         SceneManager.sceneLoaded += OnSceneLoad;
         affinityManager = new AffinityManager();
         affinityManager.SetupAffinities();
@@ -127,6 +139,11 @@ public class GameManager : MonoBehaviour
         playerInfo = new PlayerInfo(3, 960);
         globalLightManager.Setup();
         saveManager = new SaveManager();
+    }
+
+    private void Start()
+    {
+
     }
 
     private void SetupClock()
@@ -167,7 +184,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case GameState.MENU:
-                if(Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Escape))
+                if (Input.GetKeyDown("joystick button 1") || Input.GetKeyDown(KeyCode.Escape))
                 {
                     CloseCurrentMenu();
                 }
@@ -295,7 +312,7 @@ public class GameManager : MonoBehaviour
     public void ShowResources()
     {
         uiManager.ShowResources();
-        ChangeState(GameState.MENU); 
+        ChangeState(GameState.MENU);
     }
 
     public void HideResources()
@@ -422,7 +439,7 @@ public class GameManager : MonoBehaviour
         currentScene = sceneInfo;
         lastEntrance = entrance;
         playerStartPosition = sceneInfo.entrances[entrance];
-        if(player != null)
+        if (player != null)
             playerFacing = player.GetComponent<PlayerControls>().FacingVector;
         else playerFacing = Vector2.down;
         StartCoroutine(FadeToNewScene(sceneInfo.sceneName));
@@ -430,8 +447,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadNewScene(SceneInfo sceneInfo, Vector2 newPlayerPosition)
     {
-        if(currentScene != null)
-            previousScene = currentScene;
+        previousScene = CurrentScene;
         currentScene = sceneInfo;
         playerStartPosition = newPlayerPosition;
         if (player != null)
@@ -442,7 +458,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator FadeToNewScene(string sceneName)
     {
-        if(gameState != GameState.BATTLE)
+        if (gameState != GameState.BATTLE)
         {
             activeSpawns.Clear();
         }
@@ -459,7 +475,7 @@ public class GameManager : MonoBehaviour
         //play encounter sound
         playerStartPosition = player.position;
         playerFacing = player.GetComponent<PlayerControls>().FacingVector;
-        previousScene = currentScene;
+        previousScene = CurrentScene;
         ChangeState(GameState.BATTLE);
         yield return new WaitForSeconds(.5f);
         SceneManager.LoadScene("BattleScene");
@@ -471,14 +487,14 @@ public class GameManager : MonoBehaviour
     {
         baitObjects.Clear();
 
-        if(gameState != GameState.BATTLE)
+        if (gameState != GameState.BATTLE)
         {
-            Camera.main.GetComponent<CameraMovement>().SetMinBounds(currentScene.minBounds);
-            Camera.main.GetComponent<CameraMovement>().SetMaxBounds(currentScene.maxBounds);
+            Camera.main.GetComponent<CameraMovement>().SetMinBounds(CurrentScene.minBounds);
+            Camera.main.GetComponent<CameraMovement>().SetMaxBounds(CurrentScene.maxBounds);
             StartCoroutine(FadeIn());
             Player.position = playerStartPosition;
             player.GetComponent<PlayerControls>().FacingVector = playerFacing;
-            if(petManager.PartnerPet1 != null || petManager.PartnerPet2 != null)
+            if (petManager.PartnerPet1 != null || petManager.PartnerPet2 != null)
             {
                 SpawnPartnerPets();
             }
@@ -492,7 +508,7 @@ public class GameManager : MonoBehaviour
 
             activeSpawns.Clear();
 
-            if(GameObject.FindGameObjectWithTag("Farm") != null)
+            if (GameObject.FindGameObjectWithTag("Farm") != null)
             {
                 uiManager.ShowFarmControls();
             }
@@ -505,9 +521,9 @@ public class GameManager : MonoBehaviour
 
     public void SpawnPartnerPets()
     {
-        if(partnerPetObjects.Count > 0)
+        if (partnerPetObjects.Count > 0)
         {
-            foreach(GameObject pet in partnerPetObjects)
+            foreach (GameObject pet in partnerPetObjects)
             {
                 Destroy(pet);
             }
@@ -516,14 +532,14 @@ public class GameManager : MonoBehaviour
 
         GameObject newPartner;
 
-        if(petManager.PartnerPet1 != null)
+        if (petManager.PartnerPet1 != null)
         {
             Debug.Log(petManager.PartnerPet1.petName);
             newPartner = Instantiate(partnerPetPrefab, (Vector2)player.position + Vector2.down, Quaternion.identity) as GameObject;
             partnerPetObjects.Add(newPartner);
             newPartner.GetComponent<CompanionPet>().SetPetInfo(petManager.PartnerPet1);
         }
-        if(petManager.PartnerPet2 != null)
+        if (petManager.PartnerPet2 != null)
         {
             Debug.Log(petManager.PartnerPet2.petName);
             newPartner = Instantiate(partnerPetPrefab, (Vector2)player.position + Vector2.down, Quaternion.identity) as GameObject;
@@ -536,7 +552,7 @@ public class GameManager : MonoBehaviour
     {
         sceneTransitionAnimator.SetTrigger("fadeIn");
         yield return new WaitForSeconds(.5f);
-        if(currentScene != battleScene)
+        if (currentScene != battleScene)
         {
             ChangeState(GameState.NORMAL);
             uiManager.ShowGameOverlay();
@@ -567,6 +583,51 @@ public class GameManager : MonoBehaviour
         });
 
     }
+
+    public SceneInfo GetCurrentSceneInfo()
+    {
+        switch (SceneManager.GetActiveScene().name)
+        {
+            case "FarmScene":
+                return farmSceneInfo;
+
+            case "HomeScene":
+                return homeSceneInfo;
+                break;
+            case "Home2FScene":
+                return home2FSceneInfo;
+                break;
+            case "LabScene":
+                return labSceneInfo;
+                break;
+            case "StarterSelectScreen":
+                return starterSceneInfo;
+                break;
+            case "FarmToTownScene":
+                return farmSceneInfo;
+                break;
+            case "TownScene":
+                return townSceneInfo;
+                break;
+            case "ForestScene":
+                return forestSceneInfo;
+                break;
+            case "LakeScene":
+                return lakeSceneInfo;
+                break;
+            case "DesertScene":
+                return desertSceneInfo;
+                break;
+            case "CaveScene":
+                return caveSceneInfo;
+                break;
+            case "MountainScene":
+                return mountainSceneInfo;
+                break;
+            default:
+                return null;
+        }
+    }
 }
 
 namespace PetSim
@@ -575,7 +636,7 @@ namespace PetSim
     public struct ProjectCost
     {
         public Item item;
-            public int quantity;
+        public int quantity;
     }
 
     [System.Serializable]

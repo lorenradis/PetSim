@@ -52,7 +52,7 @@ public class ItemManager
     public int maxResources = 50;
     public int maxFoods = 9;
 
-    public ItemManager() { Debug.Log("I exist"); }
+    public ItemManager() {  }
 
     public void SetupItems()
     {
